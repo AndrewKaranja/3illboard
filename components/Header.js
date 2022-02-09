@@ -4,14 +4,15 @@ import Logo from '../images/titlelogo02.png'
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid'
 
 function Header() {
-  return <header className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:p-10'>
+  return <header className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:p-5'>
       {/* left */}
       <div className='relative flex items-center h-10 cursor-pointer my-auto'>
-          <Image 
+          {/* <Image 
            src={Logo}
            alt='Logo'
            objectFit='contain'
-           objectPosition='left'/>
+           objectPosition='left'/> */}
+           <h3 className='text-3xl'>3illboard</h3>
 
       </div>
       {/* middle-search */}
