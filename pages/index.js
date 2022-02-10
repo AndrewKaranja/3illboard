@@ -6,6 +6,8 @@ import Header from '../components/Header'
 import styles from '../styles/Home.module.css'
 import SmallCard from '../components/SmallCard';
 import MediumCard from '../components/MediumCard';
+import LargeCard from '../components/LargeCard';
+import Footer from '../components/Footer';
 
 export default function Home({exploreData,cardsData}) {
 
@@ -38,6 +40,7 @@ export default function Home({exploreData,cardsData}) {
 ))}
 </div>
   </section>
+
   <section>
   <h2 className='text-4xl font-semibold py-8'>Select Ad Type</h2>
 
@@ -49,10 +52,15 @@ img={item.img}
 title={item.title}/>
   ))}
   </div>
+</section>
 
-    </section>
+<LargeCard
+   img="https://links.papareact.com/4cj"
+   title="The perfect ad campaign"
+   description="Campaign curated by 3illboard"
+   buttonText="Try out"/>
 </main>
-
+<Footer/>
     </div>
   )
 }
