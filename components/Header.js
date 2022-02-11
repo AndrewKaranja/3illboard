@@ -5,11 +5,13 @@ import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroico
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
+import { useRouter } from 'next/router';
 
-function Header() {
+function Header({placeholder}) {
     const [searchInput,setSearchInput]=useState("");
     const[startDate,setStartDate]=useState(new Date());
     const[endDate,setEndDate]=useState(new Date());
+    const router=useRouter();
     const selectionRange={
         startDate:startDate,
         endDate:endDate,
@@ -25,11 +27,25 @@ function Header() {
         setSearchInput("");
     }
 
+    const search=()=>{
+        router.push({
+            pathname:'/search',
+            query:{
+                location:searchInput,
+                startDate:startDate.toISOString(),
+                endDate:endDate.toISOString(),
+
+            }
+        });
+    }
+
 
 
   return <header className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:p-5'>
       {/* left */}
-      <div className='relative flex items-center h-10 cursor-pointer my-auto'>
+      <div
+      onClick={()=> router.push("/")}
+      className='relative flex items-center h-10 cursor-pointer my-auto'>
           {/* <Image 
            src={Logo}
            alt='Logo'
@@ -39,11 +55,14 @@ function Header() {
 
       </div>
       {/* middle-search */}
-      <div className='flex items-center border-2 rounded-full py-2 md:shadow-sm'>
+      <div className='flex items-center md:border-2 rounded-full py-2 md:shadow-sm hover:border-2'>
           <input 
           value={searchInput}
           onChange={(e)=>setSearchInput(e.target.value)}
-          className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 text-ellipsis placehold' type="text" placeholder='Start your search'/>
+          className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 text-ellipsis' 
+          type="text" 
+          placeholder={placeholder || 'Start your search'}/>
+
           <SearchIcon className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
 
@@ -67,7 +86,9 @@ function Header() {
 
               <div className='flex'>
                   <button onClick={resetInput} className='flex-grow text-gray-500'>Cancel</button>
-                  <button className='flex-grow text-[#FAB038]'> Search</button>
+                  <button 
+                  onClick={search}
+                  className='flex-grow text-[#FAB038]'> Search</button>
                 </div>
           </div>
       )}

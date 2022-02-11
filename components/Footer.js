@@ -6,16 +6,16 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 space-y-10 px-32 py-14 bg-gray-100 text-gray-600">
         <div className="space-y-4 text-xs text-gray-800">
            <h5 className="font-bold">ABOUT</h5>
-           <p className="cursor-pointer hover:text-[#FAB038]">How 3illboard works</p>
-           <p className="cursor-pointer hover:text-orange-400">Newsroom</p>
-           <p className="cursor-pointer hover:text-orange-400">Investors</p>
-           <p className="cursor-pointer hover:text-orange-400">Partners</p>
-           <p className="cursor-pointer hover:text-orange-400">Careers</p>
+           <p className="buttonFooter">How 3illboard works</p>
+           <p className="buttonFooter">Newsroom</p>
+           <p className="buttonFooter">Investors</p>
+           <p className="buttonFooter">Partners</p>
+           <p className="buttonFooter">Careers</p>
         </div>
         <div className="space-y-4 text-xs text-gray-800">
         <h5 className="font-bold">Support</h5>
-           <p className="cursor-pointer hover:text-orange-400">Help Center</p>
-           <p className="cursor-pointer hover:text-orange-400">Safety Information</p>
+           <p className="buttonFooter">Help Center</p>
+           <p className="buttonFooter">Safety Information</p>
            
         </div>
         </div>

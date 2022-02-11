@@ -7,6 +7,9 @@
      hover:shadow-lg active:scale-95 active:bg-gray-100 
      transition transform duration-100 ease-out;
   }
+  .buttonFooter{
+    @apply cursor-pointer hover:text-[#FAB038];
+  }
 }
 html,
 body {
