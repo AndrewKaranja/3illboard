@@ -4,6 +4,7 @@ import React from 'react'
 import Footer from '../components/Footer'
 import Header from '../components/Header'
 import InfoCard from '../components/InfoCard';
+import Map from '../components/Map';
 
 function Search({searchResults}) {
   const router=useRouter();
@@ -42,10 +43,15 @@ const range=`${formattedStartDate} - ${formattedEndDate}`;
                   total={total}/>
                 ))}
                 </div>
-               
 
             </section>
+
+            <section className='hidden xl:inline-flex w-1/3'>
+            
+            </section>
+            <Map searchResults={searchResults}/>
         </main>
+        
         <Footer/>
     </div>
   );
