@@ -10,6 +10,12 @@
   .buttonFooter{
     @apply cursor-pointer hover:text-[#FAB038];
   }
+  .listingType{
+    @apply flex flex-col items-center 
+     p-4 mt-5 space-x-4 rounded-xl cursor-pointer
+     hover:scale-105 hover:border-2 hover:border-[#FAB038]
+     active:border-black transition transform duration-200 ease-out;
+  }
 }
 html,
 body {
