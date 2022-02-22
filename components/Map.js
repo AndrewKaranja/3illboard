@@ -12,28 +12,34 @@ function Map({searchResults}) {
           latitude={result.lat}
           offsetLeft={-20}
           offsetRight={-10}>
+            
             <p 
             onClick={()=>setSelectedLocation(result)}
             className='cursor-pointer text-2xl animate-bounce active:animate-none'
             aria-label='push-pin'>📌</p>
 
             
+            
+
+            
           </Marker>
            {selectedLocation.long === result.long ? (
             <Popup
-            onClose={()=>setSelectedLocation({})}
+            onClose={()=>setSelectedLocation(result)}
             onOpen={()=>setSelectedLocation(result)}
             closeOnClick={true}
             latitude={result.lat}
             longitude={result.long}>
-              {result.title}
+              
+              <span>{result.title}</span>
+              
             </Popup>
           ):(
             false
           )}
     </div>
     
-        
+      
   )));
    
     // Transform the  search results object to lat log object
