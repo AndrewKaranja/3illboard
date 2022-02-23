@@ -10,12 +10,11 @@ import Image from 'next/image';
 function listingtype() {
   return (
     <div className='2xl:container h-screen m-auto'>
-      <div className='fixed inset-0 w-7/12 md:hidden lg:block '>
-        <div className='invisible md:visible'>
-        <Image src={BackgroundImg}  alt='cat looking at billboard' objectFit='cover' layout="fill"/>
-        </div>
+      <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block '>
         
-        {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
+        <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
+        <h1 className='absolute z-10 text-2xl justify-center top-[40%] left-[23%] text-white'>What type of ad space do you own?</h1>
+      
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
@@ -38,7 +37,7 @@ function listingtype() {
                         </div>
                         {/* right */}
                         <div>
-                            <h2>Print billboard</h2>
+                            <h2>Print Billboard</h2>
                         </div>
                     </div>
                     <div className='listingType'>
@@ -47,8 +46,8 @@ function listingtype() {
                         <Image src={imgdigi} layout="fill" className='rounded-lg' alt='pic'/>
                         </div>
                         {/* right */}
-                        <div>
-                            <h2>Digital billboard</h2>
+                        <div >
+                            <h2 className='text-center'>Digital Billboard</h2>
                         </div>
                     </div>
                     <div className='listingType'>
@@ -58,7 +57,7 @@ function listingtype() {
                         </div>
                         {/* right */}
                         <div>
-                            <h2>Sidewalk Ads</h2>
+                            <h2>Sidewalk Ad</h2>
                         </div>
                     </div>
                     <div className='listingType'>
@@ -68,7 +67,7 @@ function listingtype() {
                         </div>
                         {/* right */}
                         <div>
-                            <h2>City clock Ad</h2>
+                            <h2>Cityclock Ad</h2>
                         </div>
                     </div>
                     <div className='listingType'>
