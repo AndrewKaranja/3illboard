@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import BackgroundImg from '../../images/streetlights.png';
 import img from '../../images/billboard_fl2.png';
 import imgdigi from '../../images/digital_signage.png';
@@ -7,7 +7,23 @@ import imgclock from '../../images/clock.png';
 import imgmoving from '../../images/movingAd.png';
 import Image from 'next/image';
 
-function listingtype() {
+
+
+
+function Listingtype() {
+  const [billboard, setBillboard] = useState(false);
+  const [digiBillboard, setDigiBillboard] = useState(false);
+ 
+  function selectBillboard() {
+    setBillboard(!billboard);
+  }
+  
+  function selectDigiBillboard() {
+    setDigiBillboard(!digiBillboard);
+  }
+
+
+ 
   return (
     <div className='2xl:container h-screen m-auto'>
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block '>
@@ -30,7 +46,7 @@ function listingtype() {
 
             
                 <div className="border-t m-4 grid grid-flow-row-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-                    <div className='listingType'>
+                    <div className={billboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setDigiBillboard(false) ;selectBillboard()}}>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={img} layout="fill" className='rounded-lg' alt='pic'/>
@@ -40,7 +56,7 @@ function listingtype() {
                             <h2>Print Billboard</h2>
                         </div>
                     </div>
-                    <div className='listingType'>
+                    <div className={digiBillboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setBillboard(false) ;selectDigiBillboard()}}>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={imgdigi} layout="fill" className='rounded-lg' alt='pic'/>
@@ -94,4 +110,4 @@ function listingtype() {
   )
 }
 
-export default listingtype
+export default Listingtype
