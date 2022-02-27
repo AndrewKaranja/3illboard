@@ -6,11 +6,24 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import { useRouter } from 'next/router';
+import Sidebar from './Sidebar';
+
+import * as FaIcons from 'react-icons/fa';
+import * as AiIcons from 'react-icons/ai';
+import * as MdIcons from 'react-icons/md';
+
+import Link from 'next/link'
+import { SidebarData } from './Data/SidebarData';
+
+import { IconContext } from 'react-icons';
 
 function Header({placeholder}) {
+    const [sidebar, setSidebar] = useState(false);
+    const showSidebar = () => setSidebar(!sidebar);
     const [searchInput,setSearchInput]=useState("");
     const[startDate,setStartDate]=useState(new Date());
     const[endDate,setEndDate]=useState(new Date());
+    
     const router=useRouter();
     const selectionRange={
         startDate:startDate,
@@ -61,6 +74,7 @@ function Header({placeholder}) {
           <input 
           value={searchInput}
           onChange={(e)=>setSearchInput(e.target.value)}
+          onClick={()=>setSidebar(false)}
           className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 text-ellipsis' 
           type="text" 
           placeholder={placeholder || 'Start your search'}/>
@@ -72,11 +86,37 @@ function Header({placeholder}) {
       <div className='flex items-center space-x-4 justify-end text-gray-500'>
           <p className='hidden md:inline'>Add your ad space</p>
           <GlobeAltIcon className='h-6 cursor-pointer'/>
-          <div className='flex items-center space-x-2 border-2 p-2 rounded-full'>
-              <MenuIcon className='h-6 cursor-pointer'/>
+          <div className='flex items-center space-x-2 p-2'>
               <UserCircleIcon className='h-6 cursor-pointer'/>
+              <MenuIcon className='h-6 cursor-pointer text-black' onClick={showSidebar}/>
+              
           </div>
+
+        
       </div>
+        {/* testing */}
+        <IconContext.Provider value={{ color: '#fff' }}>
+        
+         <nav className={sidebar ? 'bg-[#FAB038] w-[10rem] h-[20rem] rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
+         <MdIcons.MdOutlineCancel className='absolute m-2 right-0 z-50 hover:scale-150' onClick={()=>setSidebar(false)}/>
+          <ul className='w-[100%]' onClick={showSidebar}>
+           
+            {SidebarData.map((item, index) => {
+              return (
+                <li key={index} className={item.cName}>
+                  <Link href={item.path} passHref>
+                      <div className='flex text-[#f5f5f5] select-none text-sm h-[85%] w-[85%] p-3 justify-start list-none items-center rounded hover:bg-black cursor-pointer'>
+                      {item.icon}
+                    <span className='ml-4'>{item.title}</span>
+                    </div>
+                   
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+         </nav>
+        </IconContext.Provider>
 
       {searchInput && (
           <div className='flex flex-col col-span-3 mx-auto'>

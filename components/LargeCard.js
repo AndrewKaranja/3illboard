@@ -3,7 +3,7 @@ import Traffic from '../images/traffic.png'
 
 function LargeCard({img,title,description,buttonText}) {
   return (
-    <section className='relative py-16 cursor-pointer'>
+    <section className='relative py-16 cursor-pointer select-none'>
         <div className='relative h-96 min-w-[300px]'>
             <Image src={Traffic} layout="fill" objectFit='cover' alt='Large Card Image' className='rounded-2xl'/>
         </div>
