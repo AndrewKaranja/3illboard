@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import Image from 'next/image';
 import Logo from '../images/Logo.png';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
@@ -17,12 +17,17 @@ import { SidebarData } from './Data/SidebarData';
 
 import { IconContext } from 'react-icons';
 
+
+
 function Header({placeholder}) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
     const [searchInput,setSearchInput]=useState("");
     const[startDate,setStartDate]=useState(new Date());
     const[endDate,setEndDate]=useState(new Date());
+
+    const wrapperRef=useRef(null);
+    useOutsideNavAlerter(wrapperRef);
     
     const router=useRouter();
     const selectionRange={
@@ -52,11 +57,25 @@ function Header({placeholder}) {
         });
     }
 
+    function useOutsideNavAlerter(ref){
+      useEffect(() => {
+        function handleClickOutside(event){
+          if (ref.current && !ref.current.contains(event.target)) {
+            setSidebar(false)
+          }
+        }
+        document.addEventListener("mousedown",handleClickOutside);
+      
+        return () => {
+          document.removeEventListener("mousedown",handleClickOutside)
+        }
+      }, [ref]);
+      
+    }
 
-
-  return <header className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:p-5'>
+  return <header ref={wrapperRef} className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:p-5'>
       {/* left */}
-      <div
+      <div 
       onClick={()=> router.push("/")}
       className='relative flex items-center h-10 cursor-pointer my-auto'>
           <Image 
@@ -67,6 +86,7 @@ function Header({placeholder}) {
            height={'36rem'}
            />
            {/* <h3 className='text-3xl'>3illboard</h3> */}
+           
 
       </div>
       {/* middle-search */}
@@ -85,9 +105,9 @@ function Header({placeholder}) {
       {/* right */}
       <div className='flex items-center space-x-4 justify-end text-gray-500'>
           <p className='hidden md:inline'>Add your ad space</p>
-          <GlobeAltIcon className='h-6 cursor-pointer'/>
+          <GlobeAltIcon className='invisible sm:visible h-6 cursor-pointer'/>
           <div className='flex items-center space-x-2 p-2'>
-              <UserCircleIcon className='h-6 cursor-pointer'/>
+              <UserCircleIcon className='invisible sm:visible h-6 cursor-pointer'/>
               <MenuIcon className='h-6 cursor-pointer text-black' onClick={showSidebar}/>
               
           </div>
@@ -97,7 +117,7 @@ function Header({placeholder}) {
         {/* testing */}
         <IconContext.Provider value={{ color: '#fff' }}>
         
-         <nav className={sidebar ? 'bg-[#FAB038] w-[10rem] h-[20rem] rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
+         <nav  className={sidebar ? 'bg-[#FAB038] w-[10rem] h-[20rem] rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
          <MdIcons.MdOutlineCancel className='absolute m-2 right-0 z-50 hover:scale-150' onClick={()=>setSidebar(false)}/>
           <ul className='w-[100%]' onClick={showSidebar}>
            
@@ -119,7 +139,7 @@ function Header({placeholder}) {
         </IconContext.Provider>
 
       {searchInput && (
-          <div className='flex flex-col col-span-3 mx-auto'>
+          <div className='flex flex-col max-w-full col-span-3 mx-auto'>
               <DateRangePicker 
               ranges={[selectionRange]}
               minDate={new Date()}
