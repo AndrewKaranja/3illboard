@@ -1,19 +1,20 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 import BackgroundImg from '../../images/streetlights.png';
-import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
-import * as FcIcons from 'react-icons/fc';
-import * as MdIcons from 'react-icons/md';
-import * as BiIcons from 'react-icons/bi';
+import ReactDOM from "react-dom";
+import ReactTagInput from "@pathofdev/react-tag-input";
+import "@pathofdev/react-tag-input/build/index.css";
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 
-function details() {
+function Details() {
 
     const handleChange = (event) => {
         setOwnershipType(event.target.value);
       };
+
+      const [tags, setTags] =useState(["design"]);
 
     const validate=Yup.object({
         ownerfullname:Yup.string()
@@ -57,65 +58,17 @@ function details() {
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
-          <div className="m-auto px-6  mb-50 xl:w-10/12">
-           {/* Text side */}
-           <div className="mx-4 p-4">
-         <div className="flex items-center">
-            <div className="flex items-center text-orange-600 relative">
-                <div className="rounded-full h-12 w-12 py-3 px-2 text-2xl border-2  border-orange-600">
-                    
-                <BiIcons.BiSelectMultiple/>
-                </div>
-                
-            </div>
-            <div className="flex-auto border-t-2 transition duration-500 ease-in-out border-orange-600"></div>
-            <div className="flex items-center text-white relative">
-                <div className=" rounded-full items-end  h-12 w-12 py-3 px-3 scale-110 border-2 bg-orange-600 border-orange-600">
-                <FcIcons.FcViewDetails className='justify-end'/>
-                
-                </div>
-                
-            </div>
-            <div className="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-300"></div>
-            <div className="flex items-center text-gray-500 relative">
-                <div className="rounded-full h-12 w-12 py-3 px-2 text-2xl border-2 border-gray-300">
-                <MdIcons.MdOutlineAddLocation/>
-                </div>
-               
-            </div>
-            <div className="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-300"></div>
-            <div className="flex items-center text-gray-500 relative">
-                <div className="rounded-full text-2xl h-12 w-12 py-3 px-2 border-2 border-gray-300">
-                <MdIcons.MdPriceChange/>
-                
-                
-                </div>
-               
-            </div>
-            <div className="flex-auto border-t-2 transition duration-500 ease-in-out border-gray-300"></div>
-            <div className="flex items-center text-gray-500 relative">
-                <div className="rounded-full h-12 w-12 py-3 px-2 text-2xl border-2  border-gray-300">
-                <MdIcons.MdMonochromePhotos/>
-                
-                
-                </div>
-                
-            </div>
-        </div>
-    </div>
-
-
-
+          <div className="m-auto px-6 mt-4 xl:w-10/12">
+        
             <div className='space-y-4'>
               <h3 className='text-3xl'>Enter details on the Billboard</h3>
-             
-              
             </div>
 
             <Formik
-                      initialValues={{
-                          ownerfullname:'',
-                          landSize:'',
+                initialValues={{
+                billboardTitle:'',
+                dimensionWidth:'',
+                dimensionHeight:'',
                           parcelNo:'',
                           location:'',
                           ownershipType:'',
@@ -134,57 +87,62 @@ function details() {
                           }}
                           >
 
-                          {formik=>(
-                              <div>
-                                  <div className="p-5">
-    
-    <div className="mt-8 p-4">
-        <div>
+                {formik=>(
+                    <div>
+                     <div className="p-5">
+                        <div className=" p-4">
+                        <div>
+                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Title</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                                <input placeholder="eg..Iconic billboard along Ngong rd" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                            </div>
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.4rem] lowercase'>(eg nearby places of interest to boost intrest in billboard)</p></div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                                <input placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                            </div>
+
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Dimensions</div>
+
             <div className="flex flex-col md:flex-row">
-                <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
+                <div className="w-full flex-1 mx-2">
+                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
                         <input placeholder="Width" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
                 </div>
-                <div className="w-full flex-1 mx-2 svelte-1l8159u">
-                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                        <input placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                <div className="w-full flex-1 mx-2">
+                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                        <input placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> 
+                    </div>
                 </div>
                 <div className="w-15 align-bottom">
-    <select className="form-select appearance-none
-      block
-      w-full
-      px-3
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
-        <option selected>m</option>
-        <option value="in">In</option>
-        
-    </select>
-  </div>
-            </div>
-            <div className="flex flex-col md:flex-row">
-                <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div className="font-bold h-6 mt-3 text-gray-600 text-xs leading-8 uppercase"> Username</div>
-                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                        <input placeholder="Just a hint.." className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                </div>
-                <div className="w-full mx-2 flex-1 svelte-1l8159u">
-                    <div className="font-bold h-6 mt-3 text-gray-600 text-xs leading-8 uppercase"> Your Email</div>
-                    <div className="bg-white my-2 p-1 flex border border-gray-200 rounded svelte-1l8159u">
-                        <input placeholder="jhon@doe.com" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                    <select className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0
+                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
+                        <option selected value="m">m</option>
+                        <option value="in">In</option>
+                        </select>
                 </div>
             </div>
+            
+            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Contact phone No</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                                <input placeholder="+254..." className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                            </div>
+            
+
+            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Other Services Offered</div>
+            <ReactTagInput 
+  tags={tags} 
+  placeholder="Type and press enter"
+  maxTags={10}
+  editable={true}
+  readOnly={false}
+  removeOnBackspace={true}
+  onChange={(newTags) => setTags(newTags)}/>
         </div>
+        
         <div className="flex p-2 mt-4">
             <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-gray-200  
@@ -225,4 +183,4 @@ function details() {
   )
 }
 
-export default details
+export default Details
