@@ -8,6 +8,20 @@ import "@pathofdev/react-tag-input/build/index.css";
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 
+function sanitizePhoneNo(phone){
+  if(phone==""){
+    return "";
+  }
+  if(phone.length < 11 && phone.startsWith("0")){
+    const p=phone.replace(/0/,"254");
+    return p;
+  }
+  if(phone.length == 13 && phone.startsWith("+")){
+    const p=phone.replace(/0/,"");
+    return p;
+  }
+}
+
 function Details() {
 
     const handleChange = (event) => {
@@ -17,27 +31,20 @@ function Details() {
       const [tags, setTags] =useState(["design"]);
 
     const validate=Yup.object({
-        ownerfullname:Yup.string()
-        .min(3,'Must be atleast 3 characters')
-        .max(20,'Must be 20 characters or less')
-        .required('Full Name is required'),
-        landSize:Yup.string()
-        .min(3,'Must be atleas 3 characters')
-        .max(10,'Must be 10 characters or less')
-        .required('Land size in m2 is required'),
-        parcelNo:Yup.string()
-        .required('Parcel Number is required'),
-        location:Yup.string()
-        .required('Location is required'),
-        ownershipType:Yup.string()
+        billboardTitle:Yup.string()
+        .min(5,'Must be atleast 5 characters')
+        .max(50,'Must be 50 characters or less')
+        .required('Title is required'),
+        billboardDescription:Yup.number()
+        .min(5,'Must be atleas 3 characters')
+        .required('Billboard description is required'),
+        dimensionWidth:Yup.number()
+        .required('Width is required'),
+        dimensionHeight:Yup.number()
+        .required('Height is required'),
+        contact:Yup.string()
         .required('Required'),
-        regDate:Yup.string()
-        .oneOf([Yup.ref('password'),null],'Password must match')
-        .required('Required'),
-        forSale:Yup.bool()
-        .required('Required'),
-        acceptedTerms:Yup.bool()
-        .oneOf([true],'You must accept the terms and conditons')
+        services:Yup.string()
         .required('Required'),
         
       });
@@ -67,14 +74,11 @@ function Details() {
             <Formik
                 initialValues={{
                 billboardTitle:'',
+                billboardDescription:'',
                 dimensionWidth:'',
                 dimensionHeight:'',
-                          parcelNo:'',
-                          location:'',
-                          ownershipType:'',
-                          regDate:'',
-                          forSale:false,
-                          acceptedTerms:false,
+                contact:'',
+                services:'',
                           }}
                           validationSchema={validate}
                           onSubmit={(values,{setSubmitting,resetForm,setErrors})=>{
@@ -98,7 +102,7 @@ function Details() {
                                 <input placeholder="eg..Iconic billboard along Ngong rd" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
                             </div>
 
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.4rem] lowercase'>(eg nearby places of interest to boost intrest in billboard)</p></div>
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.5rem] lowercase'>(eg nearby places of interest to boost intrest)</p></div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
                                 <input placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
@@ -109,16 +113,16 @@ function Details() {
             <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2">
                     <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                        <input placeholder="Width" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                        <input type="number" placeholder="Width" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
                 </div>
                 <div className="w-full flex-1 mx-2">
                     <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                        <input placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> 
+                        <input type="number" placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> 
                     </div>
                 </div>
-                <div className="w-15 align-bottom">
-                    <select className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0
-                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example">
+                <div className="w-7">
+                    <select className="form-select ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
+                    focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none" aria-label="Default select example">
                         <option selected value="m">m</option>
                         <option value="in">In</option>
                         </select>
@@ -157,12 +161,7 @@ function Details() {
         text-orange-100 
         border duration-200 ease-in-out 
         border-orange-600 transition">Next</button>
-                <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
-        hover:bg-orange-200  
-        bg-orange-100 
-        text-orange-700 
-        border duration-200 ease-in-out 
-        border-orange-600 transition">Skip</button>
+               
             </div>
         </div>
     </div>
