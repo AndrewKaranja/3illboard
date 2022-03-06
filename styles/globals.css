@@ -22,6 +22,14 @@
      focus:border-black select-none
      active:border-black transition transform duration-200 ease-out;
   }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* sidebar code */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
   .navText{
     @apply flex text-[#f5f5f5] text-sm h-12 justify-center list-none  items-center ;
   }
