@@ -11,7 +11,7 @@ import Banner from '../../components/dashboard/Banner';
 
 function Dashboard() {
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -41,7 +41,7 @@ function Dashboard() {
               {/* Line chart (Acme Advanced) */}
               <DashboardCard02 />
               {/* Line chart (Acme Professional) */}
-              u77
+              
               
             </div>
 

@@ -1,3 +1,4 @@
+const plugin = require('tailwindcss/plugin');
 module.exports = {
   mode:"jit",
   content: ["./pages/**/*.{js,ts,jsx,tsx}",   
@@ -11,5 +12,11 @@ module.exports = {
   variants:{
     extend: {},
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [require("tailwind-scrollbar-hide"),
+  plugin(({ addVariant, e }) => {
+    addVariant('sidebar-expanded', ({ modifySelectors, separator }) => {
+      modifySelectors(({ className }) => `.sidebar-expanded .${e(`sidebar-expanded${separator}${className}`)}`);
+    });
+  }),
+],
 }
