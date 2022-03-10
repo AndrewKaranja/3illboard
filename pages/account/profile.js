@@ -1,8 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react';
+import Sidebar from '../../components/dashboard/Sidebar';
+import Header from '../../components/dashboard/Header';
 
 function Profile() {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
-    <div>
+    <div className="flex h-screen overflow-hidden">
+
+    {/* Sidebar */}
+    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+    {/* Content area */}
+    <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+
+      {/*  Site header */}
+      <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+      <main>
+        
+    <div className='mx-8'>
     <div className="mt-10 sm:mt-0">
     <div className="md:grid md:grid-cols-3 md:gap-6">
       <div className="md:col-span-1">
@@ -54,6 +70,20 @@ function Profile() {
                     className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
+
+                <div className="col-span-6 sm:col-span-4">
+                  <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                    Company Name
+                  </label>
+                  <input
+                    type="text"
+                    name="companyName"
+                    id="companyName"
+                    autoComplete="companyName"
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+
 
                 <div className="col-span-6 sm:col-span-3">
                   <label htmlFor="country" className="block text-sm font-medium text-gray-700">
@@ -266,6 +296,12 @@ function Profile() {
         </div>
       </div>
   </div>
+
+  </main>
+
+
+      </div>
+    </div>
  
   )
 }

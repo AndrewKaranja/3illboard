@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import BackgroundImg from '../../images/streetlights.png';
 import ReactDOM from "react-dom";
@@ -23,6 +24,8 @@ function sanitizePhoneNo(phone){
 }
 
 function Details() {
+  const router=useRouter();
+const {listingType}=router.query;
 
     const handleChange = (event) => {
         setOwnershipType(event.target.value);

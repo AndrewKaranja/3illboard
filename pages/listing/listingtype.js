@@ -6,6 +6,7 @@ import imgside from '../../images/street-sideAd.png';
 import imgclock from '../../images/clock.png';
 import imgmoving from '../../images/movingAd.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 
 
@@ -13,6 +14,19 @@ import Image from 'next/image';
 function Listingtype() {
   const [billboard, setBillboard] = useState(false);
   const [digiBillboard, setDigiBillboard] = useState(false);
+  const router=useRouter();
+  const next=()=>{
+    router.push({
+        pathname:'/listing/details',
+        query:{
+            listingType:adType
+
+        }
+    });
+
+}
+
+  const [adType, setAdType] = useState()
  
   function selectBillboard() {
     setBillboard(!billboard);
@@ -46,7 +60,7 @@ function Listingtype() {
 
             
                 <div className="border-t m-4 grid grid-flow-row-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-2">
-                    <div className={billboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setDigiBillboard(false) ;selectBillboard()}}>
+                    <div className={billboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setDigiBillboard(false) ;selectBillboard();setAdType("billboard");}}>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={img} layout="fill" className='rounded-lg' alt='pic'/>
@@ -56,7 +70,7 @@ function Listingtype() {
                             <h2>Print Billboard</h2>
                         </div>
                     </div>
-                    <div className={digiBillboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setBillboard(false) ;selectDigiBillboard()}}>
+                    <div className={digiBillboard ?'listingType  border-2 border-black':'listingType'} onClick={()=>{setBillboard(false) ;selectDigiBillboard();setAdType("digitalbillboard");}}>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={imgdigi} layout="fill" className='rounded-lg' alt='pic'/>
@@ -99,7 +113,10 @@ function Listingtype() {
                 </div>
                 <div className='flex  justify-between'>
                 <button className='text-sm text-gray-900 bg-gray-100 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Back</button>
-                <button className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Next</button>
+                <button
+                disabled={billboard==false && digiBillboard==false}
+                onClick={next}
+                 className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Next</button>
                 </div>
 
 
