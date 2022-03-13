@@ -80,7 +80,7 @@ function Listingtype() {
                             <h2 className='text-center'>Digital Billboard</h2>
                         </div>
                     </div>
-                    <div className='listingType'>
+                    <div className='listingType grayscale'>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={imgside} layout="fill" className='rounded-lg' alt='pic'/>
@@ -90,7 +90,7 @@ function Listingtype() {
                             <h2>Sidewalk Ad</h2>
                         </div>
                     </div>
-                    <div className='listingType'>
+                    <div className='listingType grayscale'>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={imgclock} layout="fill" className='rounded-lg' alt='pic'/>
@@ -100,7 +100,7 @@ function Listingtype() {
                             <h2>Cityclock Ad</h2>
                         </div>
                     </div>
-                    <div className='listingType'>
+                    <div className='listingType grayscale'>
                         {/* left */}
                         <div className='relative h-16 w-16 mb-2'>
                         <Image src={imgmoving} layout="fill" className='rounded-lg' alt='pic'/>

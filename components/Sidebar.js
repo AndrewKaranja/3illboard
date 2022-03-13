@@ -1,15 +1,19 @@
 import React,{useState} from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
+import * as IoIcons from 'react-icons/io';
 import Link from 'next/link'
 import { SidebarData } from './Data/SidebarData';
 
 import { IconContext } from 'react-icons';
+import { useAuth } from '../context/AuthContext';
+
 
 
 function Sidebar() {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
+    const {user}=useAuth();
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
@@ -19,7 +23,7 @@ function Sidebar() {
           </div>
         </div>
         <nav className={sidebar ? 'bg-black w-64 h-[70vh] rounded-2xl flex justify-center m-2 fixed  z-50  transition duration-850 active:left-0 active:transition active:duration-350' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 left-[-100%] transition duration-850'}>
-          <ul className='w-[100%]' onClick={showSidebar}>
+          <ul className='w-[100%]' >
             <li className='bg-black w-[100%] h-20 flex justify-start items-center'>
               <Link href='#' className='bg-none text-3xl ml-8' passHref>
                 <AiIcons.AiOutlineClose />
@@ -38,6 +42,7 @@ function Sidebar() {
                 </li>
               );
             })}
+            
           </ul>
         </nav>
         

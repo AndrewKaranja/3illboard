@@ -1,10 +1,67 @@
-import React from 'react'
+import React from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
 import GoogleLogo from '../public/google.svg';
 import FacebookLogo from '../public/facebook.svg';
 import BackgroundImg from '../images/cat.png'
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useAuth } from '../context/AuthContext';
+
+function choosePath(hostAd){
+  let path="/";
+  if (hostAd=="true") {
+    path="/listing/listingtype"
+    
+  }else{
+    path="/"
+  }
+  return path;
+
+  } 
 
 function Login() {
+  const firebaseConfig = {
+    apiKey:`${process.env.firebase_key}`,
+    authDomain: "illboard.firebaseapp.com",
+    projectId: "illboard",
+    storageBucket: "illboard.appspot.com",
+    messagingSenderId: `${process.env.firebase_messagerID}`,
+    appId: `${process.env.firebase_appID}`,
+    measurementId: `${process.env.firebase_measurementID}`
+  };
+  firebase.initializeApp(firebaseConfig);
+  const router=useRouter();
+ 
+  const {hostAd}=router.query;
+  console.log(hostAd)
+ 
+
+ 
+
+  
+ 
+
+  const{user}=useAuth();
+  console.log(user);
+
+  // Configure FirebaseUI.
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: choosePath(hostAd),
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    ],
+    callbacks: {
+     
+    },
+  };
   return (
     <div className='2xl:container h-screen m-auto'>
       <div className='fixed inset-0 w-7/12 md:hidden lg:block '>
@@ -23,8 +80,29 @@ function Login() {
               </a>
               <p className='font-medium text-lg text-gray-600'>Welcome to 3illboard! Login first:</p>
             </div>
+
+            <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
             
-            <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            
+                <div className="border-t pt-12">
+                    <div className="space-y-2 text-center">
+                        
+                        <span className="block text-sm tracking-wide text-gray-500">Get free adspace advertising for a month.</span>
+                    </div>
+                </div>
+
+
+          </div>
+        </div>
+      </div>
+
+   
+  )
+}
+
+export default Login
+
+{/* <div className="mt-12 grid gap-6 sm:grid-cols-2">
               <button className='py-3 px-6 rounded-xl bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 active:bg-yellow-200'>
                 <div className='flex justify-center gap-4'>
                 <Image src={GoogleLogo}  alt='google logo' width="20px" height="20px"/>
@@ -71,21 +149,6 @@ function Login() {
                             <span className="text-sm tracking-wide text-blue-600">Create new account</span>
                         </a>
                     </div>
-                </form>
-                <div className="border-t pt-12">
-                    <div className="space-y-2 text-center">
-                        
-                        <span className="block text-sm tracking-wide text-gray-500">Get free adspace advertising for a month.</span>
-                    </div>
-                </div>
+                </form> */}
 
 
-          </div>
-        </div>
-      </div>
-
-   
-  )
-}
-
-export default Login

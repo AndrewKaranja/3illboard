@@ -4,6 +4,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import BackgroundImg from '../images/cat.png'
 import Image from 'next/image';
+import { useAuth } from '../context/AuthContext';
 
 
 function Signup() {
@@ -17,6 +18,9 @@ function Signup() {
     measurementId: `${process.env.firebase_measurementID}`
   };
   firebase.initializeApp(firebaseConfig);
+
+  const{user}=useAuth();
+  console.log(user);
 
   // Configure FirebaseUI.
   const uiConfig = {

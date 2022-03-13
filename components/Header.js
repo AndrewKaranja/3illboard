@@ -7,6 +7,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { DateRangePicker } from 'react-date-range';
 import { useRouter } from 'next/router';
 import Sidebar from './Sidebar';
+import * as IoIcons from 'react-icons/io';
 
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
@@ -16,6 +17,8 @@ import Link from 'next/link'
 import { SidebarData } from './Data/SidebarData';
 
 import { IconContext } from 'react-icons';
+import Transition from '../utils/Transition';
+import { useAuth } from '../context/AuthContext';
 
 
 
@@ -25,6 +28,38 @@ function Header({placeholder}) {
     const [searchInput,setSearchInput]=useState("");
     const[startDate,setStartDate]=useState(new Date());
     const[endDate,setEndDate]=useState(new Date());
+
+
+    //usermenu
+    const{user,logout}=useAuth();
+  
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+  
+    const trigger = useRef(null);
+    const dropdown = useRef(null);
+  
+    // close on click outside
+    useEffect(() => {
+      const clickHandler = ({ target }) => {
+        if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
+        setDropdownOpen(false);
+      };
+      document.addEventListener('click', clickHandler);
+      return () => document.removeEventListener('click', clickHandler);
+    });
+  
+    // close if the esc key is pressed
+    useEffect(() => {
+      const keyHandler = ({ keyCode }) => {
+        if (!dropdownOpen || keyCode !== 27) return;
+        setDropdownOpen(false);
+      };
+      document.addEventListener('keydown', keyHandler);
+      return () => document.removeEventListener('keydown', keyHandler);
+    });
+
+
 
     const wrapperRef=useRef(null);
     useOutsideNavAlerter(wrapperRef);
@@ -55,6 +90,20 @@ function Header({placeholder}) {
 
             }
         });
+    }
+    function checkLogin(){
+      if(user!==null){
+        router.push({
+          pathname:'/listing/listingtype'
+        })
+      }else{
+        router.push({
+          pathname:'/login',
+          query:{
+            hostAd:true
+          }
+        })
+      }
     }
 
     function useOutsideNavAlerter(ref){
@@ -104,10 +153,73 @@ function Header({placeholder}) {
 
       {/* right */}
       <div className='flex items-center space-x-4 justify-end text-gray-500'>
-          <p className='hidden md:inline'>Add your ad space</p>
-          <GlobeAltIcon className='invisible sm:visible h-6 cursor-pointer'/>
+          <button className='hidden md:inline border-2 border-[#FAB038] rounded text-black hover:bg-orange-300 p-2'
+          onClick={checkLogin}>Add your ad space</button>
+          
           <div className='flex items-center space-x-2 p-2'>
-              <UserCircleIcon className='invisible sm:visible h-6 cursor-pointer'/>
+              
+              <button
+        ref={trigger}
+        className="inline-flex justify-center items-center group"
+        aria-haspopup="true"
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+        aria-expanded={dropdownOpen}
+      >
+        <UserCircleIcon className={user?'invisible sm:visible h-6 cursor-pointer text-green-400':'invisible sm:visible h-6 cursor-pointer'}/>
+        <div className="flex items-center truncate">
+          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">{user?.displayName}</span>
+          <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
+            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+          </svg>
+        </div>
+      </button>
+              <Transition
+        className={user?'origin-top-right z-10 absolute top-full right-0 w-44 px-4 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1':'hidden'}
+        show={dropdownOpen}
+        enter="transition ease-out duration-200 transform"
+        enterStart="opacity-0 -translate-y-2"
+        enterEnd="opacity-100 translate-y-0"
+        leave="transition ease-out duration-200"
+        leaveStart="opacity-100"
+        leaveEnd="opacity-0"
+      >
+        <div
+          ref={dropdown}
+          onFocus={() => setDropdownOpen(true)}
+          onBlur={() => setDropdownOpen(false)}
+        >
+          <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
+            <div className="font-medium text-slate-800">{user?.displayName}</div>
+            <div className="text-xs text-slate-500 italic">Administrator</div>
+          </div>
+          <ul>
+            <li>
+              <Link
+                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                href="/"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                Settings
+              </Link>
+            </li>
+            <li>
+              <div
+                className="font-medium hover:cursor-pointer text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                
+                onClick={() =>{
+                  logout();
+                  setDropdownOpen(!dropdownOpen);
+                  
+
+                }}
+              >
+                Sign Out
+              </div>
+            </li>
+          </ul>
+        </div>
+      </Transition>
+
               <MenuIcon className='h-6 cursor-pointer text-black' onClick={showSidebar}/>
               
           </div>
@@ -120,6 +232,7 @@ function Header({placeholder}) {
          <nav  className={sidebar ? 'bg-[#FAB038] w-[10rem] h-[20rem] rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
          <MdIcons.MdOutlineCancel className='absolute m-2 right-0 z-50 hover:scale-150' onClick={()=>setSidebar(false)}/>
           <ul className='w-[100%]' onClick={showSidebar}>
+            
            
             {SidebarData.map((item, index) => {
               return (
@@ -134,6 +247,7 @@ function Header({placeholder}) {
                 </li>
               );
             })}
+            
           </ul>
          </nav>
         </IconContext.Provider>

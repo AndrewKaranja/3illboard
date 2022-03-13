@@ -9,6 +9,7 @@ import MediumCard from '../components/MediumCard';
 import LargeCard from '../components/LargeCard';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home({exploreData,cardsData}) {
 

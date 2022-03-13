@@ -4,6 +4,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Router from "next/router";
 
 import ProgressBar from "@badrap/bar-of-progress";
+import { AuthContextProvider } from "../context/AuthContext";
 
 const progress=new ProgressBar({
   size:4,
@@ -17,7 +18,12 @@ Router.events.on('routeChangeComplete',progress.finish);
 Router.events.on('routeChangeError',progress.finish);
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return(
+    <AuthContextProvider>
+     <Component {...pageProps} />
+     </AuthContextProvider>
+
+  )
 }
 
 export default MyApp

@@ -6,6 +6,8 @@ import BackgroundImg from '../../images/streetlights.png';
 import ReactDOM from "react-dom";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css'
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 
@@ -26,19 +28,22 @@ function sanitizePhoneNo(phone){
 function Details() {
   const router=useRouter();
 const {listingType}=router.query;
+const [phoneNo, setphoneNo] = useState(null);
+const [tags, setTags] =useState(["design"]);
 
-    const handleChange = (event) => {
-        setOwnershipType(event.target.value);
-      };
 
-      const [tags, setTags] =useState(["design"]);
+    // const handleChange = (event) => {
+    //     setOwnershipType(event.target.value);
+    //   };
+
+      
 
     const validate=Yup.object({
         billboardTitle:Yup.string()
         .min(5,'Must be atleast 5 characters')
         .max(50,'Must be 50 characters or less')
         .required('Title is required'),
-        billboardDescription:Yup.number()
+        billboardDescription:Yup.string()
         .min(5,'Must be atleas 3 characters')
         .required('Billboard description is required'),
         dimensionWidth:Yup.number()
@@ -80,11 +85,18 @@ const {listingType}=router.query;
                 billboardDescription:'',
                 dimensionWidth:'',
                 dimensionHeight:'',
-                contact:'',
-                services:'',
+                
                           }}
+
                           validationSchema={validate}
-                          onSubmit={(values,{setSubmitting,resetForm,setErrors})=>{
+                          onSubmit={async(values,{setSubmitting,resetForm,setErrors})=>{
+                          //  console.log(phoneNo);
+                          //  console.log(tags);
+                          //  console.log(listingType);
+                          await sleep(500);
+        alert(JSON.stringify(values, null, 2));
+                           
+
                               setTimeout(()=>{
                                   alert(JSON.stringify(values,null,2));
                                   resetForm();
@@ -95,20 +107,27 @@ const {listingType}=router.query;
                           >
 
                 {formik=>(
-                    <div>
+                    <Form>
                      <div className="p-5">
                         <div className=" p-4">
                         <div>
                             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Title</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input placeholder="eg..Iconic billboard along Ngong rd" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                                <Field id='billboardTitle' name="billboardTitle" placeholder="eg..Iconic billboard along Ngong rd" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                            
+                                
+                                 </div>
+                                 <ErrorMessage component="div"  name="billboardTitle" className="text-red-600"/>
                             </div>
 
                             <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.5rem] lowercase'>(eg nearby places of interest to boost intrest)</p></div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                                <Field name="billboardDescription"  placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="billboardDescription" className="text-red-600"/>
                             </div>
 
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Dimensions</div>
@@ -116,15 +135,24 @@ const {listingType}=router.query;
             <div className="flex flex-col md:flex-row">
                 <div className="w-full flex-1 mx-2">
                     <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                        <input type="number" placeholder="Width" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                        <Field name="dimensionWidth"  type="number" placeholder="Width" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                        <ErrorMessage
+                        component="div"
+                        name="dimensionWidth"
+                        className="text-red-600"/>
+                         </div>
                 </div>
                 <div className="w-full flex-1 mx-2">
                     <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                        <input type="number" placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> 
+                        <Field name="dimensionHeight" type="number" placeholder="Height" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                        <ErrorMessage
+                        component="div"
+                        name="dimensionHeight"
+                        className="text-red-600"/> 
                     </div>
                 </div>
                 <div className="w-7">
-                    <select className="form-select ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
+                    <select className="form-select bg-orange-200 ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700  bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
                     focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none" aria-label="Default select example">
                         <option selected value="m">m</option>
                         <option value="in">In</option>
@@ -133,10 +161,15 @@ const {listingType}=router.query;
             </div>
             
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Contact phone No</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input placeholder="+254..." className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
+                            <PhoneInput
+                            country={'ke'}
+                            regions={'africa'}
+                            className="ml-3"
+                          
+                            
+                            value={phoneNo}
+                            onChange={setphoneNo(phoneNo)}/>
+                     
             
 
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Other Services Offered</div>
@@ -158,7 +191,7 @@ const {listingType}=router.query;
         border duration-200 ease-in-out 
         border-gray-600 transition">Previous</button>
             <div className="flex-auto flex flex-row-reverse">
-                <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                <button type="submit" className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-orange-600  
         bg-orange-600 
         text-orange-100 
@@ -169,7 +202,7 @@ const {listingType}=router.query;
         </div>
     </div>
 </div>
-                                </div>
+                                </Form>
                           )}
                       </Formik>
             
