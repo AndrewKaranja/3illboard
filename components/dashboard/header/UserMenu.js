@@ -5,17 +5,32 @@ import Transition from '../../../utils/Transition';
 
 import UserAvatar from '../../../images/user.svg';
 import { useAuth } from '../../../context/AuthContext';
+import { useRouter } from 'next/router';
 
 
 
 function UserMenu() {
-
+const [error,setError]=useState("")
   const{user,logout}=useAuth();
+  const router=useRouter();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef(null);
   const dropdown = useRef(null);
+  async function handleLogout(){
+    setError('')
+    try {
+      await logout();
+      router.push("/");
+    } catch (error) {
+      
+    }
+   
+    
+    
+
+  }
 
   // close on click outside
   useEffect(() => {
@@ -88,12 +103,7 @@ function UserMenu() {
               <div
                 className="font-medium hover:cursor-pointer text-sm text-indigo-500 hover:text-indigo-600 flex py-1 px-3"
                 
-                onClick={() =>{
-                  logout();
-                  setDropdownOpen(!dropdownOpen);
-                  
-
-                }}
+                onClick={handleLogout}
               >
                 Sign Out
               </div>

@@ -1,6 +1,7 @@
-import React,{useCallback, useState,useRef} from 'react';
+import React,{useCallback, useState,useRef,useEffect} from 'react';
 import BackgroundImg from '../../images/streetlights.png';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import mapStyles from '../../mapStyles';
@@ -44,6 +45,7 @@ const containerStyle = {
   }
 
 function Location() {
+  const router=useRouter();
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: `${process.env.GOOGLEMAPS_API_KEY}`,
     libraries
@@ -69,6 +71,8 @@ function Location() {
 
   },[]);
 
+
+
   const panTo=useCallback(({lat,lng})=>{
     mapRef.current.panTo({lat,lng});
     mapRef.current.setZoom(16);
@@ -76,6 +80,18 @@ function Location() {
   },[])
 
   const [markers, setMarkers] = useState([]);
+  useEffect(() => {
+    localStorage.setItem('listingLocation', JSON.stringify(markers));
+  }, [markers]);
+
+     const handleNextClick = () => {
+      setTimeout(() => {
+        if(markers!==null){router.push("/listing/photos");}
+        
+      }, 500);
+       
+        
+      };
 
   
 
@@ -136,7 +152,7 @@ function Location() {
 
                     <div className='flex  justify-between pb-10  w-[30rem]'>
                       <button className='text-sm text-gray-900 bg-gray-100 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Back</button>
-                      <button className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Next</button>
+                      <button onClick={handleNextClick} className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Next</button>
                     </div>
            
 

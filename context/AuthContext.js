@@ -4,13 +4,15 @@ import { auth } from '../firebase';
 
 const AuthContext= createContext({});
 
-export const useAuth=()=>useContext(AuthContext)
+export const useAuth=()=>useContext(AuthContext);
 export const AuthContextProvider=({children})=>{
 
     const [user,setUser]=useState(null);
+    const [loading,setLoading]=useState(true);
 
     useEffect(()=>{
         const unsubscribe= onAuthStateChanged(auth,(user)=>{
+            
             if(user){
                 setUser({
                     uid:user.uid,
@@ -21,6 +23,7 @@ export const AuthContextProvider=({children})=>{
             }else{
                 setUser(null);
             }
+            setLoading(false);
 
             console.log(user)
         })
@@ -34,7 +37,7 @@ export const AuthContextProvider=({children})=>{
 
     return (
         <AuthContext.Provider value={{user,logout}}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     )
 }

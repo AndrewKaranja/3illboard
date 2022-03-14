@@ -8,6 +8,7 @@ import DashboardCard02 from '../../components/dashboard/RecentCard';
 
 
 import Banner from '../../components/dashboard/Banner';
+import { withProtected } from '../../hooks/route';
 
 function Dashboard() {
 
@@ -55,4 +56,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default withProtected(Dashboard) ;

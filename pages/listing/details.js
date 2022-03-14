@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -31,6 +31,13 @@ const {listingType}=router.query;
 const [phoneNo, setphoneNo] = useState(null);
 const [tags, setTags] =useState(["design"]);
 
+const [listingInfo, setlistingInfo] = useState([]);
+
+useEffect(() => {
+  localStorage.setItem('listingInfo', JSON.stringify(listingInfo));
+}, [listingInfo]);
+
+
 
     // const handleChange = (event) => {
     //     setOwnershipType(event.target.value);
@@ -50,10 +57,7 @@ const [tags, setTags] =useState(["design"]);
         .required('Width is required'),
         dimensionHeight:Yup.number()
         .required('Height is required'),
-        contact:Yup.string()
-        .required('Required'),
-        services:Yup.string()
-        .required('Required'),
+       
         
       });
 
@@ -89,26 +93,31 @@ const [tags, setTags] =useState(["design"]);
                           }}
 
                           validationSchema={validate}
-                          onSubmit={async(values,{setSubmitting,resetForm,setErrors})=>{
-                          //  console.log(phoneNo);
-                          //  console.log(tags);
-                          //  console.log(listingType);
-                          await sleep(500);
-        alert(JSON.stringify(values, null, 2));
+                          onSubmit={values=>{
+                          
+                            setlistingInfo({
+                              listingType:listingType,
+                              billboardTitle:values.billboardTitle,
+                              billboardDescription:values.billboardDescription,
+                              dimensionWidth:values.dimensionWidth,
+                              dimensionHeight:values.dimensionHeight,
+                              otherServices:tags,
+                           });
+                           console.log(listingInfo);
+                           router.push("/listing/location")
                            
-
-                              setTimeout(()=>{
-                                  alert(JSON.stringify(values,null,2));
-                                  resetForm();
-                                  setSubmitting(false);
-                              },3000)
-                              //signup(values.email,values.password)
                           }}
+                          
                           >
 
                 {formik=>(
+                  <div>
+                
+                    
                     <Form>
+                      
                      <div className="p-5">
+                     
                         <div className=" p-4">
                         <div>
                             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Title</div>
@@ -154,24 +163,22 @@ const [tags, setTags] =useState(["design"]);
                 <div className="w-7">
                     <select className="form-select bg-orange-200 ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700  bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
                     focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none" aria-label="Default select example">
-                        <option selected value="m">m</option>
+                        <option defaultValue value="m">m</option>
                         <option value="in">In</option>
                         </select>
                 </div>
             </div>
             
-            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Contact phone No</div>
+            {/* <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Contact phone No</div>
                             <PhoneInput
                             country={'ke'}
                             regions={'africa'}
                             className="ml-3"
-                          
-                            
-                            value={phoneNo}
-                            onChange={setphoneNo(phoneNo)}/>
+                            onBlur={formik.handleBlur}
+                            value={formik.values.contact}
+                            onChange={formik.handleChange}/> */}
                      
             
-
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Other Services Offered</div>
             <ReactTagInput 
   tags={tags} 
@@ -189,20 +196,21 @@ const [tags, setTags] =useState(["design"]);
         bg-gray-100 
         text-gray-700 
         border duration-200 ease-in-out 
-        border-gray-600 transition">Previous</button>
+        border-gray-600 transition" type='reset'>Previous</button>
             <div className="flex-auto flex flex-row-reverse">
-                <button type="submit" className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-orange-600  
         bg-orange-600 
         text-orange-100 
         border duration-200 ease-in-out 
-        border-orange-600 transition">Next</button>
+        border-orange-600 transition" type='submit'>Next</button>
                
             </div>
         </div>
     </div>
 </div>
                                 </Form>
+                                </div>
                           )}
                       </Formik>
             

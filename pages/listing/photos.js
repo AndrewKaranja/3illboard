@@ -69,7 +69,7 @@ function Photos() {
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block  '>
         
         <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
-        <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>Show your customers how the billboard looks like</h1>
+        <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>Showcase your billboard</h1>
        
         
         {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}

@@ -8,6 +8,7 @@ import BackgroundImg from '../images/cat.png'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useAuth } from '../context/AuthContext';
+import { withPublic } from '../hooks/route';
 
 function choosePath(hostAd){
   let path="/";
@@ -21,7 +22,7 @@ function choosePath(hostAd){
 
   } 
 
-function Login() {
+function Login({user}) {
   const firebaseConfig = {
     apiKey:`${process.env.firebase_key}`,
     authDomain: "illboard.firebaseapp.com",
@@ -35,16 +36,9 @@ function Login() {
   const router=useRouter();
  
   const {hostAd}=router.query;
-  console.log(hostAd)
  
-
  
-
   
- 
-
-  const{user}=useAuth();
-  console.log(user);
 
   // Configure FirebaseUI.
   const uiConfig = {
@@ -100,7 +94,7 @@ function Login() {
   )
 }
 
-export default Login
+export default withPublic(Login) ;
 
 {/* <div className="mt-12 grid gap-6 sm:grid-cols-2">
               <button className='py-3 px-6 rounded-xl bg-yellow-50 hover:bg-yellow-100 focus:bg-yellow-100 active:bg-yellow-200'>
