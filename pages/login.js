@@ -7,6 +7,8 @@ import FacebookLogo from '../public/facebook.svg';
 import BackgroundImg from '../images/cat.png'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { db } from '../firebase';
+import { collection,addDoc,doc } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import { withPublic } from '../hooks/route';
 
@@ -34,8 +36,14 @@ function Login({user}) {
   };
   firebase.initializeApp(firebaseConfig);
   const router=useRouter();
+  const usersCollectionRef=collection(db,"users");
  
   const {hostAd}=router.query;
+
+  const addUser=async(user)=>{
+    
+    await addDoc(usersCollectionRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
+  }
  
  
   
@@ -45,7 +53,7 @@ function Login({user}) {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: choosePath(hostAd),
+   signInSuccessUrl: choosePath(hostAd),
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -53,6 +61,22 @@ function Login({user}) {
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
+      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        const user = authResult.user;
+        const credential = authResult.credential;
+        const isNewUser = authResult.additionalUserInfo.isNewUser;
+        const providerId = authResult.additionalUserInfo.providerId;
+        const operationType = authResult.operationType;
+        if(isNewUser==true){
+          console.log(user);
+          addUser(user);
+
+        }
+        // Do something with the returned AuthResult.
+        // Return type determines whether we continue the redirect
+        // automatically or whether we leave that to developer to handle.
+        return true;
+      }
      
     },
   };

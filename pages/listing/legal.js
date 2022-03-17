@@ -1,14 +1,79 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
 import BackgroundImg from '../../images/streetlights.png';
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
+import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+import {storage} from "../../firebase";
+import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { useAuth } from '../../context/AuthContext';
 
 
-
+function ErrorNotification({errors}){
+  return <div>
+    <p className="text-red-500">{errors}</p>
+  </div>
+}
 
 function Legal() {
+const {user}=useAuth()
+const router=useRouter();
+    const [files, setFiles] = useState([]);
+    const [errors,setErrors]=useState('');
+    const [imageSrc, setImageSrc] = useState(undefined);
+    const updateFiles = (incommingFiles) => {
+      console.log("incomming files", incommingFiles);
+      setFiles(incommingFiles);
+    };
+    const onDelete = (id) => {
+      setFiles(files.filter((x) => x.id !== id));
+    };
+    const handleSee = (imageSource) => {
+      setImageSrc(imageSource);
+    };
+    const handleNextClick=()=>{
+      console.log(files);
+      if(Object.keys(files).length==0){
+        setErrors("please upload atleast one document")
+
+      }else{
+        setErrors("")
+        uploadFiles(files);
+
+        router.push("/listing/preview")
+        
+        
+      }
+    }
+
+
+
+const [progress,setProgress]=useState(0);
+// const formHandler=(e)=>{
+//   const file=e.target[0].files[0];
+//   console.log(file);
+//   uploadFiles(file);
+// }
+
+const uploadFiles=(file)=>{
+  if(!file) return;
+  const storageRef=ref(storage, `/files/${user.uid}/legal/${file.name}`)
+  const uploadTask=uploadBytesResumable(storageRef,file);
+  uploadTask.on("state_changed",(snapshot)=>{
+    const prog=Math.round(
+      (snapshot.bytesTransferred/snapshot.totalBytes)* 100
+    );
+    setProgress(prog);
+  },(err)=>console.log(err),
+  ()=>{
+    getDownloadURL(uploadTask.snapshot.ref)
+    .then((url)=>console.log(url))
+  }
+  );
+}
+
+
   return (
     <div className='2xl:container h-screen m-auto'>
       {/* <Head>
@@ -31,42 +96,47 @@ function Legal() {
             </div>
 
             <div>
-                     <div className="p-5">
-                        <div className=" p-4">
-                        <div>
-                         
-                            
+              <div className="text-orange-400">Please upload atleast two of this documents to speed up verification and listing.<p className="text-gray-900 text-lg">(Certificate of occupancy,Business license,Tax certificate,Business insurance or A service contract)</p></div>
+            <Dropzone
+        onChange={updateFiles}
+        value={files}
+	onClean
+	accept={"image/jpeg,.png,.pdf"}
+	maxFileSize={5242880}
+	maxFiles={5}
+	label={"Drop Files here or click to browse"}
+	minHeight={"200px"}
+	maxHeight={"500px"}
+	method={"POST"}
+	behaviour={"add"}
+	uploadOnDrop
+	color={"#fab308"}
+	disableScroll
+      >
+        {files?.map((file) => (
+          <FileItem
+            {...file}
+            key={file.id}
+	    onDelete={onDelete}
+	    onSee={handleSee}
+	    alwaysActive
+	    preview
+	    info
+	    hd
+	    elevation={1}
+	    resultOnTooltip
+          />
+        ))}
+       <FullScreenPreview
+          imgSource={imageSrc}
+          openImage={imageSrc}
+          onClose={(e) => handleSee(undefined)}
+       />
+      </Dropzone>
+      <ErrorNotification errors={errors}/>
+                     
                         
-            
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Certificate of occupancy</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="file" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Business license</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="file" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Tax certificate</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="file" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Business insurance</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="file" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">A service contract</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="file" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
-                            </div>
-                         
-            
-           
-        </div>
+                       
         
         <div className="flex p-2 mt-4">
             <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
@@ -76,7 +146,7 @@ function Legal() {
         border duration-200 ease-in-out 
         border-gray-600 transition">Previous</button>
             <div className="flex-auto flex flex-row-reverse">
-                <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                <button onClick={handleNextClick}  className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-[#FAB038]  
         bg-[#FAB038] 
         text-orange-100 
@@ -85,8 +155,8 @@ function Legal() {
                
             </div>
         </div>
-    </div>
-</div>
+   
+
                                 </div>
             
             

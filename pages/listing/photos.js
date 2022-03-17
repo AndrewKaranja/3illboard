@@ -2,6 +2,7 @@ import React, {useEffect, useState,createRef} from 'react';
 import Image from 'next/image';
 import Head from 'next/head';
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
+import { useRouter } from 'next/router';
 
 import BackgroundImg from '../../images/streetlights.png';
 
@@ -46,9 +47,17 @@ const thumbsContainer = {
     height: '100%'
   };
 
+  function ErrorNotification({errors}){
+    return <div>
+      <p className="text-red-500">{errors}</p>
+    </div>
+  }
+
 
 function Photos() {
+  const router=useRouter();
     const [files, setFiles] = useState([]);
+    const [errors,setErrors]=useState('');
     const [imageSrc, setImageSrc] = useState(undefined);
     const updateFiles = (incommingFiles) => {
       console.log("incomming files", incommingFiles);
@@ -60,6 +69,19 @@ function Photos() {
     const handleSee = (imageSource) => {
       setImageSrc(imageSource);
     };
+    const handleNextClick=()=>{
+      console.log(files);
+      if(Object.keys(files).length==0){
+        setErrors("please upload a photo of the listing")
+
+      }else{
+        setErrors("")
+
+        router.push("/listing/price")
+        
+        
+      }
+    }
     
   return (
     <div className='2xl:container h-screen m-auto'>
@@ -89,7 +111,7 @@ function Photos() {
 	onClean
 	accept={"image/jpeg,.ts,.png, video/*"}
 	maxFileSize={104857600}
-	maxFiles={14}
+	maxFiles={5}
 	label={"Drop Files here or click to browse"}
 	minHeight={"200px"}
 	maxHeight={"500px"}
@@ -99,7 +121,7 @@ function Photos() {
 	color={"#fab308"}
 	disableScroll
       >
-        {files.map((file) => (
+        {files?.map((file) => (
           <FileItem
             {...file}
             key={file.id}
@@ -119,6 +141,7 @@ function Photos() {
           onClose={(e) => handleSee(undefined)}
        />
       </Dropzone>
+      <ErrorNotification errors={errors}/>
       <div className="flex p-2 mt-4">
             <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-gray-200  
@@ -126,7 +149,7 @@ function Photos() {
         text-gray-700 
         border duration-200 ease-in-out 
         border-gray-600 transition">Previous</button>
-            <div className="flex-auto flex flex-row-reverse">
+            <div onClick={handleNextClick} className="flex-auto flex flex-row-reverse">
                 <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-[#FAB038]  
         bg-[#FAB038] 

@@ -89,12 +89,13 @@ useEffect(() => {
                 billboardDescription:'',
                 dimensionWidth:'',
                 dimensionHeight:'',
+                nightVisibility:false,
                 
                           }}
 
                           validationSchema={validate}
-                          onSubmit={values=>{
-                          
+                          onSubmit={async (values)=>{
+                           
                             setlistingInfo({
                               listingType:listingType,
                               billboardTitle:values.billboardTitle,
@@ -102,7 +103,9 @@ useEffect(() => {
                               dimensionWidth:values.dimensionWidth,
                               dimensionHeight:values.dimensionHeight,
                               otherServices:tags,
+                              nightVisibility:values.nightVisibility
                            });
+                           
                            console.log(listingInfo);
                            router.push("/listing/location")
                            
@@ -188,6 +191,11 @@ useEffect(() => {
   readOnly={false}
   removeOnBackspace={true}
   onChange={(newTags) => setTags(newTags)}/>
+            <div className='flex flex-row mt-4 ml-2 items-center'>
+              <Field type="checkbox" name="nightVisibility" className="m-2"/>
+              <p>Visible at night</p>
+              
+            </div>
         </div>
         
         <div className="flex p-2 mt-4">

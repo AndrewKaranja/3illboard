@@ -1,25 +1,24 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import Image from 'next/image';
-import Head from 'next/head';
 import BackgroundImg from '../../images/streetlights.png';
-import ReactDOM from "react-dom";
-import ReactTagInput from "@pathofdev/react-tag-input";
-import "@pathofdev/react-tag-input/build/index.css";
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
+import { useRouter } from 'next/router';
 
 function Price() {
-    const handleChange = (event) => {
-        setOwnershipType(event.target.value);
-      };
+  const router=useRouter();
+  const [listingPrice, setlistingPrice] = useState([]);
 
-      const [tags, setTags] =useState(["design"]);
+  useEffect(() => {
+    localStorage.setItem('listingPrice', JSON.stringify(listingPrice));
+  }, [listingPrice]);
+
+   
 
     const validate=Yup.object({
-        interval:Yup.string(),
         price:Yup.number()
         .min(4,'Must be atleast KES.999')
-        .required('Price is required')
+        .required('Price is required'),
         
       });
 
@@ -47,21 +46,24 @@ function Price() {
             <Formik
                 initialValues={{
                 price:'',
-                interval:'',
+                interval:'monthly',
                           }}
                           validationSchema={validate}
-                          onSubmit={(values,{setSubmitting,resetForm,setErrors})=>{
-                              setTimeout(()=>{
-                                  alert(JSON.stringify(values,null,2));
-                                  resetForm();
-                                  setSubmitting(false);
-                              },3000)
-                              //signup(values.email,values.password)
+                          onSubmit={values=>{
+                            
+                                console.log(values)
+                                setlistingPrice({
+                                  price:values.price,
+                                  interval:values.interval,
+                                });
+                                router.push("/listing/legal")
+                                
+                             
                           }}
                           >
 
                 {formik=>(
-                    <div>
+                    <Form>
                      <div className="p-5">
                         <div className=" p-4">
                         <div>
@@ -69,18 +71,19 @@ function Price() {
                             
                         
             
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Price</div>
+                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Price in KSH</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <input type="number" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/> </div>
+                                <Field id="price" name="price" type="number" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                <ErrorMessage component="div"  name="price" className="text-red-600"/> </div>
                             </div>
                             <div className="w-18">
-                    <select className="form-select ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
+                    <Field as="select" name="interval" className="form-select ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
                     focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none" aria-label="Default select example">
-                        <option selected value="m">monthly</option>
-                        <option value="w">Weekly</option>
-                        <option value="d">Daily</option>
-                        </select>
+                        <option  value="monthly">monthly</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="daily">Daily</option>
+                        </Field>
                 </div>
             
            
@@ -94,7 +97,7 @@ function Price() {
         border duration-200 ease-in-out 
         border-gray-600 transition">Previous</button>
             <div className="flex-auto flex flex-row-reverse">
-                <button className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+                <button type="submit" className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-[#FAB038]  
         bg-[#FAB038] 
         text-orange-100 
@@ -105,7 +108,7 @@ function Price() {
         </div>
     </div>
 </div>
-                                </div>
+                                </Form>
                           )}
                       </Formik>
             
