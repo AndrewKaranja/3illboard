@@ -33,6 +33,7 @@
     "react-query": "^3.34.16",
     "react-tag-input": "^6.8.0",
     "react-transition-group": "^4.4.2",
+    "swiper": "^8.0.7",
     "tailwind-scrollbar-hide": "^1.1.7",
     "use-places-autocomplete": "^1.11.0",
     "yup": "^0.32.11"

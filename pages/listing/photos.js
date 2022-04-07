@@ -5,6 +5,10 @@ import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import { useRouter } from 'next/router';
 
 import BackgroundImg from '../../images/streetlights.png';
+import {storage} from "../../firebase";
+import {ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { async } from '@firebase/util';
+import {v4} from 'uuid';
 
 
 const dropzoneRef = createRef();
@@ -16,36 +20,6 @@ const openDialog = () => {
   }
 };
 
-const thumbsContainer = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16
-  };
-  
-  const thumb = {
-    display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
-    marginBottom: 8,
-    marginRight: 8,
-    width: 100,
-    height: 100,
-    padding: 4,
-    boxSizing: 'border-box'
-  };
-  
-  const thumbInner = {
-    display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden'
-  };
-  
-  const img = {
-    display: 'block',
-    width: 'auto',
-    height: '100%'
-  };
 
   function ErrorNotification({errors}){
     return <div>
@@ -57,27 +31,84 @@ const thumbsContainer = {
 function Photos() {
   const router=useRouter();
     const [files, setFiles] = useState([]);
+    //const [images, setImages] = useState(null);
+    const [urls,setUrls]=useState("");
     const [errors,setErrors]=useState('');
     const [imageSrc, setImageSrc] = useState(undefined);
+    const [progress,setProgress]=useState(0);
+
+    useEffect(() => {
+      localStorage.setItem('photosURLS', JSON.stringify(urls));
+    }, [urls]);
+
+  
+
+    
+
+    //Upload to firebase storage
+    const uploadFiles=()=>{
+      if(!files) return;
+      const promises=[];
+      files?.map((file)=>{
+
+        const storageRef=ref(storage, `listings/images/${file.file.name + v4()}`);
+        const uploadTask=uploadBytesResumable(storageRef,file.file);
+        promises.push(uploadTask);
+        uploadTask.on("state_changed",(snapshot)=>{
+          const prog=Math.round(
+            (snapshot.bytesTransferred/snapshot.totalBytes)* 100
+          );
+          setProgress(prog);
+        },(err)=>console.log(err),
+        async ()=>{
+         await getDownloadURL(uploadTask.snapshot.ref).then((urls)=>{
+            setUrls((prevState)=>[...prevState,urls]);
+           // console.log('File available at', urls);
+          });
+        }
+        );
+        
+
+      });
+      Promise.all(promises)
+      .then(()=>{alert("All images uploaded");setTimeout(() => {  router.push("/listing/price"); }, 2000);})
+      .catch((err)=>console.log(err));
+      // console.log("urls",urls);
+      
+
+     
+    }
+
+
+    //Update files state
     const updateFiles = (incommingFiles) => {
       console.log("incomming files", incommingFiles);
       setFiles(incommingFiles);
+     // setImages(incommingFiles);
+      
     };
     const onDelete = (id) => {
       setFiles(files.filter((x) => x.id !== id));
+      //setImages(images.filter((x) => x.id !== id));
     };
     const handleSee = (imageSource) => {
       setImageSrc(imageSource);
     };
+
+    //handle actions when next button is clicked
     const handleNextClick=()=>{
-      console.log(files);
+      
       if(Object.keys(files).length==0){
         setErrors("please upload a photo of the listing")
 
       }else{
         setErrors("")
+        
+        uploadFiles();
 
-        router.push("/listing/price")
+        
+
+       
         
         
       }
@@ -109,10 +140,10 @@ function Photos() {
         onChange={updateFiles}
         value={files}
 	onClean
-	accept={"image/jpeg,.ts,.png, video/*"}
-	maxFileSize={104857600}
+	accept={"image/jpeg,.ts,.png"}
+	maxFileSize={5242880}
 	maxFiles={5}
-	label={"Drop Files here or click to browse"}
+	label={"Drop images here or click to browse"}
 	minHeight={"200px"}
 	maxHeight={"500px"}
 	method={"POST"}

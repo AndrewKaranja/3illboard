@@ -107,7 +107,7 @@ useEffect(() => {
                            });
                            
                            console.log(listingInfo);
-                           router.push("/listing/location")
+                           router.push("/listing/location");
                            
                           }}
                           

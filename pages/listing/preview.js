@@ -1,11 +1,91 @@
-import React from 'react';
+import React, {useEffect, useState } from 'react';
 import Image from 'next/image';
 import BackgroundImg from '../../images/streetlights.png';
-import { HeartIcon} from '@heroicons/react/outline'
-import { StarIcon } from '@heroicons/react/solid'
-import CatImg from '../../images/cat.png'
+import { HeartIcon} from '@heroicons/react/outline';
+import { StarIcon } from '@heroicons/react/solid';
+import CatImg from '../../images/cat.png';
+
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+// import required modules
+import { EffectFade, Navigation, Pagination } from "swiper";
+import { collection } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 function Preview() {
+  const [details, setDetails] = useState([]);
+  const [price, setPrice] = useState([]);
+  const [location, setLocation] = useState([]);
+  const [photosURLS, setPhotosURLS] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [legals, setLegals] = useState([]);
+
+  const usersCollectionRef=collection(db,"users");
+  //const listingCollectionRef=collection(db,"users","user.id","listings");
+
+  const addListing =async(user)=>{
+    
+    await addDoc(usersCollectionRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
+  }
+
+  const images=photosURLS?.map((photosURL)=>
+  <>
+    <SwiperSlide key={photosURL}>
+            
+            {/* <Image src={photosURL} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl w-full h-full'/> */}
+            <img src={photosURL} alt="listing images" />
+        </SwiperSlide>
+  </>
+  )
+  
+  useEffect(() => {
+    const listingInfo = JSON.parse(localStorage.getItem('listingInfo'));
+    const listingPrice = JSON.parse(localStorage.getItem('listingPrice'));
+    const listingLocation = JSON.parse(localStorage.getItem('listingLocation'));
+    const photosURLS = JSON.parse(localStorage.getItem('photosURLS'));
+    const legalsURLS = JSON.parse(localStorage.getItem('legalsURLS'));
+    if (listingInfo) {
+     setDetails(listingInfo);
+    }
+    if (listingPrice) {
+      setPrice(listingPrice);
+     }
+    if (listingLocation) {
+      setLocation(listingLocation);
+     }
+     if (photosURLS) {
+      setPhotosURLS(photosURLS);
+     }
+  
+     if (legalsURLS) {
+      setLegals(legalsURLS);
+     }
+  }, []);
+
+
+
+
+  const handleNextClick=()=>{
+    
+    if(Object.keys(files).length==0){
+      setErrors("please upload atleast one document")
+
+    }else{
+      setErrors("")
+      router.push("/account")
+      
+      
+    }
+
+    
+  }
+
   return (
     <div className='2xl:container h-screen m-auto'>
       {/* <Head>
@@ -23,26 +103,50 @@ function Preview() {
         <div className='relative h-full ml-auto lg:w-6/12'>
           <div className=" flex flex-col px-6 mt-4 w-full justify-items-center">
 
-          <div className='space-y-4 mb-10 mt-4 '>
-              <h3 className='text-3xl'>Here is how your listing looks like on 3illboard</h3>
+          <div className='space-y-4 mb-5 mt-4 '>
+              <h3 className='text-sm sm:text-xl border-b'>Here is how your listing looks like on 3illboard</h3>
             </div>
 
         
             
 
-            <div className='items-center sm:h-1/3 w-2/3 justify-self-center  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
+            <div className='items-center sm:h-1/3 w-full justify-self-center  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
         <div className='relative  h-52 w-full  flex-shrink-0'>
-        <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/>
+        {/* <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/> */}
+        <Swiper
+        spaceBetween={30}
+        effect={"fade"}
+        navigation={true}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[EffectFade, Navigation, Pagination]}
+        className=" w-[100%] md:w-[80%] h-[100%] rounded-2xl"
+      >
+        {images}
+        {/* <SwiperSlide>
+          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
+        </SwiperSlide> */}
+       
+      </Swiper>
         </div>
         <div className='flex flex-col flex-grow pl-5 mt-6 sm:mt-0'>
             <div className='flex justify-between'>
-                <p>Madaraka Estate</p>
+            <h4 className='text-xl font-bold'>{details.billboardTitle}</h4>
+                
                 <HeartIcon className='h-7 cursor-pointer'/>
                 
             </div>
-            <h4 className='text-xl'>Iconic billboard</h4>
+            <p>{details.billboardDescription}</p>
             <div className='border-b w10 pt-2'/>
-            <p className='pt-2 text-sm text-gray-500 flex-grow'>design .Mounting .assignment</p>
+            <p className='pt-2 text-sm text-gray-500 flex-grow'>{details.otherServices?.map((service)=>
+          
+              <> {service} .</>
+            )}</p>
+            {details.otherServices?.map((service)=>{
+              console.log(service);
+              <p className='text-black'>{service}</p>
+            })}
 
             <div className='flex justify-between items-end pt-5'>
             <p className='flex items-center'>
@@ -50,8 +154,8 @@ function Preview() {
             0.0
             </p>
             <div>
-                <p className='text-lg lg:text-2xl font-semibold pb-2'>20000</p>
-                <p className='text-right font-extralight'>2000KES</p>
+                
+                <p className='text-right font-extralight'>{price.price}KES/{price.interval}</p>
             </div>
         </div>
         </div>
@@ -60,7 +164,23 @@ function Preview() {
         </div>
 
            
-            
+        <div className="flex p-2 mt-4">
+            <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+        hover:bg-gray-200  
+        bg-gray-100 
+        text-gray-700 
+        border duration-200 ease-in-out 
+        border-gray-600 transition">Edit</button>
+            <div className="flex-auto flex flex-row-reverse">
+                <button onClick={handleNextClick}  className="text-base  ml-2  hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
+        hover:bg-[#FAB038]  
+        bg-[#FAB038] 
+        text-orange-100 
+        border duration-200 ease-in-out 
+        border-[#FAB038] transition">Finish</button>
+               
+            </div>
+        </div>
 
             
                

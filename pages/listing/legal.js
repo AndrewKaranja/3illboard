@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import BackgroundImg from '../../images/streetlights.png';
@@ -6,7 +6,10 @@ import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import {storage} from "../../firebase";
-import { getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+
+import {ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import {v4} from 'uuid';
+
 import { useAuth } from '../../context/AuthContext';
 
 
@@ -21,10 +24,12 @@ const {user}=useAuth()
 const router=useRouter();
     const [files, setFiles] = useState([]);
     const [errors,setErrors]=useState('');
+    const [urls,setUrls]=useState("");
     const [imageSrc, setImageSrc] = useState(undefined);
     const updateFiles = (incommingFiles) => {
       console.log("incomming files", incommingFiles);
       setFiles(incommingFiles);
+      
     };
     const onDelete = (id) => {
       setFiles(files.filter((x) => x.id !== id));
@@ -39,13 +44,17 @@ const router=useRouter();
 
       }else{
         setErrors("")
-        uploadFiles(files);
+        uploadFiles();
 
-        router.push("/listing/preview")
+        
         
         
       }
     }
+//add to local storage
+    useEffect(() => {
+      localStorage.setItem('legalsURLS', JSON.stringify(urls));
+    }, [urls]);
 
 
 
@@ -56,21 +65,38 @@ const [progress,setProgress]=useState(0);
 //   uploadFiles(file);
 // }
 
-const uploadFiles=(file)=>{
-  if(!file) return;
-  const storageRef=ref(storage, `/files/${user.uid}/legal/${file.name}`)
-  const uploadTask=uploadBytesResumable(storageRef,file);
-  uploadTask.on("state_changed",(snapshot)=>{
-    const prog=Math.round(
-      (snapshot.bytesTransferred/snapshot.totalBytes)* 100
+const uploadFiles=()=>{
+  if(!files) return;
+  const promises=[];
+  files?.map((file)=>{
+  console.log(file.file);
+    const storageRef=ref(storage, `listings/legal/${file.file.name + v4()}`);
+    const uploadTask=uploadBytesResumable(storageRef,file.file);
+    promises.push(uploadTask);
+    uploadTask.on("state_changed",(snapshot)=>{
+      const prog=Math.round(
+        (snapshot.bytesTransferred/snapshot.totalBytes)* 100
+      );
+      setProgress(prog);
+    },(err)=>console.log(err),
+    async ()=>{
+     await getDownloadURL(uploadTask.snapshot.ref).then((urls)=>{
+        setUrls((prevState)=>[...prevState,urls]);
+        console.log('File available at', urls);
+      });
+    }
     );
-    setProgress(prog);
-  },(err)=>console.log(err),
-  ()=>{
-    getDownloadURL(uploadTask.snapshot.ref)
-    .then((url)=>console.log(url))
-  }
-  );
+   
+
+  });
+  Promise.all(promises)
+  .then(()=>{alert("All images uploaded"); setTimeout(() => { router.push("/listing/preview");}, 5000);})
+  .catch((err)=>console.log(err));
+
+  console.log("urls",urls);
+  
+  
+ 
 }
 
 
