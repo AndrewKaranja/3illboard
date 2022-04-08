@@ -8,7 +8,7 @@ import BackgroundImg from '../images/cat.png'
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { db } from '../firebase';
-import { collection,addDoc,doc } from 'firebase/firestore';
+import { collection,addDoc,doc,setDoc} from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import { withPublic } from '../hooks/route';
 
@@ -38,11 +38,12 @@ function Login({user}) {
   const router=useRouter();
   const usersCollectionRef=collection(db,"users");
  
+ 
   const {hostAd}=router.query;
 
   const addUser=async(user)=>{
-    
-    await addDoc(usersCollectionRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
+    const userDocRef = doc(db, "users", `${user.uid}`);
+    await setDoc(userDocRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
   }
  
  

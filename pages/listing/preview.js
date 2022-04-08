@@ -4,6 +4,7 @@ import BackgroundImg from '../../images/streetlights.png';
 import { HeartIcon} from '@heroicons/react/outline';
 import { StarIcon } from '@heroicons/react/solid';
 import CatImg from '../../images/cat.png';
+import { useRouter } from 'next/router';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -15,23 +16,33 @@ import "swiper/css/pagination";
 
 // import required modules
 import { EffectFade, Navigation, Pagination } from "swiper";
-import { collection } from 'firebase/firestore';
+import { collection,addDoc,serverTimestamp   } from 'firebase/firestore';
 import { db } from '../../firebase';
+import { useAuth } from '../../context/AuthContext';
 
 function Preview() {
+  const router=useRouter();
+  const{user}=useAuth();
   const [details, setDetails] = useState([]);
   const [price, setPrice] = useState([]);
   const [location, setLocation] = useState([]);
   const [photosURLS, setPhotosURLS] = useState([]);
-  const [photos, setPhotos] = useState([]);
-  const [legals, setLegals] = useState([]);
+  //const [photos, setPhotos] = useState([]);
+  const [legalsURLS, setLegalsURLS] = useState([]);
 
-  const usersCollectionRef=collection(db,"users");
-  //const listingCollectionRef=collection(db,"users","user.id","listings");
+ // const usersCollectionRef=collection(db,"users");
+  const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
+  const listingsMainCollectionRef=collection(db,"listings");
 
   const addListing =async(user)=>{
-    
-    await addDoc(usersCollectionRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
+    const promises=[];
+    const uploadUserListing=addDoc(listingsCollectionRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),activated:false});
+    promises.push(uploadUserListing);
+    const uploadListing=addDoc(listingsMainCollectionRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),ownerid:user.uid,activated:false});
+    promises.push(uploadListing);
+    Promise.all(promises)
+  .then(()=>{alert("Listing successfully added");localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
+  .catch((err)=>console.log(err));
   }
 
   const images=photosURLS?.map((photosURL)=>
@@ -64,7 +75,7 @@ function Preview() {
      }
   
      if (legalsURLS) {
-      setLegals(legalsURLS);
+      setLegalsURLS(legalsURLS);
      }
   }, []);
 
@@ -73,15 +84,9 @@ function Preview() {
 
   const handleNextClick=()=>{
     
-    if(Object.keys(files).length==0){
-      setErrors("please upload atleast one document")
 
-    }else{
-      setErrors("")
-      router.push("/account")
-      
-      
-    }
+  addListing(user);
+      // router.push("/account")
 
     
   }

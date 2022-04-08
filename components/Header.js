@@ -167,7 +167,7 @@ function Header({placeholder}) {
       >
         <UserCircleIcon className={user?'invisible sm:visible h-6 cursor-pointer text-green-400':'invisible sm:visible h-6 cursor-pointer'}/>
         <div className="flex items-center truncate">
-          <span className="truncate ml-2 text-sm font-medium group-hover:text-slate-800">{user?.displayName}</span>
+          <span className="invisible sm:visible truncate ml-2 text-sm font-medium group-hover:text-slate-800">{user?.displayName}</span>
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
@@ -234,19 +234,23 @@ function Header({placeholder}) {
           <ul className='w-[100%]' onClick={showSidebar}>
             
            
-            {SidebarData.map((item, index) => {
-              return (
-                <li key={index} className={item.cName}>
-                  <Link href={item.path} passHref>
-                      <div className='flex text-[#f5f5f5] select-none text-sm h-[85%] w-[85%] p-3 justify-start list-none items-center rounded hover:bg-black cursor-pointer'>
-                      {item.icon}
-                    <span className='ml-4'>{item.title}</span>
-                    </div>
-                   
-                  </Link>
-                </li>
-              );
-            })}
+            {
+
+                SidebarData.map((item, index) => {
+                  return (
+                    <li key={index} className={item.cName}>
+                      <Link href={item.path} passHref>
+                          <div className='flex text-[#f5f5f5] select-none text-sm h-[85%] w-[85%] p-3 justify-start list-none items-center rounded hover:bg-black cursor-pointer'>
+                          {item.icon}
+                        <span className='ml-4'>{item.title}</span>
+                        </div>
+                       
+                      </Link>
+                    </li>
+                  );
+                })
+              
+            }
             
           </ul>
          </nav>

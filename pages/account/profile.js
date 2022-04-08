@@ -1,9 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../../components/dashboard/Sidebar';
 import Header from '../../components/dashboard/Header';
+import { useAuth } from '../../context/AuthContext';
 
 function Profile() {
+  const {user}=useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [name, setName] = useState("");
+
+
+  if(user!=null){
+   
+  }
+  useEffect(() => {
+    setName(user.displayName);
+  }, [user]);
+
+
+  const onTodoChange =(value)=>{
+    setName(value);
+}
+
+  
   return (
     <div className="flex h-screen overflow-hidden">
 
@@ -32,31 +50,37 @@ function Profile() {
           <div className="shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 bg-white sm:p-6">
               <div className="grid grid-cols-6 gap-6">
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                    First name
+                
+                <div className="col-span-6 sm:col-span-4">
+                  <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                    Name
                   </label>
                   <input
-                    type="text"
-                    name="first-name"
-                    id="first-name"
-                    autoComplete="given-name"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                   name="name"
+                   id="name"
+                  
+                  placeholder="enter name"
+                  value={name}
+                  onChange={e => onTodoChange(e.target.value)}
+                    
+                    
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 h-8 bg-orange-300  placeholder-shown:bg-gray-100 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
+                </div>
+                <div className="col-span-6 sm:col-span-4">
+                  <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
+                   Phone Number
+                  </label>
+                  <input
+                   name="phoneNo"
+                   id="phoneNo"
+                 
+                    
+                    
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block h-8 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                    Last name
-                  </label>
-                  <input
-                    type="text"
-                    name="last-name"
-                    id="last-name"
-                    autoComplete="family-name"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                  />
-                </div>
 
                 <div className="col-span-6 sm:col-span-4">
                   <label htmlFor="email-address" className="block text-sm font-medium text-gray-700">
@@ -66,8 +90,8 @@ function Profile() {
                     type="text"
                     name="email-address"
                     id="email-address"
-                    autoComplete="email"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block h-8 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -79,8 +103,8 @@ function Profile() {
                     type="text"
                     name="companyName"
                     id="companyName"
-                    autoComplete="companyName"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    autoComplete="organization"
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block h-8 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -110,7 +134,7 @@ function Profile() {
                     name="street-address"
                     id="street-address"
                     autoComplete="street-address"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block h-8 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
@@ -123,7 +147,7 @@ function Profile() {
                     name="city"
                     id="city"
                     autoComplete="address-level2"
-                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block h-8 w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
 
