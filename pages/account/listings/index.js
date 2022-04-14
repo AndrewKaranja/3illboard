@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../../components/dashboard/Sidebar';
-import Header from '../../components/dashboard/Header';
-import { useAuth } from '../../context/AuthContext';
-import { withProtected } from '../../hooks/route';
+import Sidebar from '../../../components/dashboard/Sidebar';
+import Header from '../../../components/dashboard/Header';
+import { useAuth } from '../../../context/AuthContext';
+import { withProtected } from '../../../hooks/route';
 import { collection, query, where, getDocs } from "firebase/firestore";
-import ListingCard from '../../components/dashboard/ListingCard';
-import { db } from '../../firebase';
+import ListingCard from '../../../components/dashboard/ListingCard';
+import { db } from '../../../firebase';
 
 
 
@@ -96,8 +96,8 @@ useEffect(() => {
             {console.log(listings)}
 {listings && listings.map((listing)=>(
    <ListingCard
-   key={listing.id}
-   listingid={listing.id}
+   key={listing.listingid}
+   listingid={listing.listingid}
    title={listing.details.billboardTitle}
    price={listing.price.price}
    interval={listing.price.interval}

@@ -5,6 +5,7 @@ import { HeartIcon} from '@heroicons/react/outline';
 import { StarIcon } from '@heroicons/react/solid';
 import CatImg from '../../images/cat.png';
 import { useRouter } from 'next/router';
+import {v4} from 'uuid';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -16,7 +17,7 @@ import "swiper/css/pagination";
 
 // import required modules
 import { EffectFade, Navigation, Pagination } from "swiper";
-import { collection,addDoc,serverTimestamp   } from 'firebase/firestore';
+import { collection,addDoc,serverTimestamp,setDoc,doc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 
@@ -31,14 +32,18 @@ function Preview() {
   const [legalsURLS, setLegalsURLS] = useState([]);
 
  // const usersCollectionRef=collection(db,"users");
-  const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
-  const listingsMainCollectionRef=collection(db,"listings");
+  //const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
+  //const listingsMainCollectionRef=collection(db,"listings");
+ 
 
   const addListing =async(user)=>{
+    const listingID=v4();
+    const listingDocRef=doc(db,"listings",listingID);
+    const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID)
     const promises=[];
-    const uploadUserListing=addDoc(listingsCollectionRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),activated:false});
+    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false});
     promises.push(uploadUserListing);
-    const uploadListing=addDoc(listingsMainCollectionRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),ownerid:user.uid,activated:false});
+    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false});
     promises.push(uploadListing);
     Promise.all(promises)
   .then(()=>{alert("Listing successfully added");localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})

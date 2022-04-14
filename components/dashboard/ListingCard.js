@@ -11,7 +11,7 @@ export default function ListingCard({img,location,title,interval,price,listingid
     <div className='flex m-5 p-7 px-2  h-84 hover:border-2 hover:shadow-sm rounded-xl bg-white hover:border-[#FAB038] cursor-pointer select-none hover:opacity-80   transition duration-100 ease-out '>
      <Link
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href={`/account/listing/${listingid}`}
+                href={`/account/listings/${listingid}`}
                passHref
               >
                

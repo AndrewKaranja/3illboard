@@ -40,10 +40,12 @@ import { useAuth } from '../../../context/AuthContext';
   
 // }
 
+
 export default function ListingDetails() {
   const {user}=useAuth();
   const{query:{listingid},}=useRouter();
   const [response, setResponse] = useState("");
+  const [showCalendar,setShowCalendar]=useState(false);
 
   const[startDate,setStartDate]=useState(new Date());
   const[endDate,setEndDate]=useState(new Date());
@@ -58,6 +60,22 @@ const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
 }
+
+const handleCanlendar=(isPressed)=>{
+  if (isPressed) {
+    return <div>
+    <DateRange
+      ranges={[selectionRange]}
+      minDate={new Date()}
+      rangeColors={["#FAB038"]}
+      
+      onChange={handleSelect}/>
+
+    </div> ;
+  }
+  
+}
+
 
   useEffect(() => {
     async function getListingDetail(user){
@@ -82,12 +100,11 @@ const handleSelect=(ranges)=>{
 
  
     
-    <div className='flex mt-12 ml-12 mr-12 mb-2   h-84  rounded-xl bg-white cursor-pointer select-none '>
+    <div className='flex lg:mt-12 lg:ml-12 lg:mr-12 mb-2   h-84  rounded-xl bg-white cursor-pointer select-none '>
     
-      <div className='flex flex-[10]'>
-      <div className='relative h-full w-32 flex-grow-[1] '>
-            
-            <Image src={billboard} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
+      <div className='flex flex-col lg:flex-row lg:flex-[10]'>
+            <div className='relative h-full w-32 flex-grow-[1] '>
+              <Image src={billboard} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
             </div>
             <div className='flex flex-col flex-grow-[9] p-5 h-fit'>
                 <div className='flex justify-between'>
@@ -113,26 +130,33 @@ const handleSelect=(ranges)=>{
                 </div>
             
             <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
-              >📅 Check Ad Calendar</button>
+              onClick={()=>setShowCalendar(!showCalendar)}>📅 Show Ad Calendar</button>
               
             </div>
-            <DateRange
-              ranges={[selectionRange]}
-              minDate={new Date()}
-              rangeColors={["#FAB038"]}
+            {handleCanlendar(showCalendar)}
+            {/* {()=>{
+              if (showCalendar) {
+              return <div className={showCalendar?'visible':'invisible'}>
+              <DateRange
+                ranges={[selectionRange]}
+                minDate={new Date()}
+                rangeColors={["#FAB038"]}
+                
+                onChange={handleSelect}/>
+  
+              </div>
               
-              onChange={handleSelect}/>
-
-      </div>
+            }}} */}
+            </div>
         
        
   
         </div>
 
         {/* main body */}
-        <div className='flex mt-3 ml-12 mr-12 mb-12 h-84  rounded-xl bg-white cursor-pointer select-none '>
+        <div className='flex mt-3 lg:ml-12 lg:mr-12 lg:mb-12 h-84  rounded-xl bg-white cursor-pointer select-none '>
     
-    <div className='flex flex-[10]'>
+    <div className='flex flex-col lg:flex-row md:flex-[10]'>
     <div className='h-full  w-[70%] flex-grow-[6] m-5 '>
 
        <div>
@@ -192,7 +216,7 @@ Never gonna tell a lie and hurt you</p>
         pagination={true}
         navigation={true}
         modules={[EffectFlip, Pagination, Navigation]}
-        className="mySwiper w-[60vw] h-80"
+        className="mySwiper lg:w-[60vw] w-[80vw] h-80"
       >
         <SwiperSlide>
         <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
