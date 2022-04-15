@@ -16,8 +16,10 @@ function Sidebar({ sidebarOpen,
   const { asPath } = useRouter();
   //const { pathname } = "/";
 
-  const trigger = useRef(null);
+ const trigger = useRef(null);
   const sidebar = useRef(null);
+  // const trigger = React.forwardRef(null);
+  // const sidebar=React.forwardRef(null);
 
   // NOTE THIS IS A TEMPORARY FIX
   //!!!!!!!!!!!

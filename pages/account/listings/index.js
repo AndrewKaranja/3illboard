@@ -15,54 +15,24 @@ import { db } from '../../../firebase';
 function Listings() {
     const {user}=useAuth();
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [details, setDetails] = useState([]);
-    const [listings,setListings] =useState("");
 
-    //const listingsQuery = query(collection(db, `users/${user.uid}/listings`));
-
-// useEffect(() => {
-//     const showListings =async()=>{
-//         const promises=[];
-//         const querySnapshot = await getDocs(collection(db, `users/${user.uid}/listings`));
-//         promises.push(querySnapshot);
-//         querySnapshot.forEach((doc) => {
-//             // doc.data() is never undefined for query doc snapshots
-          
-    
-//             console.log(doc.id, " => ", doc.data());
-//           });
-//           Promise.all(promises)
-//           .then(()=>{alert("Listing successfully added");})
-//           .catch((err)=>console.log(err));
-
-//     }
-// }, [])
+    const [details,setDetails] =useState([]);
+    const [listings,setListings] =useState([]);
 
 useEffect(() => {
-  async function getListing(user){
+  async function getListings(user){
+     const promises=[];
     const querySnapshot = await getDocs(collection(db, `users/${user.uid}/listings`));
-                querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-          
-  
-    setListings([...listings,doc.data()])
-  // setListings((prevState)=>[...prevState,doc.data()]);
-            //console.log(doc.id, " => ", doc.data());
-          });
-         
-
-    
-
+    promises.push(querySnapshot);
+    setListings(querySnapshot.docs.map(docSnapshot => docSnapshot.data()));
+          Promise.all(promises)
+          .then(()=>{alert("Listing successfully Fetched");})
+          .catch((err)=>console.log(err));
   }
- 
-    console.log("Hello",listings);
   
+  getListings(user);
 
-  
-  getListing(user);
-
- 
-}, [])
+}, [user])
 
 
 
@@ -93,7 +63,6 @@ useEffect(() => {
                 
                 
             </div>
-            {console.log(listings)}
 {listings && listings.map((listing)=>(
    <ListingCard
    key={listing.listingid}
@@ -105,6 +74,18 @@ useEffect(() => {
    img={listing.details.photosURLS}
    />
 ))}
+
+{/* {details && details.map((detail)=>(
+   <ListingCard
+   key={detail.listingid}
+   listingid={detail.listingid}
+   title={detail.details.billboardTitle}
+   price={detail.price.price}
+   interval={detail.price.interval}
+   otherServices={detail.details.otherServices}
+   img={detail.details.photosURLS}
+   />
+))} */}
 
 
  
