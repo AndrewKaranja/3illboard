@@ -6,6 +6,7 @@ import { withProtected } from '../../../hooks/route';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import ListingCard from '../../../components/dashboard/ListingCard';
 import { db } from '../../../firebase';
+import LoadingScreen from '../../../components/LoadingScreen';
 
 
 
@@ -18,6 +19,8 @@ function Listings() {
 
     const [details,setDetails] =useState([]);
     const [listings,setListings] =useState([]);
+    const [done, setDone] = useState(undefined);
+    
 
 useEffect(() => {
   async function getListings(user){
@@ -26,11 +29,12 @@ useEffect(() => {
     promises.push(querySnapshot);
     setListings(querySnapshot.docs.map(docSnapshot => docSnapshot.data()));
           Promise.all(promises)
-          .then(()=>{alert("Listing successfully Fetched");})
+          .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
           .catch((err)=>console.log(err));
   }
   
   getListings(user);
+ 
 
 }, [user])
 
@@ -63,17 +67,28 @@ useEffect(() => {
                 
                 
             </div>
-{listings && listings.map((listing)=>(
-   <ListingCard
-   key={listing.listingid}
-   listingid={listing.listingid}
-   title={listing.details.billboardTitle}
-   price={listing.price.price}
-   interval={listing.price.interval}
-   otherServices={listing.details.otherServices}
-   img={listing.details.photosURLS}
-   />
-))}
+   {!done ?(
+      <LoadingScreen/>
+
+   ):(
+      <div>
+      {listings && listings.map((listing)=>(
+      <ListingCard
+      key={listing.listingid}
+      listingid={listing.listingid}
+      title={listing.details.billboardTitle}
+      price={listing.price.price}
+      interval={listing.price.interval}
+      otherServices={listing.details.otherServices}
+      img={listing.details.photosURLS}
+      />
+   ))}
+      </div>
+   )}
+
+
+ 
+
 
 {/* {details && details.map((detail)=>(
    <ListingCard
