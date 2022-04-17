@@ -9,6 +9,8 @@ import {storage} from "../../firebase";
 
 import {ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
 import {v4} from 'uuid';
+import LoadingScreen from '../../components/LoadingScreen';
+import UploadedScreen from '../../components/UploadedScreen';
 
 import { useAuth } from '../../context/AuthContext';
 
@@ -26,6 +28,9 @@ const router=useRouter();
     const [errors,setErrors]=useState('');
     const [urls,setUrls]=useState("");
     const [imageSrc, setImageSrc] = useState(undefined);
+    const [uploading, setUploading] = useState(false);
+    const [done, setDone] = useState(false);
+
     const updateFiles = (incommingFiles) => {
       console.log("incomming files", incommingFiles);
       setFiles(incommingFiles);
@@ -38,11 +43,14 @@ const router=useRouter();
       setImageSrc(imageSource);
     };
     const handleNextClick=()=>{
-      console.log(files);
+      //console.log(files);
       if(Object.keys(files).length==0){
+        setUploading(true);
+        setTimeout(() => { setUploading(false); }, 2000);
         setErrors("please upload atleast one document")
 
       }else{
+        setTimeout(() => { setUploading(true); }, 2000);
         setErrors("")
         uploadFiles();
 
@@ -90,7 +98,7 @@ const uploadFiles=()=>{
 
   });
   Promise.all(promises)
-  .then(()=>{alert("All images uploaded"); setTimeout(() => { router.push("/listing/preview");}, 5000);})
+  .then(()=>{setTimeout(() => { setUploading(false);setDone(true); }, 1000); setTimeout(() => { router.push("/listing/preview");}, 4000);})
   .catch((err)=>console.log(err));
 
   console.log("urls",urls);
@@ -115,6 +123,12 @@ const uploadFiles=()=>{
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
+        {uploading ?(<LoadingScreen/>):(
+            <></>
+          )}
+          {done ?(<UploadedScreen/>):(
+            <></>
+          )}
           <div className="m-auto px-6 mt-4 xl:w-10/12">
         
             <div className='space-y-4'>

@@ -6,6 +6,7 @@ import { StarIcon } from '@heroicons/react/solid';
 import CatImg from '../../images/cat.png';
 import { useRouter } from 'next/router';
 import {v4} from 'uuid';
+import LoadingScreen from '../../components/LoadingScreen';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -30,6 +31,7 @@ function Preview() {
   const [photosURLS, setPhotosURLS] = useState([]);
   //const [photos, setPhotos] = useState([]);
   const [legalsURLS, setLegalsURLS] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
  // const usersCollectionRef=collection(db,"users");
   //const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
@@ -46,7 +48,7 @@ function Preview() {
     const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false});
     promises.push(uploadListing);
     Promise.all(promises)
-  .then(()=>{alert("Listing successfully added");localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
+  .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
   .catch((err)=>console.log(err));
   }
 
@@ -89,7 +91,7 @@ function Preview() {
 
   const handleNextClick=()=>{
     
-
+    setTimeout(() => { setUploading(true);}, 1000);
   addListing(user);
       // router.push("/account")
 
@@ -110,7 +112,10 @@ function Preview() {
         {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
-        <div className='relative h-full ml-auto lg:w-6/12'>
+        <div className='relative h-full ml-auto lg:w-6/12 overflow-auto bg-slate-100'>
+        {uploading ?(<LoadingScreen/>):(
+            <></>
+          )}
           <div className=" flex flex-col px-6 mt-4 w-full justify-items-center">
 
           <div className='space-y-4 mb-5 mt-4 '>
@@ -120,7 +125,7 @@ function Preview() {
         
             
 
-            <div className='items-center sm:h-1/3 w-full justify-self-center  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
+            <div className='items-center sm:h-1/3 w-full justify-self-center bg-white  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
         <div className='relative  h-52 w-full  flex-shrink-0'>
         {/* <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/> */}
         <Swiper

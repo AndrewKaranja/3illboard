@@ -68,7 +68,7 @@ function Login({user}) {
         const providerId = authResult.additionalUserInfo.providerId;
         const operationType = authResult.operationType;
         if(isNewUser==true){
-          console.log(user);
+          //console.log(user);
           addUser(user);
 
         }

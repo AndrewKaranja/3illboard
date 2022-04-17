@@ -44,6 +44,7 @@ import { useAuth } from '../../../context/AuthContext';
 export default function ListingDetails() {
   const {user}=useAuth();
   const{query:{listingid},}=useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [response, setResponse] = useState("");
   const [showCalendar,setShowCalendar]=useState(false);
 
@@ -97,8 +98,7 @@ const handleCanlendar=(isPressed)=>{
 
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
-
- 
+      
     
     <div className='flex lg:mt-12 lg:ml-12 lg:mr-12 mb-2   h-84  rounded-xl bg-white cursor-pointer select-none '>
     
@@ -234,35 +234,7 @@ Never gonna tell a lie and hurt you</p>
         <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
         </SwiperSlide>
       </Swiper>
-      {/* <Swiper
-        slidesPerView={2}
-        spaceBetween={30}
-        slidesPerGroup={2}
-        loop={true}
-        loopFillGroupWithBlank={true}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper w-[60vw] h-80"
-      >
-      <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-      </Swiper> */}
+ 
 
 </div>
 

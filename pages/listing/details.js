@@ -30,6 +30,7 @@ function Details() {
 const {listingType}=router.query;
 const [phoneNo, setphoneNo] = useState(null);
 const [tags, setTags] =useState(["design"]);
+const [uploading, setUploading] = useState(false);
 
 const [listingInfo, setlistingInfo] = useState([]);
 
@@ -106,7 +107,7 @@ useEffect(() => {
                               nightVisibility:values.nightVisibility
                            });
                            
-                           console.log(listingInfo);
+                           //console.log(listingInfo);
                            router.push("/listing/location");
                            
                           }}
