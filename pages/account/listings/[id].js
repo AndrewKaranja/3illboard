@@ -6,6 +6,8 @@ import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
 import * as FcIcons from 'react-icons/fc';
+import * as AiIcons from 'react-icons/ai';
+
 import { DateRange } from 'react-date-range';
 
 
@@ -25,28 +27,34 @@ import { async } from '@firebase/util';
 import { doc, getDoc } from "firebase/firestore";
 import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
-
+import UploadedScreen from '../../../components/UploadedScreen';
+import LoadingScreen from '../../../components/LoadingScreen';
 
 
 // export async function getServerSideProps({params}){
-//   const docRef = doc(db, `users/${user.id}/listing`, "SF");
-// const docSnap = await getDoc(docRef);
-// const response=docSnap.data();
+//   console.log(params.listingid);
+//   const docRef = doc(db, "listings", `${params.id}`);
+//       const docSnap = await getDoc(docRef);
+     
+
+//   const response=JSON.stringify(docSnap.data());
 // return{
 //   props:{
 //     listing:response,
 //   },
 // }
-  
 // }
 
 
 export default function ListingDetails() {
   const {user}=useAuth();
-  const{query:{listingid},}=useRouter();
+  const{query:{id}}=useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [response, setResponse] = useState("");
+  const [listing,setListing]=useState("");
+  const [done, setDone] = useState(undefined);
   const [showCalendar,setShowCalendar]=useState(false);
+  const [bannerImage,setBannerImage]=useState(billboard);
 
   const[startDate,setStartDate]=useState(new Date());
   const[endDate,setEndDate]=useState(new Date());
@@ -77,44 +85,80 @@ const handleCanlendar=(isPressed)=>{
   
 }
 
+const listingImage=listing.photosURLS?.map((photosURL)=>
+<>
+  <SwiperSlide key={photosURL}>
+          
+          <Image src={photosURL} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl w-full h-full'/>
+          {/* <img src={photosURL} alt="listing images" /> */}
+      </SwiperSlide>
+</>
+)
+
+
 
   useEffect(() => {
     async function getListingDetail(user){
-      const docRef = doc(db, `users/${user.id}/listings`, "f7tU7trC0zWSriZav6Uo");
+      const promises=[];
+      const docRef = doc(db, `users/${user.uid}/listings`, `${id}`);
       const docSnap = await getDoc(docRef);
-      setResponse(docSnap.data()); 
+      promises.push(docSnap);
+      console.log(docSnap)
+      setListing(docSnap.data()); 
+      Promise.all(promises)
+      .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
+      .catch((err)=>console.log(err));
   
     }
-   
-      console.log("Hello",response);
+    if(id){
+      getListingDetail(user);
+      //const image=listing.photosURLS[0]
+      //setBannerImage(image);
+    }
     
-  
-    
-    getListingDetail(user);
-  
    
-  }, [])
+  }, []);
+
+ var image=listing?.photosURLS;
 
 
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
+      <Link passHref href="/account/listings" >
+        <div className="bg-white w-fit absolute">
+        <AiIcons.AiOutlineRollback className='h-16 w-16'/>
+
+        </div>
+              
+              </Link>
+      
+      {console.log("Hello",id)}
+     
+      {console.log("Millo",listing)}
+      {!done ?(<LoadingScreen/>):(
+            <></>
+          )}
       
     
     <div className='flex lg:mt-12 lg:ml-12 lg:mr-12 mb-2   h-84  rounded-xl bg-white cursor-pointer select-none '>
     
       <div className='flex flex-col lg:flex-row lg:flex-[10]'>
-            <div className='relative h-full w-32 flex-grow-[1] '>
-              <Image src={billboard} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
+            <div className='relative h-full w-32 flex-grow-[1]  '>
+              <Image src={listing?.photosURLS?.[0]} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
+              {/* <Link passHref href="/account/listings">
+              <AiIcons.AiOutlineRollback className='h-full w-full'/>
+              </Link> */}
+              
             </div>
             <div className='flex flex-col flex-grow-[9] p-5 h-fit'>
                 <div className='flex justify-between'>
-                <h4 className='text-xl text-black font-bold'>Gigantic Billboard</h4>
+                <h4 className='text-xl text-black font-bold'>{listing.details?.billboardTitle}</h4>
                     
               <RiIcons.RiMenu4Fill/>
                     
                 </div>
                 
-                <p className='text-sm text-gray-500 font-semibold'>📍Near Strathmore</p>
+                <p className='text-sm text-gray-500 font-semibold'>📍{listing.details?.billboardDescription}</p>
                 
                 <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
                
@@ -161,14 +205,8 @@ const handleCanlendar=(isPressed)=>{
 
        <div>
        <h4 className='text-xl text-black font-bold m-2'>Ad Description</h4>
-       <p className='m-5'>I just wanna tell you how I am feeling
-Gotta make you understand
-Never gonna give you up
-Never gonna let you down
-Never gonna run around and desert you
-Never gonna make you cry
-Never gonna say goodbye
-Never gonna tell a lie and hurt you</p>
+       {/* <p className='invisible text-white'>{listing.listingid}</p> */}
+       <p className='m-5'>{listing.details?.billboardDescription}</p>
          </div>   
     
 
@@ -178,14 +216,14 @@ Never gonna tell a lie and hurt you</p>
 <div className='flex flex-row items-center mx-3'>
 <BiIcons.BiCrop className='h-8 w-8'/>
 <div className='ml-2'>
-<p className='text-sm text-black'>12 x 12 m</p>
+<p className='text-sm text-black'>{listing.details?.dimensionWidth} x {listing.details?.dimensionHeight} m</p>
 <p className='text-sm text-gray-500'>dimensions</p>
 </div>
 
 </div>
 <div className='flex flex-row items-center mx-3'>
 
-<RiIcons.RiLightbulbFlashLine className='h-8 w-8'/>
+<RiIcons.RiLightbulbFlashLine className={listing.details?.nightVisibility ?'h-8 w-8 text-yellow-400':'h-8 w-8 text-gray-400'}/>
 <p className='text-sm text-black'>Visible at Night</p>
 </div>
 
@@ -194,7 +232,13 @@ Never gonna tell a lie and hurt you</p>
 <div className='border-b pt-2 border-orange-100'/>
 <div className='my-3'>
 <h4 className='font-bold text-xl m-5'>Services</h4>
-<p className='text-sm text-black bg-orange-50 w-fit m-4 p-2 rounded-xl font-medium'>Design</p>
+
+<div className='flex flex-row'>
+{listing.details?.otherServices?.map((service)=>
+          <p key={service} className='text-sm text-black bg-orange-50 w-fit m-2 p-2 rounded-xl font-medium'> {service}
+          </p>
+        )}
+        </div>
 </div>
 
 
@@ -218,21 +262,7 @@ Never gonna tell a lie and hurt you</p>
         modules={[EffectFlip, Pagination, Navigation]}
         className="mySwiper lg:w-[60vw] w-[80vw] h-80"
       >
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
-        <SwiperSlide>
-        <Image src={billboard} alt='ad image' layout='fill'  objectFit="cover" className='rounded-2xl m-5'/>
-        </SwiperSlide>
+        {listingImage}
       </Swiper>
  
 
@@ -272,8 +302,8 @@ Never gonna tell a lie and hurt you</p>
               <p className='text-xs'>+254 712 345 678</p>
               </div>
               <div className='flex justify-between py-2 mb-3'>
-              <p className='text-xs'>Price/Month</p>
-              <p className='text-sm font-semibold'>200,000KES</p>
+              <p className='text-xs'>Price/{listing.price?.interval}</p>
+              <p className='text-sm font-semibold'>{listing.price?.price}KES</p>
               </div>
               
 

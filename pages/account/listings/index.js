@@ -72,11 +72,12 @@ useEffect(() => {
 
    ):(
       <div>
-      {listings && listings.map((listing)=>(
+      {listings && listings?.map((listing)=>(
       <ListingCard
       key={listing.listingid}
       listingid={listing.listingid}
       title={listing.details.billboardTitle}
+      location={listing.details.billboardDescription}
       price={listing.price.price}
       interval={listing.price.interval}
       otherServices={listing.details.otherServices}

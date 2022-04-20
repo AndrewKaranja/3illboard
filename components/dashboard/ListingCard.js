@@ -7,13 +7,15 @@ import Link from 'next/link';
 
 export default function ListingCard({img,location,title,interval,price,listingid,otherServices}) {
   return (
+    <Link
+    className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+    href={`/account/listings/${listingid}`}
+   passHref
+  >
+    <a>
 
     <div className='flex m-5 p-7 px-2  h-84 hover:border-2 hover:shadow-sm rounded-xl bg-white hover:border-[#FAB038] cursor-pointer select-none hover:opacity-80   transition duration-100 ease-out '>
-     <Link
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href={`/account/listings/${listingid}`}
-               passHref
-              >
+    
                
             
       <div className='flex flex-[10]'>
@@ -29,7 +31,7 @@ export default function ListingCard({img,location,title,interval,price,listingid
                     
                 </div>
                 
-                <p className='text-sm text-gray-500'>Near Strathmore</p>
+                <p className='text-sm text-gray-500'>{location}</p>
                 <div className='border-b w10 pt-2'/>
                 <p className='pt-2 text-sm text-gray-500 flex-grow'>{otherServices?.map((service)=>
           
@@ -42,7 +44,7 @@ export default function ListingCard({img,location,title,interval,price,listingid
                2.0
                 </p>
                 <div>
-                    <p className='text-lg lg:text-2xl font-semibold pb-2'>{price}KES/{interval}</p>
+                    <p className='text-lg lg:text-2xl font-semibold pb-2'>End Of Listing:</p>
                 </div>
             </div>
             </div>
@@ -51,8 +53,10 @@ export default function ListingCard({img,location,title,interval,price,listingid
         
        
         
-      </Link>
+      
         </div>
+        </a>
+        </Link>
 
   )
 }
