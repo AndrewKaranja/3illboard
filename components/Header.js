@@ -19,6 +19,7 @@ import { SidebarData } from './Data/SidebarData';
 import { IconContext } from 'react-icons';
 import Transition from '../utils/Transition';
 import { useAuth } from '../context/AuthContext';
+import Avatar from 'react-avatar';
 
 
 
@@ -165,9 +166,11 @@ function Header({placeholder}) {
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <UserCircleIcon className={user?'invisible sm:visible h-6 cursor-pointer text-green-400':'invisible sm:visible h-6 cursor-pointer'}/>
+        {/* <UserCircleIcon className={user?'invisible sm:visible h-6 cursor-pointer text-green-400':'invisible sm:visible h-6 cursor-pointer'}/> */}
+        
         <div className="flex items-center truncate">
-          <span className="invisible sm:visible truncate ml-2 text-sm font-medium group-hover:text-slate-800">{user?.displayName}</span>
+        <Avatar size="20" name={user?.displayName}  round={true} className={user?'visible cursor-pointer':'invisible'} />
+          {/* <span className="invisible sm:visible truncate ml-2 text-sm font-medium group-hover:text-slate-800">{user?.displayName}</span> */}
           <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>

@@ -1,38 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import {  query, orderBy, doc, getDoc,getDocs,collection,where } from "firebase/firestore";
+import { db } from '../../../firebase';
 import Image from 'next/image';
 import Sidebar from '../../../components/dashboard/Sidebar';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
 import { withProtected } from '../../../hooks/route';
 import billboard from '../../../images/cat.png';
-import {db} from '../../../firebase';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
 import {useCollection} from "react-firebase-hooks/firestore";
-import { collection, query, where } from "firebase/firestore";
 
-
-import * as BiIcons from 'react-icons/bi';
-import * as RiIcons from 'react-icons/ri';
-import * as MdIcons from 'react-icons/md';
-import * as FcIcons from 'react-icons/fc';
 import ChatCard from '../../../components/dashboard/ChatCard';
 import ChatScreen from '../../../components/dashboard/ChatScreen';
 
-function Messages() {
+
+function Chat({chat,messages}) {
     const {user}=useAuth();
+    const [sidebarOpen, setSidebarOpen] = useState(true);
     //get chats snapshots
     const userChatRef = collection(db, "chats");
     const chatsQuery = query(userChatRef,where('users','array-contains',user.email));
     const [chatsSnapshot]=useCollection(chatsQuery);
-
-    const [sidebarOpen, setSidebarOpen] = useState(true);
     const chatAlreadyExists=(recepientEmail)=>
-        !!chatsSnapshot?.docs.find(
-            (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
-            );
-   
+    !!chatsSnapshot?.docs.find(
+        (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
+        );
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-100">
+    <div className="flex h-screen  bg-gray-100  max-h-[100vh]">
          {/* Sidebar */}
     <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        {/* Content area */}
@@ -60,7 +54,7 @@ function Messages() {
 
 {/*chat screen*/}
           <div className='flex flex-col flex-grow-[9] h-full'>
-            {/* <ChatScreen/> */}
+            <ChatScreen messages={messages} chat={chat}/>
           </div>
 
 
@@ -70,5 +64,43 @@ function Messages() {
         </div>
   )
 }
+export default Chat;
 
-export default withProtected(Messages);
+export async function getServerSideProps(context){ 
+    console.log(context.query.id)
+    const collectionRef = collection(db,`chats/${context.query.id}/messages`);
+    const ref = doc(db,"chats",context.query.id);
+ 
+    //const ref=collection(db,`chats/${context.query.id}/messages`);
+   
+
+    //prep the messages on the server
+
+    const q=query(collectionRef,orderBy("timestamp","asc"))
+    
+    const messagesRes=await getDocs(q) ;
+
+    const messages=messagesRes.docs?.map((doc)=>({
+        id:doc.id,
+        ...doc.data(),
+    })).map(messages=>({
+        ...messages,
+        timestamp:messages.timestamp.toDate().getTime()
+    }));
+
+    //prep the chats
+    const chatRes=await getDoc(ref);
+    const chat={
+        id:chatRes.id,
+        ...chatRes.data()
+    }
+
+    return{
+        props:{
+            messages:JSON.stringify(messages),
+            chat:chat,
+        }
+    }
+
+}
+
