@@ -14,7 +14,7 @@ import * as AiIcons from 'react-icons/ai';
 import * as MdIcons from 'react-icons/md';
 
 import Link from 'next/link'
-import { SidebarData } from './Data/SidebarData';
+import { SidebarData,SidebarDataLoggedIn } from './Data/SidebarData';
 
 import { IconContext } from 'react-icons';
 import Transition from '../utils/Transition';
@@ -232,28 +232,38 @@ function Header({placeholder}) {
         {/* testing */}
         <IconContext.Provider value={{ color: '#fff' }}>
         
-         <nav  className={sidebar ? 'bg-[#FAB038] w-[10rem] h-[20rem] rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
+         <nav  className={sidebar ? 'bg-[#FAB038] w-[10rem] h-fit rounded-2xl flex justify-center m-2 absolute  z-50  transition duration-850 right-4  mt-20  ' : 'bg-[#060b26] w-64 h-[100vh] flex justify-center fixed top-0 right-[-100%] transition duration-850'}>
          <MdIcons.MdOutlineCancel className='absolute m-2 right-0 z-50 hover:scale-150' onClick={()=>setSidebar(false)}/>
-          <ul className='w-[100%]' onClick={showSidebar}>
+          <ul className='w-[100%] mx-auto text-center my-2' onClick={showSidebar}>
             
            
-            {
-
-                SidebarData.map((item, index) => {
-                  return (
-                    <li key={index} className={item.cName}>
-                      <Link href={item.path} passHref>
-                          <div className='flex text-[#f5f5f5] select-none text-sm h-[85%] w-[85%] p-3 justify-start list-none items-center rounded hover:bg-black cursor-pointer'>
-                          {item.icon}
-                        <span className='ml-4'>{item.title}</span>
-                        </div>
-                       
-                      </Link>
-                    </li>
-                  );
-                })
-              
-            }
+          {!user && SidebarData.map((item, index) => {
+              return (
+                <li key={index} className={item.cName}>
+                  <Link href={item.path} passHref>
+                      <div className='flex text-[#f5f5f5] text-lg h-[100%] w-[95%]  justify-start list-none hover:cursor-pointer   items-center rounded hover:bg-black '>
+                      {item.icon}
+                    <span className='ml-4'>{item.title}</span>
+                    </div>
+                   
+                  </Link>
+                </li>
+              );
+            })}
+            {user && SidebarDataLoggedIn.map((item, index) => {
+              return (
+                <li key={index} className={item.cName}>
+                  <Link href={item.path} passHref>
+                      <div className='flex text-[#f5f5f5] text-lg h-[100%] w-[95%] mx-auto justify-start list-none  items-center rounded hover:bg-black '>
+                      {item.icon}
+                    <span className='ml-4'>{item.title}</span>
+                    </div>
+                   
+                  </Link>
+                </li>
+              );
+            })}
+            
             
           </ul>
          </nav>

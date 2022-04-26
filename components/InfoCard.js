@@ -1,16 +1,21 @@
 import { HeartIcon} from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid'
-import Image from 'next/image'
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-function InfoCard({img,location,title,description,star,price,total}) {
+function InfoCard({img,id,location,title,description,star,price,total}) {
+    const router=useRouter();
+    const viewListing=()=>{
+        router.push(`/search/${id}`);
+      }
   return (
-    <div className='flex py-7 px-2 border-b cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out first:border-t'>
+    <div  onClick={viewListing} className='flex py-7 px-2 border-b cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out first:border-t'>
         <div className='relative h-24 w-40 md:h-52 md:w-80 flex-shrink-0'>
         <Image src={img} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/>
         </div>
         <div className='flex flex-col flex-grow pl-5'>
             <div className='flex justify-between'>
-                <p>{location}</p>
+                <p>{description}</p>
                 <HeartIcon className='h-7 cursor-pointer'/>
                 
             </div>
@@ -21,11 +26,12 @@ function InfoCard({img,location,title,description,star,price,total}) {
             <div className='flex justify-between items-end pt-5'>
             <p className='flex items-center'>
             <StarIcon className='h-5 text-[#FAB038]'/>
-            {star}
+            {/* {star} */}
+            3.5
             </p>
             <div>
-                <p className='text-lg lg:text-2xl font-semibold pb-2'>{price}</p>
-                <p className='text-right font-extralight'>{total}</p>
+                <p className='text-lg lg:text-2xl font-semibold pb-2'>KES{price.price}/{price.interval}</p>
+                {/* <p className='text-right font-extralight'>{total}</p> */}
             </div>
         </div>
         </div>

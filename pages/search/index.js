@@ -1,20 +1,28 @@
 import { format } from 'date-fns';
-import { useRouter } from 'next/router'
-import React from 'react'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-import InfoCard from '../components/InfoCard';
-import Map from '../components/Map';
+import {useRouter} from "next/router";
 
-function Search({searchResults}) {
+import React from 'react'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
+import InfoCard from '../../components/InfoCard';
+import Map from '../../components/Map';
+import {useCollection} from "react-firebase-hooks/firestore";
+import { collection, query, where,getDocs } from "firebase/firestore";
+import { db } from '../../firebase';
+import { useAuth } from '../../context/AuthContext';
+
+function Search({listings,searchResults}) {
   const router=useRouter();
+  const {user}=useAuth();
 const {location,startDate,endDate}=router.query;
+
 
 
 
 const formattedStartDate=format(new Date(startDate),"dd MMMM yy");
 const formattedEndDate=format(new Date(endDate),"dd MMMM yy");
 const range=`${formattedStartDate} - ${formattedEndDate}`;
+
   return (
     <div>
         <Header placeholder={`${location} | ${range}`}/>
@@ -31,7 +39,19 @@ const range=`${formattedStartDate} - ${formattedEndDate}`;
                 </div>
 
                 <div className='flex flex-col'>
-                {searchResults.map(({img,location,title,description,star,price,total})=>(
+                  {console.log(listings)}
+                  {JSON.parse(listings)?.map((listing)=>(
+                    <InfoCard
+                    key={listing.listingid}
+                    id={listing.listingid}
+                    img={listing?.photosURLS?.[0]}
+                    title={listing?.details?.billboardTitle}
+                    description={listing?.details?.billboardDescription}
+                    price={listing?.price}
+
+                    />
+                  ))}
+                {/* {searchResults.map(({img,location,title,description,star,price,total})=>(
                   <InfoCard 
                   key={img}
                   img={img}
@@ -41,7 +61,7 @@ const range=`${formattedStartDate} - ${formattedEndDate}`;
                   star={star}
                   price={price}
                   total={total}/>
-                ))}
+                ))} */}
                 </div>
 
             </section>
@@ -60,12 +80,25 @@ const range=`${formattedStartDate} - ${formattedEndDate}`;
 export default Search;
 
 export async function getServerSideProps() {
+  const listingsRef = collection(db, "listings");
+  const listingQuery=query(listingsRef,where('activated','==',false));
+ 
+  const listingsRes=await getDocs(listingQuery) ;
+
+    const listings=listingsRes.docs?.map((doc)=>({
+        id:doc.id,
+        ...doc.data(),
+    }));
+
+
+
   const searchResults=await fetch('https://links.papareact.com/isz').
   then(res=>res.json());
 
   return{
     props:{
       searchResults,
+      listings:JSON.stringify(listings),
     }
   }
 }

@@ -3,7 +3,8 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import Link from 'next/link'
-import { SidebarData } from './Data/SidebarData';
+import { SidebarData} from './Data/SidebarData';
+import {SidebarDataLoggedIn } from './Data/SidebarDataLoggedIn';
 
 import { IconContext } from 'react-icons';
 import { useAuth } from '../context/AuthContext';
@@ -29,7 +30,7 @@ function Sidebar() {
                 <AiIcons.AiOutlineClose />
               </Link>
             </li>
-            {SidebarData.map((item, index) => {
+            {user && SidebarData.map((item, index) => {
               return (
                 <li key={index} className={item.cName}>
                   <Link href={item.path} passHref>
@@ -42,6 +43,20 @@ function Sidebar() {
                 </li>
               );
             })}
+            {user && SidebarDataLoggedIn.map((item, index) => {
+              return (
+                <li key={index} className={item.cName}>
+                  <Link href={item.path} passHref>
+                      <div className='flex text-[#f5f5f5] text-lg h-[100%] w-[95%] pl-8 justify-start list-none  items-center rounded hover:bg-[#FAB038] '>
+                      {item.icon}
+                    <span className='ml-4'>{item.title}</span>
+                    </div>
+                   
+                  </Link>
+                </li>
+              );
+            })}
+
             
           </ul>
         </nav>
