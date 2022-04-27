@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Traffic from '../images/traffic.png'
 
-function LargeCard({img,title,description,buttonText}) {
+function LargeCard({title,description,buttonText}) {
   return (
     <section className='relative py-16 cursor-pointer select-none'>
         <div className='relative h-96 min-w-[300px]'>

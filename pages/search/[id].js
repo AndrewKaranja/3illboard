@@ -140,7 +140,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
-      <Link passHref href="/account/listings" >
+      <Link passHref href="/search" >
         <div className="bg-white w-full flex flex-row items-center p-2">
         <AiIcons.AiOutlineRollback className='h-16 w-16'/>
         <p className='text-xl align-middle font-bold'>Return to Search</p>

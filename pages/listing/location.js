@@ -20,7 +20,7 @@ import {
 import "@reach/combobox/styles.css";
 
 const containerStyle = {
-    width: '30rem',
+    width: '24rem',
     height: '30rem'
   };
 
@@ -39,8 +39,8 @@ const containerStyle = {
 
 
   function PlaceMarkerText(){
-    return <div>
-      <p className=' text-black text-lg bg-[#FAB308] w-[30rem]'>Please click on map to place marker on the Location of your ad space</p>
+    return <div className='w-full'>
+      <p className=' text-black text-lg bg-[#FAB308] '>Please click on map to place marker on the Location of your ad space</p>
     </div>
   }
 
@@ -80,11 +80,15 @@ function Location() {
   },[])
 
   const [markers, setMarkers] = useState([]);
+  const [marker,setMarker]=useState("");
+  const [nearbyAddress,setNearbyAddress]=useState("");
   useEffect(() => {
-    localStorage.setItem('listingLocation', JSON.stringify(markers));
-  }, [markers]);
+    localStorage.setItem('listingLocation', JSON.stringify(marker));
+  }, [marker]);
 
      const handleNextClick = () => {
+       setMarker({lat:markers?.[0].lat,
+      long:markers?.[0].lng});
       setTimeout(() => {
         if(markers!==null){router.push("/listing/photos");}
         
@@ -115,17 +119,20 @@ function Location() {
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
-          <div className="m-auto pt-12 px-6 sm:p-15 xl:w-10/12">
-            <div className='space-y-4 mb-2'>
+          <div className="m-auto px-6 mt-4 xl:w-10/12">
+        
+            <div className='space-y-4'>
               
               <h3 className='text-3xl'>Enter Location of Ad space:</h3>
               
               
             </div>
             
+            <div className='w-[100vw] sm:w-[30rem] mr-3'>
             <GoogleSearch panTo={panTo}/>
+
             
-                <GoogleMap
+            <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
                 options={options}
@@ -134,7 +141,7 @@ function Location() {
                 onClick={onMapClick}>
 
                   {/* should check this out in future -not optimised */}
-                  {markers.map((marker)=>(
+                  {markers?.map((marker)=>(
                     <Marker
                     key={marker.time.toISOString()}
                     position={{lat: marker.lat,lng: marker.lng}}
@@ -144,13 +151,20 @@ function Location() {
                       
                     }}/>
                   ))}
+
+                  
                     
 
                    
                     </GoogleMap>
                     <PlaceMarkerText/>
 
-                    <div className='flex  justify-between pb-10  w-[30rem]'>
+            </div>
+            
+                
+                    
+
+                    <div className='flex  justify-between pb-10  w-[100vw] sm:w-[25rem] '>
                       <button className='text-sm text-gray-900 bg-gray-100 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Back</button>
                       <button onClick={handleNextClick} className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>Next</button>
                     </div>
@@ -197,14 +211,14 @@ function GoogleSearch({panTo}){
   }}>
     <ComboboxInput 
        className="city-search-input"
-       style={{ width: 400 ,border: '2px solid #FAB038',borderRadius:'5px',backgroundColor:'#f0f0f0' }}
+       style={{ width: 400 ,height:50,border: '2px solid #FAB038',borderRadius:'5px',backgroundColor:'#fff' }}
        value={value}
        
        onChange={(e)=>{
          setValue(e.target.value)
        }}
        disabled={!ready}
-       placeholder="Enter An address"
+       placeholder="Enter a nearby location"
     />
     <ComboboxPopover className="shadow-popup">
     <ComboboxList>

@@ -52,8 +52,11 @@ useEffect(() => {
         .max(50,'Must be 50 characters or less')
         .required('Title is required'),
         billboardDescription:Yup.string()
-        .min(5,'Must be atleas 3 characters')
+        .min(10,'Must be atleast 10 characters')
         .required('Billboard description is required'),
+        locationDescription:Yup.string()
+        .min(10,'Must be atleast 10 characters')
+        .required('Location description is required'),
         dimensionWidth:Yup.number()
         .required('Width is required'),
         dimensionHeight:Yup.number()
@@ -88,6 +91,7 @@ useEffect(() => {
                 initialValues={{
                 billboardTitle:'',
                 billboardDescription:'',
+                locationDescription:'',
                 dimensionWidth:'',
                 dimensionHeight:'',
                 nightVisibility:false,
@@ -101,6 +105,7 @@ useEffect(() => {
                               listingType:listingType,
                               billboardTitle:values.billboardTitle,
                               billboardDescription:values.billboardDescription,
+                              locationDescription:values.locationDescription,
                               dimensionWidth:values.dimensionWidth,
                               dimensionHeight:values.dimensionHeight,
                               otherServices:tags,
@@ -134,13 +139,33 @@ useEffect(() => {
                                  <ErrorMessage component="div"  name="billboardTitle" className="text-red-600"/>
                             </div>
 
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.5rem] lowercase'>(eg nearby places of interest to boost intrest)</p></div>
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Billboard Description<p className='text-[0.5rem] lowercase'>(Defining Features of the billboard)</p></div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <Field name="billboardDescription"  placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                              <textarea
+                              name="billboardDescription"
+                              id="billboardDescription"   
+                              placeholder="eg. Its on a Junction,no surrounding buildings,on busy road etc"
+                              className="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                              onChange={formik.handleChange}
+                              value={formik.values.billboardDescription}
+                              rows={5}
+                              cols={5}
+                              />
+                               
                                 
                                  </div>
                                  <ErrorMessage component="div" name="billboardDescription" className="text-red-600"/>
+                            </div>
+
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Location Description<p className='text-[0.5rem] lowercase'>(eg nearby places of interest to boost intrest)</p></div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                              <Field name="locationDescription"  placeholder="eg. places of interest around billboard" type="text" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="locationDescription" className="text-red-600"/>
                             </div>
 
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Dimensions</div>

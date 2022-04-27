@@ -46,7 +46,7 @@ function Preview() {
     const promises=[];
     const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false});
     promises.push(uploadUserListing);
-    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false});
+    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false});
     promises.push(uploadListing);
     Promise.all(promises)
   .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})

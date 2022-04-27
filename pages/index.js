@@ -10,8 +10,16 @@ import LargeCard from '../components/LargeCard';
 import Footer from '../components/Footer';
 import Sidebar from '../components/Sidebar';
 import { useAuth } from '../context/AuthContext';
+import city from '../images/city.png';
+import town from  '../images/nakuru.png';
+import oceancity from '../images/mombasa.png';
+import imgbill from '../images/billboard_fl2.png';
+import imgdigi from '../images/digital_signage.png';
+import imgside from '../images/street-sideAd.png';
+import imgclock from '../images/clock.png';
+import imgmoving from '../images/movingAd.png';
 
-export default function Home({exploreData,cardsData}) {
+export default function Home() {
 
   return (
     <div className="">
@@ -33,15 +41,29 @@ export default function Home({exploreData,cardsData}) {
 
 {/* Pull some data from a server-API endpoints */}
 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-{exploreData?.map((item)=>(
-  <SmallCard 
-  key={item.img}
-  img={item.img}
-  distance={item.distance}
-  location={item.location}
-  />
 
-))}
+  <SmallCard 
+  img={city}
+  ads="500"
+  location="Nairobi"
+  />
+   <SmallCard 
+  img={oceancity}
+  ads="500"
+  location="Mombasa"
+  />
+   <SmallCard 
+  img={town}
+  ads="500"
+  location="Kisumu"
+  />
+  <SmallCard 
+  img={town}
+  ads="500"
+  location="Nakuru"
+  />
+ 
+
 </div>
   </section>
 
@@ -51,17 +73,27 @@ export default function Home({exploreData,cardsData}) {
   
 
   <div className='flex space-x-3 overflow-scroll scrollbar-hide p-3 ml-3'>
-  {cardsData?.map((item)=>(
+  
 <MediumCard
-key={item.img}
-img={item.img}
-title={item.title}/>
-  ))}
+img={imgbill}
+title="Billboards"/>
+<MediumCard
+img={imgdigi}
+title="Digital Billboards"/>
+<MediumCard
+img={imgside}
+title="Light Post Ads"/>
+<MediumCard
+img={imgclock}
+title="Clock Ads"/>
+<MediumCard
+img={imgmoving}
+title="Moving Ads"/>
+
   </div>
 </section>
 
 <LargeCard
-   img="https://links.papareact.com/4cj"
    title="The perfect ad campaign"
    description="Campaign curated by 3illboard"
    buttonText="Try out"/>
@@ -73,22 +105,22 @@ title={item.title}/>
 
 
 
-export async function getStaticProps() {
-  // To be edited to add 3illboard api
-  const exploreData=await fetch('https://links.papareact.com/pyp').
-  then(
-    (res)=>res.json()
-    );
+// export async function getStaticProps() {
+//   // To be edited to add 3illboard api
+//   const exploreData=await fetch('https://links.papareact.com/pyp').
+//   then(
+//     (res)=>res.json()
+//     );
 
-    const cardsData=await fetch('https://links.papareact.com/zp1').
-    then(
-      (res)=>res.json()
-      );
+//     const cardsData=await fetch('https://links.papareact.com/zp1').
+//     then(
+//       (res)=>res.json()
+//       );
     
-    return{
-      props:{
-        exploreData,
-        cardsData,
-      }
-    }
-}
+//     return{
+//       props:{
+//         exploreData,
+//         cardsData,
+//       }
+//     }
+// }

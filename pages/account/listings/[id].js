@@ -117,7 +117,7 @@ const listingImage=listing.photosURLS?.map((photosURL)=>
     }
     
    
-  }, []);
+  }, [user,id]);
 
  var image=listing?.photosURLS;
 
@@ -125,8 +125,9 @@ const listingImage=listing.photosURLS?.map((photosURL)=>
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
       <Link passHref href="/account/listings" >
-        <div className="bg-white w-fit absolute">
+      <div className="bg-white w-full flex flex-row items-center p-2">
         <AiIcons.AiOutlineRollback className='h-16 w-16'/>
+        <p className='text-xl align-middle font-bold'>Back to Listings</p>
 
         </div>
               
