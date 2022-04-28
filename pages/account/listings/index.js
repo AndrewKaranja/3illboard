@@ -76,12 +76,13 @@ useEffect(() => {
       <ListingCard
       key={listing.listingid}
       listingid={listing.listingid}
+      rating={listing.rating}
       title={listing.details.billboardTitle}
-      location={listing.details.billboardDescription}
+      location={listing.details.locationDescription}
       price={listing.price.price}
       interval={listing.price.interval}
       otherServices={listing.details.otherServices}
-      img={listing.details.photosURLS}
+      img={listing.photosURLS?.[0]}
       />
    ))}
       </div>

@@ -85,12 +85,12 @@ const handleCanlendar=(isPressed)=>{
   
 }
 
-const listingImage=listing.photosURLS?.map((photosURL)=>
+const listingImage=listing?.photosURLS?.map((photosURL)=>
 <>
   <SwiperSlide key={photosURL}>
           
-          {/* <Image src={photosURL} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl w-full h-full'/> */}
-          <img src={photosURL} alt="listing images" />
+          <Image src={photosURL} layout="fill" alt='ad image' objectFit="contain"  className='rounded-2xl w-full h-full'/>
+          {/* <img src={photosURL} alt="listing images" /> */}
       </SwiperSlide>
 </>
 )
@@ -159,7 +159,7 @@ const listingImage=listing.photosURLS?.map((photosURL)=>
                     
                 </div>
                 
-                <p className='text-sm text-gray-500 font-semibold'>📍{listing.details?.billboardDescription}</p>
+                <p className='text-sm text-gray-500 font-semibold'>📍{listing.details?.locationDescription}</p>
                 
                 <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
                

@@ -4,8 +4,9 @@ import { StarIcon } from '@heroicons/react/solid'
 import Image from 'next/image';
 import billboard from '../../images/cat.png';
 import Link from 'next/link';
+import * as BsIcons from 'react-icons/bs';
 
-export default function ListingCard({img,location,title,interval,price,listingid,otherServices}) {
+export default function ListingCard({img,title,location,interval,price,rating,listingid,otherServices}) {
   return (
     <Link
     className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
@@ -20,8 +21,7 @@ export default function ListingCard({img,location,title,interval,price,listingid
             
       <div className='flex flex-[10]'>
       <div className='relative h-full w-32 flex-grow-[1] '>
-            
-            <Image src={billboard} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/>
+            <Image src={img} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/>
             </div>
             <div className='flex flex-col flex-grow-[9] pl-5 h-fit'>
                 <div className='flex justify-between'>
@@ -33,18 +33,18 @@ export default function ListingCard({img,location,title,interval,price,listingid
                 
                 <p className='text-sm text-gray-500'>{location}</p>
                 <div className='border-b w10 pt-2'/>
-                <p className='pt-2 text-sm text-gray-500 flex-grow'>{otherServices?.map((service)=>
+                {/* <p className='pt-2 text-sm text-gray-500 flex-grow'>{otherServices?.map((service)=>
           
           <> {service} .</>
-        )}</p>
+        )}</p> */}
     
                 <div className='flex justify-between items-end pt-5'>
                 <p className='flex items-center'>
                 <StarIcon className='h-5 text-[#FAB038]'/>
-               2.0
+               {rating}
                 </p>
                 <div>
-                    <p className='text-lg lg:text-2xl font-semibold pb-2'>End Of Listing:</p>
+                  <BsIcons.BsBookmarkCheckFill className='text-green-300'/>
                 </div>
             </div>
             </div>
