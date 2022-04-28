@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from '../../images/Logo.png';
+import OfficialLogo from '../../images/3illboardLogo.png';
 import SidebarLinkGroup from './SidebarLinkGroup';
 
 function Sidebar({ sidebarOpen,
@@ -116,11 +117,11 @@ function Sidebar({ sidebarOpen,
         {/* Logo */}
         <Link passHref href="/" className="block">
         <Image 
-           src={Logo}
+           src={OfficialLogo}
            alt='Logo'
            
            width={'140px'}
-           height={'36px'}
+           height={'50px'}
            />
         </Link>
       </div>

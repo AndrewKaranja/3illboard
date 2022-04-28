@@ -1,6 +1,7 @@
 import React, { useState,useRef,useEffect } from 'react';
 import Image from 'next/image';
 import Logo from '../images/Logo.png';
+import OfficialLogo from '../images/3illboardLogo.png';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -129,9 +130,9 @@ function Header({placeholder}) {
       onClick={()=> router.push("/")}
       className='relative flex items-center h-10 cursor-pointer my-auto'>
           <Image 
-           src={Logo}
+           src={OfficialLogo}
            alt='Logo'
-           
+           objectFit="contain"
            width={'140rem'}
            height={'36rem'}
            />
