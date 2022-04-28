@@ -44,9 +44,9 @@ function Preview() {
     const listingDocRef=doc(db,"listings",listingID);
     const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID)
     const promises=[];
-    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false});
+    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00});
     promises.push(uploadUserListing);
-    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false});
+    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false,rating:0.00});
     promises.push(uploadListing);
     Promise.all(promises)
   .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})

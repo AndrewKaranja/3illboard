@@ -193,7 +193,6 @@ useEffect(() => {
                     <select className="form-select bg-orange-200 ml-2 text-center appearance-none block w-full  py-1.5 text-base font-normal text-gray-700  bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out mt-2
                     focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none" aria-label="Default select example">
                         <option defaultValue value="m">m</option>
-                        <option value="in">In</option>
                         </select>
                 </div>
             </div>
