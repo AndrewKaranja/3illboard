@@ -47,6 +47,7 @@ function Price() {
                 initialValues={{
                 price:'',
                 interval:'monthly',
+                hidePrice:false,
                           }}
                           validationSchema={validate}
                           onSubmit={values=>{
@@ -55,6 +56,7 @@ function Price() {
                                 setlistingPrice({
                                   price:values.price,
                                   interval:values.interval,
+                                  hidePrice:values.hidePrice,
                                 });
                                 router.push("/listing/legal")
                                 
@@ -85,6 +87,11 @@ function Price() {
                         <option value="daily">Daily</option>
                         </Field>
                 </div>
+                <div className='flex flex-row mt-4 ml-2 items-center'>
+              <Field type="checkbox" name="hidePrice" className="m-2"/>
+              <p>Hide Price from search page</p>
+              
+            </div>
             
            
         </div>

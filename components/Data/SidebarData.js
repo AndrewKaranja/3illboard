@@ -48,7 +48,7 @@ export const SidebarDataLoggedIn = [
   
   {
     title: 'Host Ad',
-    path: '/search',
+    path: '/listing/listingtype',
     icon: <FcIcons.FcAddDatabase />,
     cName: 'navText'
   },
@@ -60,7 +60,7 @@ export const SidebarDataLoggedIn = [
   },
   {
     title: 'Messages',
-    path: '/messages',
+    path: '/account/messages',
     icon: <FaIcons.FaEnvelopeOpenText />,
     cName: 'navText'
   },

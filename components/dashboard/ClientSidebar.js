@@ -3,49 +3,25 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Logo from '../../images/Logo.png';
-import OfficialLogoWhite from '../../images/3illboardLogoWhite.svg';
-import OfficialLogoMiniWhite from '../../images/3illboardLogoMiniWhite.svg';
+import OfficialLogo from '../../images/3illboardLogo.png';
 import SidebarLinkGroup from './SidebarLinkGroup';
 
-function Sidebar({ sidebarOpen,
+function ClientSidebar({ sidebarOpen,
   setSidebarOpen
 }) {
 
   
   const router = useRouter();
-  // const location = useLocation();
-  // const { router.pathname } = location;
+ 
   const { asPath } = useRouter();
-  //const { pathname } = "/";
+ 
 
  const trigger = useRef(null);
   const sidebar = useRef(null);
-  // const trigger = React.forwardRef(null);
-  // const sidebar=React.forwardRef(null);
-
-  // NOTE THIS IS A TEMPORARY FIX
-  //!!!!!!!!!!!
-  //!!!!!!!!!!
-  //!!!!!!!!!
-  //!!!!!!!!
-
-  //const storedSidebarExpanded=useRef(null);
-//   const ISSERVER = typeof window === "undefined";
-
-// if(!ISSERVER) {
-//  // Access localStorage
-//  const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
-//  return storedSidebarExpanded;
-// }else{
-//   storedSidebarExpanded=null;
-//   return storedSidebarExpanded;
-// }
-
-  //This is
+ 
   const [storedSidebarExpanded, setstoredSidebarExpanded] = useState('true');
 
   useEffect(() => {
-    // Perform localStorage action
     const storedSidebarExpandedState = localStorage.getItem('sidebar-expanded');
     console.log(storedSidebarExpandedState);
     
@@ -117,21 +93,13 @@ function Sidebar({ sidebarOpen,
         </button>
         {/* Logo */}
         <Link passHref href="/" className="block">
-          {sidebarExpanded?<Image 
-           src={OfficialLogoWhite}
+        <Image 
+           src={OfficialLogo}
            alt='Logo'
            
            width={'140px'}
            height={'50px'}
-           />:
-           <Image 
-           src={OfficialLogoMiniWhite}
-           alt='Logo'
-           objectFit="fill"
-           width={'140px'}
-           height={'200px'}
-           />}
-        
+           />
         </Link>
       </div>
 
@@ -366,4 +334,4 @@ function Sidebar({ sidebarOpen,
   )
 }
 
-export default Sidebar
+export default ClientSidebar

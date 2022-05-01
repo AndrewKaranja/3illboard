@@ -2,19 +2,19 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="148.59138mm"
+   width="49.599373mm"
    height="61.797592mm"
-   viewBox="0 0 148.59138 61.797592"
+   viewBox="0 0 49.599373 61.797592"
    version="1.1"
    id="svg5"
+   sodipodi:docname="3illboardLogoMiniWhite.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   sodipodi:docname="3illboardLogo.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
-     id="namedview7"
+     id="namedview10"
      pagecolor="#ffffff"
      bordercolor="#111111"
      borderopacity="1"
@@ -23,19 +23,19 @@
      inkscape:pagecheckerboard="1"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="0.5"
-     inkscape:cx="79"
-     inkscape:cy="195"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.49887767"
+     inkscape:cx="-99.222722"
+     inkscape:cy="133.29921"
      inkscape:window-width="1366"
      inkscape:window-height="745"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0" />
+     inkscape:current-layer="layer1" />
   <defs
      id="defs2">
     <rect
@@ -52,32 +52,22 @@
        id="rect20426" />
   </defs>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-34.419671,-100.61549)">
+     transform="translate(-81.515508,-112.78632)">
     <rect
        style="fill:none;fill-opacity:0.807229;stroke:#fab038;stroke-width:9.24584;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect11424"
        width="40.353535"
        height="52.55175"
-       x="39.042591"
-       y="105.23841" />
+       x="86.138428"
+       y="117.40924" />
     <text
        xml:space="preserve"
-       transform="matrix(1.4567877,0,0,1.4351288,-339.60869,-976.49415)"
+       transform="matrix(1.4567877,0,0,1.4351288,-292.51286,-964.32332)"
        id="text20424"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Sylfaen;-inkscape-font-specification:Sylfaen;white-space:pre;shape-inside:url(#rect20426)"><tspan
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Sylfaen;-inkscape-font-specification:Sylfaen;white-space:pre;shape-inside:url(#rect20426);fill:#ffffff"><tspan
          x="264"
          y="785.95494"
-         id="tspan839">3</tspan></text>
-    <text
-       xml:space="preserve"
-       transform="matrix(0.58612776,0,0,0.80951524,-68.845299,-530.04229)"
-       id="text54346"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:40px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';white-space:pre;shape-inside:url(#rect54348)"><tspan
-         x="262"
-         y="854.49321"
-         id="tspan841">illboard</tspan></text>
+         id="tspan956">3</tspan></text>
   </g>
 </svg>

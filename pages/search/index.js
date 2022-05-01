@@ -50,6 +50,7 @@ if(startDate && endDate){
                     title={listing?.details?.billboardTitle}
                     description={listing?.details?.billboardDescription}
                     price={listing?.price}
+                    location={listing?.details?.locationDescription}
 
                     />
                   ))}

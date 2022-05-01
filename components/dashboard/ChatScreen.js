@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+
 import Image from 'next/image';
 import {useRouter} from "next/router";
 import Avatar from 'react-avatar';
@@ -61,20 +62,27 @@ function ChatScreen({chat,messages}) {
             block:"start",
                 });
     }
-    const sendMessage=(e)=>{
+
+    // Added async here
+    const sendMessage=async (e)=>{
         e.preventDefault();
         //update Last seen
         const userDocRef=doc(db,"users",user.uid);
         setDoc(userDocRef,{lastSeen:serverTimestamp()}, { merge: true });
 
         const messagesCollectionRef=collection(db,`chats/${router.query.id}/messages`);
+        const chatDocRef=doc(db,"chats",router.query.id);
 
-        addDoc(messagesCollectionRef, {
+        
+
+        const messageDoc=await addDoc(messagesCollectionRef, {
             timestamp: serverTimestamp(),
             message:input,
             user:user.email
             
           });
+
+          await setDoc(chatDocRef,{lastMessageId:messageDoc.id,lastMessage:input,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true })
 
           setInput("");
           scrollToBottom();
@@ -118,19 +126,20 @@ function ChatScreen({chat,messages}) {
     </div>
 
 {/* Message Container */}
-<div className='p-2 min-h-[70vh] max-h-[100vh]'>
+<div className='p-2 min-h-[50vh] max-h-[55vh] whitespace-normal overflow-y-auto scrollbar-hide'>
     {showMessages()}
+    <div ref={endOfMessagesRef} className="pb-6"></div>
 
 </div>
-<div ref={endOfMessagesRef} className="pb-6"></div>
+
 
 {/* Input container */}
 <form className='flex items-center text-black p-3 sticky bottom-0 bg-slate-200 z-50'>
     <EmojiHappyIcon className='text-[#fab038] h-6 w-6 mx-2'/>
     
-<input type="text" value={input} onChange={e=>setInput(e.target.value)} className='flex flex-1 p-3 sticky bottom-0 items-center bg-white' />
+<input type="text" placeholder='Add your message' value={input} onChange={e=>setInput(e.target.value)} className='flex flex-1 p-3 sticky bottom-0 rounded-full items-center bg-white' />
 <button hidden disabled={!input} type="submit" onClick={sendMessage}></button>
-<IoIcons.IoMdSend className='h-8 w-8 ml-2 bg-white p-1'/>
+<IoIcons.IoMdSend className='h-8 w-8 ml-2 bg-white p-1' onClick={sendMessage}/>
 
 </form>
 

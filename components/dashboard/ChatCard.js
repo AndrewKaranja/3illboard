@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import moment from 'moment';
 import {useRouter} from "next/router";
 import billboard from '../../images/cat.png';
 import {useCollection} from "react-firebase-hooks/firestore";
@@ -9,7 +10,7 @@ import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import Avatar from 'react-avatar';
 
-function ChatCard({id,users}) {
+function ChatCard({id,users,lastMessage,lastSender,lastMessageTime}) {
     const router=useRouter();
     const {user}=useAuth();
     
@@ -24,19 +25,21 @@ function ChatCard({id,users}) {
     const recipient=recipientSnapshot?.docs?.[0]?.data();
     
   return (
-    <div onClick={enterChat} className='flex flex-row bg-white p-5 m-1 overflow-hidden hover:cursor-pointer rounded-xl '>
+    <div onClick={enterChat} className='relative flex flex-row bg-white p-5 m-1 overflow-hidden hover:cursor-pointer rounded-xl '>
       <Avatar size="40" name={recipient?.name}  email={recipientEmail} round={true} />
               {/* <Image src={billboard} alt='ad image' width={40} height={40} objectFit="cover" className='rounded-2xl'/> */}
               <div className='flex ml-2  flex-col'>
                 <p className='text-sm font-bold  justify-center'>{recipientEmail}</p>
-              <p className='text-xs text-ellipsis overflow-hidden w-24  whitespace-nowrap inline-block '>I was hoping we could meet today at the shop I was hoping we could meet today at the shop I was hoping we could meet today at the shop I was hoping we could meet today at the shop</p>
+              <p className='text-xs text-ellipsis overflow-hidden w-24  whitespace-nowrap inline-block '>{lastMessage}</p>
 
               </div>
-              <div className='flex flex-col ml-auto'>
-              <p className='text-sm font-bold  justify-center '>11:32</p>
-              <p className='text-sm rounded-sm text-center  bg-[#fab038] '>1</p>
+              
+              <p className='text-xs text-gray-500 font-bold ml-auto align-middle '>{lastMessageTime? moment(lastMessageTime).format('LT'):'...'}</p>
+              
+              
                   
-              </div>
+              
+              {lastSender!==user.email ? <p className='absolute right-0 bottom-0 m-2 p-1 text-sm rounded-full text-center  bg-[#fab038] '>1</p>:<></> }
               </div>
   )
 }

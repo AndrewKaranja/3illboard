@@ -43,7 +43,7 @@ function Login({user}) {
 
   const addUser=async(user)=>{
     const userDocRef = doc(db, "users", `${user.uid}`);
-    await setDoc(userDocRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid});
+    await setDoc(userDocRef,{name:user.displayName,email:user.email,phone:user.phoneNumber,userid:user.uid,usertype:"client",totalListings:0});
   }
  
  

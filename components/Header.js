@@ -1,7 +1,7 @@
 import React, { useState,useRef,useEffect } from 'react';
 import Image from 'next/image';
 import Logo from '../images/Logo.png';
-import OfficialLogo from '../images/3illboardLogo.png';
+import OfficialLogo from '../images/3illboardLogo.svg';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file

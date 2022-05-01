@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Sidebar from '../../../components/dashboard/Sidebar';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
+import {useUserType} from '../../../context/UserTypeContext';
 import { withProtected } from '../../../hooks/route';
 import billboard from '../../../images/cat.png';
 import {db} from '../../../firebase';
@@ -20,6 +21,8 @@ import ChatScreen from '../../../components/dashboard/ChatScreen';
 
 function Messages() {
     const {user}=useAuth();
+    const {userInfo}=useUserType();
+    console.log(userInfo);
     //get chats snapshots
     const userChatRef = collection(db, "chats");
     const chatsQuery = query(userChatRef,where('users','array-contains',user.email));

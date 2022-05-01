@@ -24,7 +24,7 @@ import Image from 'next/image';
 import billboard from '../../images/cat.png';
 import Link from 'next/link';
 import { async } from '@firebase/util';
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc,addDoc } from "firebase/firestore";
 import { useDocument } from 'react-firebase-hooks/firestore';
 
 import { useAuth } from '../../context/AuthContext';
@@ -59,9 +59,9 @@ import { db } from '../../firebase';
 
 
 export default function ListingDetails() {
-  
   const {user}=useAuth();
   const{query:{id}}=useRouter();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [response, setResponse] = useState("");
   const [done, setDone] = useState(undefined);
@@ -109,6 +109,17 @@ console.log(listing)
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
+}
+
+const handleEnquireClick= async()=>{
+  const promises=[];
+  const chatRef = await addDoc(collection(db, "chats"), {
+    users:[user.email,listing?.owneremail]
+  });
+  promises.push(chatRef);
+  Promise.all(promises)
+  .then(()=>{setTimeout(() => { router.push(`/account/messages/${chatRef.id}`);}, 1000);})
+  .catch((err)=>console.log(err));
 }
 
 const handleCanlendar=(isPressed)=>{
@@ -325,7 +336,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
 
   
-          <button className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+          <button onClick={handleEnquireClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
             >📫Enquire</button>
 
             </div>

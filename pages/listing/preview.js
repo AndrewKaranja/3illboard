@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, {useEffect, useState } from 'react';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import Image from 'next/image';
 import BackgroundImg from '../../images/streetlights.png';
 import { HeartIcon} from '@heroicons/react/outline';
@@ -8,6 +10,7 @@ import CatImg from '../../images/cat.png';
 import { useRouter } from 'next/router';
 import {v4} from 'uuid';
 import LoadingScreen from '../../components/LoadingScreen';
+import { geohashForLocation } from 'geofire-common';
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -19,11 +22,12 @@ import "swiper/css/pagination";
 
 // import required modules
 import { EffectFade, Navigation, Pagination } from "swiper";
-import { collection,addDoc,serverTimestamp,setDoc,doc } from 'firebase/firestore';
+import { collection,addDoc,serverTimestamp,setDoc,doc, Firestore} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 
 function Preview() {
+
   const router=useRouter();
   const{user}=useAuth();
   const [details, setDetails] = useState([]);
@@ -33,6 +37,8 @@ function Preview() {
   //const [photos, setPhotos] = useState([]);
   const [legalsURLS, setLegalsURLS] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [hash,setHash]=useState(null);
+  const listingID=v4();
 
  // const usersCollectionRef=collection(db,"users");
   //const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
@@ -40,14 +46,22 @@ function Preview() {
  
 
   const addListing =async(user)=>{
-    const listingID=v4();
+   
     const listingDocRef=doc(db,"listings",listingID);
+    const userDocRef = doc(db, "users", `${user.uid}`);
     const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID)
     const promises=[];
-    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00});
+    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
     promises.push(uploadUserListing);
-    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,activated:false,rating:0.00});
+    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
     promises.push(uploadListing);
+    // console.log(FieldValue.increment(1));
+
+
+    // const increment = firebase.firestore.FieldValue.increment(1);
+    const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:firebase.firestore.FieldValue.increment(1)}, { merge: true });
+    promises.push(setUserType);
+  
     Promise.all(promises)
   .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
   .catch((err)=>console.log(err));
@@ -77,6 +91,9 @@ function Preview() {
      }
     if (listingLocation) {
       setLocation(listingLocation);
+      
+      setHash(geohashForLocation([listingLocation.lat,listingLocation.long]))
+      console.log(hash);
      }
      if (photosURLS) {
       setPhotosURLS(photosURLS);
@@ -160,8 +177,8 @@ function Preview() {
               <> {service} .</>
             )}</p>
             {details.otherServices?.map((service)=>{
-              console.log(service);
-              <p className='text-black'>{service}</p>
+              //console.log(service);
+              <p className='text-black' key={service}>{service}</p>
             })}
 
             <div className='flex justify-between items-end pt-5'>

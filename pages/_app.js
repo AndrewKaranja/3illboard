@@ -5,6 +5,7 @@ import Router from "next/router";
 
 import ProgressBar from "@badrap/bar-of-progress";
 import { AuthContextProvider } from "../context/AuthContext";
+import { UserTypeContextProvider } from "../context/UserTypeContext";
 
 const progress=new ProgressBar({
   size:4,
@@ -20,7 +21,9 @@ Router.events.on('routeChangeError',progress.finish);
 function MyApp({ Component, pageProps }) {
   return(
     <AuthContextProvider>
-     <Component {...pageProps} />
+      <UserTypeContextProvider>
+      <Component {...pageProps} />
+      </UserTypeContextProvider>
      </AuthContextProvider>
 
   )
