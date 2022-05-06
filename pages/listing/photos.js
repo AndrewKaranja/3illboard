@@ -140,7 +140,7 @@ function Photos() {
         {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
-        <div className='relative h-full ml-auto lg:w-6/12'>
+        <div className='relative h-full overflow-auto ml-auto lg:w-6/12'>
           {uploading ?(<LoadingScreen/>):(
             <></>
           )}

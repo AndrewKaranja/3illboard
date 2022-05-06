@@ -58,8 +58,8 @@ function Preview() {
     // console.log(FieldValue.increment(1));
 
 
-    // const increment = firebase.firestore.FieldValue.increment(1);
-    const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:firebase.firestore.FieldValue.increment(1)}, { merge: true });
+     const increment = firebase.firestore.FieldValue.increment(1);
+    const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:increment}, { merge: true });
     promises.push(setUserType);
   
     Promise.all(promises)
