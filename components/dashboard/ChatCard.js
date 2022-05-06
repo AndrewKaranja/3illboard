@@ -25,7 +25,7 @@ function ChatCard({id,users,lastMessage,lastSender,lastMessageTime}) {
     const recipient=recipientSnapshot?.docs?.[0]?.data();
     
   return (
-    <div onClick={enterChat} className='relative flex flex-row bg-white p-5 m-1 overflow-hidden hover:cursor-pointer rounded-xl '>
+    <div onClick={enterChat} className='relative flex flex-row bg-white p-5 m-1  overflow-hidden hover:cursor-pointer rounded-xl '>
       <Avatar size="40" name={recipient?.name}  email={recipientEmail} round={true} />
               {/* <Image src={billboard} alt='ad image' width={40} height={40} objectFit="cover" className='rounded-2xl'/> */}
               <div className='flex ml-2  flex-col'>
@@ -34,7 +34,7 @@ function ChatCard({id,users,lastMessage,lastSender,lastMessageTime}) {
 
               </div>
               
-              <p className='text-xs text-gray-500 font-bold ml-auto align-middle '>{lastMessageTime? moment(lastMessageTime).format('LT'):'...'}</p>
+              <p className='text-xs text-gray-500 font-bold ml-auto justify-items-center '>{lastMessageTime? moment(lastMessageTime).format('LT'):'...'}</p>
               
               
                   

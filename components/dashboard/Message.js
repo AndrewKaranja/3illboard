@@ -14,9 +14,9 @@ function Message({message}) {
 
   return (
     <div >
-       <p className={message.user===user?.email ?'text-black w-fit p-4 border rounded-bl-2xl rounded-t-2xl m-3 min-w-[60px] pb-2 relative text-right ml-auto bg-[#fab038a9]':
-       'text-black w-fit p-4 border rounded-lg m-3 min-w-[60px] pb-2 relative  text-left bg-white'}>{message.message}
-       <p className='text-xs align-bottom font-semibold text-gray-600'>{message.timestamp? moment(message.timestamp).format('LT'):'...'}</p>
+       <p className={message.user===user?.email ?'text-white w-fit max-w-lg p-4 border rounded-bl-2xl rounded-t-2xl m-3 min-w-[60px] pb-2 relative text-right ml-auto bg-[#fab038]':
+       'text-black w-fit max-w-lg p-4 border rounded-lg m-3 min-w-[60px] pb-2 relative  text-left bg-white'}>{message.message}
+       <p className='text-xs align-bottom font-semibold text-gray-400'>{message.timestamp? moment(message.timestamp).format('LT'):'...'}</p>
        
        </p>
         

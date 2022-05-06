@@ -139,7 +139,7 @@ function ChatScreen({chat,messages}) {
     
 <input type="text" placeholder='Add your message' value={input} onChange={e=>setInput(e.target.value)} className='flex flex-1 p-3 sticky bottom-0 rounded-full items-center bg-white' />
 <button hidden disabled={!input} type="submit" onClick={sendMessage}></button>
-<IoIcons.IoMdSend className='h-8 w-8 ml-2 bg-white p-1' onClick={sendMessage}/>
+{/* <IoIcons.IoMdSend disabled={!input} className='h-8 w-8 ml-2 bg-white p-1'  onClick={sendMessage}/> */}
 
 </form>
 
