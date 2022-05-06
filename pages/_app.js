@@ -2,6 +2,8 @@ import "tailwindcss/tailwind.css"
 import '../styles/globals.css'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Router from "next/router";
+import "@fullcalendar/common/main.css";
+import "@fullcalendar/daygrid/main.css";
 
 import ProgressBar from "@badrap/bar-of-progress";
 import { AuthContextProvider } from "../context/AuthContext";
