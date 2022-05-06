@@ -8,8 +8,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@babel/preset-react": "^7.16.7",
     "@badrap/bar-of-progress": "^0.1.2",
     "@dropzone-ui/react": "^6.7.1",
+    "@fullcalendar/common": "^5.11.0",
+    "@fullcalendar/daygrid": "^5.11.0",
+    "@fullcalendar/interaction": "^5.11.0",
+    "@fullcalendar/react": "^5.11.1",
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
     "@pathofdev/react-tag-input": "^1.0.7",
@@ -23,7 +28,8 @@
     "geolib": "^3.3.3",
     "mapbox-gl": "^2.7.0",
     "moment": "^2.29.3",
-    "next": "12.0.9",
+    "next": "^12.1.6",
+    "next-transpile-modules": "^9.0.0",
     "react": "^17.0.2",
     "react-avatar": "^4.0.0",
     "react-date-range": "^1.4.0",

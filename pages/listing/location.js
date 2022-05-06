@@ -72,6 +72,7 @@ function Location() {
   },[]);
 
 
+  
 
   const panTo=useCallback(({lat,lng})=>{
     mapRef.current.panTo({lat,lng});
@@ -82,13 +83,18 @@ function Location() {
   const [markers, setMarkers] = useState([]);
   const [marker,setMarker]=useState("");
   const [nearbyAddress,setNearbyAddress]=useState("");
+  // gets address
+  const childToParent = (address) => {
+    setNearbyAddress(address);
+  }
+
   useEffect(() => {
     localStorage.setItem('listingLocation', JSON.stringify(marker));
   }, [marker]);
 
      const handleNextClick = () => {
        setMarker({lat:markers?.[0].lat,
-      long:markers?.[0].lng});
+      long:markers?.[0].lng,nearbyAddress:nearbyAddress});
       setTimeout(() => {
         if(markers!==null){router.push("/listing/photos");}
         
@@ -129,7 +135,7 @@ function Location() {
             </div>
             
             <div className='w-[100vw] sm:w-[30rem] mr-3'>
-            <GoogleSearch panTo={panTo}/>
+            <GoogleSearch panTo={panTo} childToParent={childToParent}/>
 
             
             <GoogleMap
@@ -185,7 +191,7 @@ function Location() {
 
 
 
-function GoogleSearch({panTo}){
+function GoogleSearch({panTo,childToParent}){
   const {ready,value,suggestions:{status,data},setValue,clearSuggestions} =usePlacesAutocomplete({
     requestOptions:{
       location:{lat:()=> -1.292066,lng:()=> 36.821945},
@@ -195,12 +201,11 @@ function GoogleSearch({panTo}){
 
   return <div className='mb-2'>
     <Combobox  onSelect={async (address)=>{
-      console.log(address);
       setValue(address,false);
       clearSuggestions()
       try {
         const results=await getGeocode({address});
-        console.log(address);
+        childToParent(address);
         const {lat,lng}=await getLatLng(results[0]);
         panTo({lat,lng});
         
