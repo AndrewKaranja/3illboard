@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Sidebar from '../../../components/dashboard/Sidebar';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
+import {useRouter} from "next/router";
 import { withProtected } from '../../../hooks/route';
 import { collection, query, where, getDocs } from "firebase/firestore";
 import ListingCard from '../../../components/dashboard/ListingCard';
@@ -15,11 +16,18 @@ import LoadingScreen from '../../../components/LoadingScreen';
 
 function Listings() {
     const {user}=useAuth();
+    const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     const [details,setDetails] =useState([]);
     const [listings,setListings] =useState([]);
     const [done, setDone] = useState(undefined);
+
+
+
+   const handleCreateListing=()=>{
+router.push('/listing/listingtype');
+    }
     
 
 useEffect(() => {
@@ -59,6 +67,8 @@ useEffect(() => {
 <div className='flex justify-between mx-6 my-3'>
 <h4 className='text-lg lg:text-2xl font-semibold'>Listings</h4>
 <div>
+<button onClick={handleCreateListing} className='hidden md:inline border-2 mx-3 border-gray-600 bg-[#fab038] font-semibold rounded text-white p-2'
+          >Create New Listing</button>
 <button className='hidden md:inline border-2 border-gray-600 bg-gray-400 rounded text-black p-2'
           >Active</button>
           <button className='hidden md:inline border-2 border-gray-600 bg-gray-200 rounded text-black hover:bg-orange-300 p-2'
