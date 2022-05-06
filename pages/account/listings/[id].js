@@ -7,6 +7,12 @@ import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
 import * as FcIcons from 'react-icons/fc';
 import * as AiIcons from 'react-icons/ai';
+import FullCalendar ,{ formatDate } from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import interactionPlugin from '@fullcalendar/interaction'
+
+
+
 
 import { DateRange } from 'react-date-range';
 
@@ -24,7 +30,7 @@ import Image from 'next/image';
 import billboard from '../../../images/cat.png';
 import Link from 'next/link';
 import { async } from '@firebase/util';
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc,collection,getDocs } from "firebase/firestore";
 import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
 import UploadedScreen from '../../../components/UploadedScreen';
@@ -55,6 +61,8 @@ export default function ListingDetails() {
   const [done, setDone] = useState(undefined);
   const [showCalendar,setShowCalendar]=useState(false);
   const [bannerImage,setBannerImage]=useState(billboard);
+  const [someReserved,setSomeReserved]=useState("");
+  const[bookings,setBookings]=useState("");
 
   const[startDate,setStartDate]=useState(new Date());
   const[endDate,setEndDate]=useState(new Date());
@@ -64,7 +72,8 @@ export default function ListingDetails() {
     endDate:endDate,
     key:'selection',
 }
-
+const reservedDates=[];
+console.log("Selection Range"+selectionRange);
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
@@ -72,15 +81,25 @@ const handleSelect=(ranges)=>{
 
 const handleCanlendar=(isPressed)=>{
   if (isPressed) {
-    return <div>
-    <DateRange
-      ranges={[selectionRange]}
-      minDate={new Date()}
-      rangeColors={["#FAB038"]}
+    console.log(" reserved testing"+reservedDates);
+    return <div className='flex mt-3 lg:ml-12 lg:mr-12 lg:mb-12  h-[40rem]  rounded-xl bg-white cursor-pointer select-none '>
+      <div className='w-full h-[36rem] m-3'>
+    {/* <DateRange
+    ranges={reservedDates}
       
-      onChange={handleSelect}/>
+      staticRanges={reservedDates}
+      rangeColors={["#FAB038","#f0f0f0"]}
+      
+     /> */}
+     <FullCalendar
+  plugins={[ dayGridPlugin ]}
+  height="100%"
+  initialView="dayGridMonth"
+  weekends={true}
+  events={bookings}
+/>
 
-    </div> ;
+    </div></div> ;
   }
   
 }
@@ -101,6 +120,36 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
     async function getListingDetail(user){
       const promises=[];
       const docRef = doc(db, `users/${user.uid}/listings`, `${id}`);
+      const reservationsRef=collection(db,`users/${user.uid}/listings/${id}/reservations`);
+
+      const reservationsQuerySnapshot = await getDocs(reservationsRef);
+      
+      reservationsQuerySnapshot.docs?.forEach((doc) => {
+        const event={
+          title:doc.data().reservedBy,
+          start:doc.data().startDate.toDate().toISOString().replace(/T.*$/, ''),
+          end:doc.data().endDate.toDate().toISOString().replace(/T.*$/, '')
+        }
+       
+        reservedDates.push(event);
+        
+        console.log("event"+event);
+        console.log("reservedDates"+reservedDates);
+      });
+
+      // Another option for this
+    const results=reservationsQuerySnapshot.docs?.map((doc)=>({
+           title:doc.data().reservedBy+" : "+doc.data().status,
+          start:doc.data().startDate.toDate().toISOString().replace(/T.*$/, ''),
+          end:doc.data().endDate.toDate().toISOString().replace(/T.*$/, ''),
+          allDay:true,
+          backgroundColor:doc.data().background,
+    }))
+  console.log("somereserved"+results);
+    // setSomeReserved(results);
+    setBookings(results);
+
+
       const docSnap = await getDoc(docRef);
       promises.push(docSnap);
       console.log(docSnap)
@@ -119,14 +168,14 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
    
   }, [user,id]);
 
- var image=listing?.photosURLS;
+
 
 
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
       <Link passHref href="/account/listings" >
-      <div className="bg-white w-full flex flex-row items-center p-2">
-        <AiIcons.AiOutlineRollback className='h-16 w-16'/>
+      <div className="bg-white w-full flex flex-row text-[#fab038] justify-center items-center cursor-pointer p-2">
+        <AiIcons.AiOutlineRollback className='h-10 w-10'/>
         <p className='text-xl align-middle font-bold'>Back to Listings</p>
 
         </div>
@@ -135,13 +184,13 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
       
       {console.log("Hello",id)}
      
-      {console.log("Millo",listing.length )}
+     
       {!done ?(<LoadingScreen/>):(
             <></>
           )}
       
     
-    <div className='flex lg:mt-12 lg:ml-12 lg:mr-12 mb-2   h-84  rounded-xl bg-white cursor-pointer select-none '>
+    <div className='flex lg:mt-12 lg:ml-12 lg:mr-12 mb-2 h-84 rounded-xl bg-white cursor-pointer select-none '>
     
       <div className='flex flex-col lg:flex-row lg:flex-[10]'>
             <div className='relative h-full w-32 flex-grow-[1]  '>
@@ -175,10 +224,11 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                 </div>
             
             <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
-              onClick={()=>setShowCalendar(!showCalendar)}>📅 Show Ad Calendar</button>
+              onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button>
               
             </div>
-            {handleCanlendar(showCalendar)}
+            {/* {handleCanlendar(showCalendar)} */}
+
             {/* {()=>{
               if (showCalendar) {
               return <div className={showCalendar?'visible':'invisible'}>
@@ -197,7 +247,9 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
        
   
         </div>
-
+        
+        {handleCanlendar(showCalendar)}
+        
         {/* main body */}
         <div className='flex mt-3 lg:ml-12 lg:mr-12 lg:mb-12 h-84  rounded-xl bg-white cursor-pointer select-none '>
     

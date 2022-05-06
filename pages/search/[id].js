@@ -24,7 +24,7 @@ import Image from 'next/image';
 import billboard from '../../images/cat.png';
 import Link from 'next/link';
 import { async } from '@firebase/util';
-import { collection, doc, getDoc,addDoc } from "firebase/firestore";
+import { collection, doc, getDoc,addDoc,getDocs } from "firebase/firestore";
 import { useDocument } from 'react-firebase-hooks/firestore';
 
 import { useAuth } from '../../context/AuthContext';
@@ -76,6 +76,8 @@ export default function ListingDetails() {
     async function getListingDetail(){
       const promises=[];
       const docRef = doc(db, "listings", `${id}`);
+      // const reservationsRef=collection(db,`listings/${id}/reservations`);
+      // const reservationsQuerySnapshot = await getDocs(reservationsRef);
       const docSnap = await getDoc(docRef);
       promises.push(docSnap);
       console.log(docSnap)
@@ -112,14 +114,25 @@ const handleSelect=(ranges)=>{
 }
 
 const handleEnquireClick= async()=>{
-  const promises=[];
-  const chatRef = await addDoc(collection(db, "chats"), {
-    users:[user.email,listing?.owneremail]
-  });
-  promises.push(chatRef);
-  Promise.all(promises)
-  .then(()=>{setTimeout(() => { router.push(`/account/messages/${chatRef.id}`);}, 1000);})
-  .catch((err)=>console.log(err));
+  // const promises=[];
+  // const chatRef = await addDoc(collection(db, "chats"), {
+  //   users:[user.email,listing?.owneremail],
+  //   lastMessage:null,
+  //   lastMessageTime:null,
+  //   lastSender:null,
+
+  // });
+  // promises.push(chatRef);
+  // Promise.all(promises)
+  // .then(()=>{setTimeout(() => { router.push(`/account/messages/${chatRef.id}`);}, 1000);})
+  // .catch((err)=>console.log(err));
+  if(!user){
+    router.push('/login');
+  }else{
+    router.push('/account/messages');
+
+  }
+
 }
 
 const handleCanlendar=(isPressed)=>{
@@ -152,8 +165,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
       <Link passHref href="/search" >
-        <div className="bg-white w-full flex flex-row items-center p-2">
-        <AiIcons.AiOutlineRollback className='h-16 w-16'/>
+        <div className="bg-white w-full flex flex-row text-[#fab038] justify-center items-center p-2 cursor-pointer">
+        <AiIcons.AiOutlineRollback className='h-12 w-12'/>
         <p className='text-xl align-middle font-bold'>Return to Search</p>
 
         </div>
@@ -168,7 +181,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 {/* {loading && <LoadingScreen/>} */}
       
     
-    <div className='flex lg:mt-10 lg:ml-12 lg:mr-12 mb-2   h-84  lg:rounded-xl bg-white cursor-pointer select-none '>
+    <div className='flex lg:mt-10 lg:ml-12 lg:mr-12 mb-2   h-84  lg:rounded-xl bg-white select-none '>
     
       <div className='flex flex-col lg:flex-row mx-auto lg:flex-[10]'>
             <div className='relative h-full w-32 flex-grow-[1]  '>
@@ -202,7 +215,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                 </div>
             
             <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
-              onClick={()=>setShowCalendar(!showCalendar)}>📅 Show Ad Calendar</button>
+              onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button>
               
             </div>
             {handleCanlendar(showCalendar)}

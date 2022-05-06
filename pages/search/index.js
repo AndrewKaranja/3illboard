@@ -15,6 +15,7 @@ function Search({listings,searchResults}) {
   const router=useRouter();
   const {user}=useAuth();
 const {location,startDate,endDate}=router.query;
+const range="today";
 
 
 
@@ -22,6 +23,7 @@ if(startDate && endDate){
   const formattedStartDate=format(new Date(startDate),"dd MMMM yy");
   const formattedEndDate=format(new Date(endDate),"dd MMMM yy");
   const range=`${formattedStartDate} - ${formattedEndDate}`;
+ 
   
 }
 
@@ -31,7 +33,7 @@ if(startDate && endDate){
         <main className='flex'>
             <section className='flex-grow pt-14 px-6'>
                 <p className='txt-xs'>200+ Ad spaces available {range}</p>
-                <h1 className='text-3xl font-semibold mt-2 mb-6'>Ad spaces in {location}</h1>
+                <h1 className='text-3xl font-semibold mt-2 mb-6'>Ad spaces in {location ?`${location}`:"the area"}</h1>
 
                 <div className='hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap'>
                     <p className='button'>Cancellation Flexiblity</p>
@@ -72,7 +74,7 @@ if(startDate && endDate){
             <section className='hidden xl:inline-flex w-1/3'>
             
             </section>
-            <Map searchResults={searchResults}/>
+            <Map searchResults={listings}/>
         </main>
         
         <Footer/>
@@ -84,6 +86,7 @@ export default Search;
 
 export async function getServerSideProps() {
   const listingsRef = collection(db, "listings");
+  // remember to fix the listingQuery
   const listingQuery=query(listingsRef,where('activated','==',false));
  
   const listingsRes=await getDocs(listingQuery) ;

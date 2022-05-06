@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Sidebar from '../../../components/dashboard/Sidebar';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
+import {useUserType} from '../../../context/UserTypeContext';
 import { withProtected } from '../../../hooks/route';
 import billboard from '../../../images/cat.png';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
@@ -16,6 +17,8 @@ import ChatScreen from '../../../components/dashboard/ChatScreen';
 
 function Chat({chat,messages}) {
     const {user}=useAuth();
+    const {userInfo}=useUserType();
+    console.log(userInfo);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     //get chats snapshots
     const userChatRef = collection(db, "chats");
@@ -30,12 +33,12 @@ function Chat({chat,messages}) {
          {/* Sidebar */}
     <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
        {/* Content area */}
-       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+       <div className="relative flex flex-col flex-1 overflow-hidden max-h-screen">
 
 {/*  Site header */}
 <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-<div className='flex flex-row flex-[10]'>
-<div className='flex flex-col text-black bg-slate-200 rounded-xl m-5 flex-grow-[1] overflow-y-scroll min-w-fit  h-[100vh] scrollbar-hide'>
+<div className='flex flex-row flex-[10] '>
+<div className='flex flex-col text-black bg-slate-200 rounded-xl m-5 flex-grow-[1] overflow-y-scroll min-w-fit  max-h-[85vh] scrollbar-hide'>
     {/*Chat search*/}
     <div className='flex items-center md:border-2 rounded-full py-2 md:shadow-sm hover:border-2'>
           <input 
@@ -46,7 +49,10 @@ function Chat({chat,messages}) {
           <SearchIcon className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
            {chatsSnapshot?.docs.map((chat)=>(
-               <ChatCard key={chat.id} id={chat.id} users={chat.data().users}/>
+               <ChatCard key={chat.id} id={chat.id} users={chat.data().users} 
+               lastMessage={chat.data().lastMessage} 
+               lastSender={chat.data().lastSender} 
+               lastMessageTime={chat.data().lastMessageTime?.toDate().getTime()} />
            ))}
             {/* <ChatCard/> */}
               
@@ -89,10 +95,15 @@ export async function getServerSideProps(context){
     }));
 
     //prep the chats
+    //There is an error here to fix
     const chatRes=await getDoc(ref);
     const chat={
         id:chatRes.id,
-        ...chatRes.data()
+        lastMessage:chatRes.data().lastMessage,
+        lastMessageId:chatRes.data().lastMessageId,
+        lastMessageTime:chatRes.data().lastMessageTime.toDate().getTime(),
+        lastSender:chatRes.data().lastSender,
+        users:chatRes.data().users,
     }
 
     return{
