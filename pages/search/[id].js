@@ -31,6 +31,7 @@ import { useAuth } from '../../context/AuthContext';
 
 import LoadingScreen from '../../components/LoadingScreen';
 import { db } from '../../firebase';
+import ListingModal from '../../components/ListingModal';
 
 
 
@@ -67,6 +68,7 @@ export default function ListingDetails() {
   const [done, setDone] = useState(undefined);
   const [showCalendar,setShowCalendar]=useState(false);
   const [listing,setListing]=useState("");
+  const [showModal, setShowModal] = React.useState(false);
  
 
   const[startDate,setStartDate]=useState(new Date());
@@ -310,10 +312,6 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 </div>
 
 
-
-
-              
-
           </div>
           <div className='flex flex-col flex-grow-[4] h-fit'>
             <div className='p-5 h-fit text-white bg-black rounded-xl m-5'>
@@ -349,7 +347,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
 
   
-          <button onClick={handleEnquireClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+          <button onClick={() => setShowModal(true)} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
             >📫Enquire</button>
 
             </div>
@@ -365,6 +363,15 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
             </div>
               
           </div>
+
+          {/* modal popup start */}
+          {showModal ? (
+        <>
+        <ListingModal/>
+        </>
+      ) : null}
+
+          {/* modal popup end */}
 
     </div>
       
