@@ -14,14 +14,14 @@ export const UserTypeContextProvider=({children})=>{
     const [loading,setLoading]=useState(true);
 
     useEffect(() => {
-      if(user){
-      const userinformation=  async function getUserDetail(){
+      if(user!=null){
+      async function getUserDetail(){
           const promises=[];
           const docRef = doc(db, "users", `${user.uid}`);
           const docSnap = await getDoc(docRef);
           promises.push(docSnap);
          
-          setUserInfo(docSnap.data()); 
+          setUserInfo(docSnap?.data()); 
           Promise.all(promises)
           .then(()=>{setLoading(false);})
           .catch((err)=>console.log(err));
@@ -29,13 +29,15 @@ export const UserTypeContextProvider=({children})=>{
         };
         
          
-        return ()=> userinformation();
+        getUserDetail();
+        // console.log(userInfo?.usertype);
         }
         
         
        
       }, [user]);
 
+      
 
       return(
           <UserTypeContext.Provider value={{userInfo}}>

@@ -18,8 +18,11 @@ import imgdigi from '../images/digital_signage.png';
 import imgside from '../images/street-sideAd.png';
 import imgclock from '../images/clock.png';
 import imgmoving from '../images/movingAd.png';
+import { useUserType } from '../context/UserTypeContext';
 
 export default function Home() {
+  const {userInfo}=useUserType();
+  console.log("userinfo"+userInfo?.usertype);
 
   return (
     <div className="">

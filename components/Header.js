@@ -94,18 +94,10 @@ function Header({placeholder}) {
         });
     }
     function checkLogin(){
-      if(user!==null){
         router.push({
           pathname:'/listing/listingtype'
         })
-      }else{
-        router.push({
-          pathname:'/login',
-          query:{
-            hostAd:true
-          }
-        })
-      }
+      
     }
 
     function useOutsideNavAlerter(ref){

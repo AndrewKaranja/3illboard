@@ -7,7 +7,8 @@ import imgclock from '../../images/clock.png';
 import imgmoving from '../../images/movingAd.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-
+import { withProtected } from '../../hooks/route';
+ 
 
 
 
@@ -127,4 +128,4 @@ function Listingtype() {
   )
 }
 
-export default Listingtype
+export default withProtected(Listingtype); 

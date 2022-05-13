@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 
 import Image from 'next/image';
+import Link from 'next/link';
 import {useRouter} from "next/router";
 import Avatar from 'react-avatar';
 import { PaperClipIcon,DotsVerticalIcon,EmojiHappyIcon } from '@heroicons/react/outline'
@@ -14,6 +15,7 @@ import * as IoIcons from 'react-icons/io';
 import TimeAgo from 'timeago-react'; 
 import { FirebaseError } from 'firebase/app';
 import getRecipientEmail from '../../utils/getRecipientEmail';
+import * as AiIcons from 'react-icons/ai';
 
 
 
@@ -92,9 +94,9 @@ function ChatScreen({chat,messages}) {
     console.log(recipient);
     const recipientEmail=getRecipientEmail(chat.users,user)
   return (
-    <div className='p-5  text-white bg-slate-200 rounded-xl m-5  max-h-[100vh] '>
+    <div className='p-5  text-white bg-slate-200 rounded-xl m-5 h-[85vh]  max-h-[100vh] '>
     {/* Header info */}
-    <div className='flex flex-row sticky top-16 z-50 text-black bg-white border-b p-3 items-center '>
+    <div className='flex flex-row sticky top-16 z-30 text-black bg-white border-b p-3 items-center '>
         <Avatar name={recipient?.name} email={recipientEmail} size="40"/>
        
         <div className='flex flex-col ml-2'>
@@ -126,15 +128,15 @@ function ChatScreen({chat,messages}) {
     </div>
 
 {/* Message Container */}
-<div className='p-2 min-h-[50vh] max-h-[55vh] whitespace-normal overflow-y-auto scrollbar-hide'>
+<div className='p-2 min-h-[50vh] max-h-[65vh] whitespace-normal overflow-y-auto scrollbar-hide'>
     {showMessages()}
-    <div ref={endOfMessagesRef} className="pb-6"></div>
+    <div ref={endOfMessagesRef} ></div>
 
 </div>
 
 
 {/* Input container */}
-<form className='flex items-center text-black p-3 sticky bottom-0 bg-slate-200 z-50'>
+<form className='flex items-center text-black p-3 sticky bottom-0 h-fit bg-slate-200 z-30'>
     <EmojiHappyIcon className='text-[#fab038] h-6 w-6 mx-2'/>
     
 <input type="text" placeholder='Add your message' value={input} onChange={e=>setInput(e.target.value)} className='flex flex-1 p-3 sticky bottom-0 rounded-full items-center bg-white' />
@@ -142,6 +144,15 @@ function ChatScreen({chat,messages}) {
 {/* <IoIcons.IoMdSend disabled={!input} className='h-8 w-8 ml-2 bg-white p-1'  onClick={sendMessage}/> */}
 
 </form>
+
+<Link passHref href="/account/messages" >
+      <div className="bg-white w-full flex flex-row text-[#fab038] justify-center items-center cursor-pointer p-2">
+        <AiIcons.AiOutlineRollback className='h-10 w-10'/>
+        <p className='text-xl align-middle font-bold'>Back to messages</p>
+
+        </div>
+              
+              </Link>
 
     </div>
   )

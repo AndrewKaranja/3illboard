@@ -1,4 +1,6 @@
 import React from "react";
+import Image from 'next/image';
+import OfficialLogoMini from '../images/3illboardLogoMini.svg';
 import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 
@@ -12,7 +14,19 @@ export function withPublic(Component){
         
         if(user!==null){
             router.replace("/")
-            return <h1>Loading...</h1>
+            return <div className="relative w-screen h-screen ">
+            <div className="absolute top-[50%] left-[50%]">
+            <Image 
+   src={OfficialLogoMini}
+   alt='Logo'
+   width={'140px'}
+   height={'200px'}
+   
+   />
+
+            </div>
+        
+    </div>
 
         
         }
@@ -28,11 +42,33 @@ export function withProtected(Component){
         const router= useRouter();
         
         if(user==null){
-            router.replace("/login")
-            return <h1>Loading...</h1>
+            // router.replace("/login");
+            const prevPath=router.pathname;
+            router.replace({
+                pathname:'/login',
+                query:{
+                  prevPath:prevPath
+                }
+              })
+            
+            return  <div className="relative w-screen h-screen ">
+                <div className="absolute top-[50%] left-[50%]">
+                <Image 
+       src={OfficialLogoMini}
+       alt='Logo'
+       width={'140px'}
+       height={'200px'}
+       
+       />
+
+                </div>
+            
+        </div>
+        
 
         
         }
+        
         return <Component user={user} {...props}/>
 
     }
