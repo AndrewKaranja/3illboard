@@ -8,7 +8,29 @@ import * as MdIcons from 'react-icons/md';
 import * as FcIcons from 'react-icons/fc';
 import * as AiIcons from 'react-icons/ai';
 
+
 import { DateRange } from 'react-date-range';
+
+import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
+import * as Yup from 'yup';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+
+import {
+  addDays,
+  endOfDay,
+  startOfDay,
+  startOfMonth,
+  endOfMonth,
+  addMonths,
+  startOfWeek,
+  endOfWeek,
+  isSameDay,
+  differenceInCalendarDays,
+  format,
+} from 'date-fns';
+
+
 
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -24,8 +46,9 @@ import Image from 'next/image';
 import billboard from '../../images/cat.png';
 import Link from 'next/link';
 import { async } from '@firebase/util';
-import { collection, doc, getDoc,addDoc,getDocs } from "firebase/firestore";
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { collection, doc, getDoc,addDoc,getDocs,query, orderBy,where,setDoc,serverTimestamp  } from "firebase/firestore";
+
+import {useCollection} from "react-firebase-hooks/firestore";
 
 import { useAuth } from '../../context/AuthContext';
 
@@ -69,9 +92,43 @@ export default function ListingDetails() {
   const [showCalendar,setShowCalendar]=useState(false);
   const [listing,setListing]=useState("");
   const [showModal, setShowModal] = React.useState(false);
+
+
+  //variables to add mesage
+  if(user!=null){
+
+  }
+
+  // remember to fix this issue---> when user is logged out
+  // this section returns an error
+  const userChatRef = collection(db, "chats");
+  const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
+  const [chatsSnapshot]=useCollection(chatsQuery);
+  const chatAlreadyExists=(recepientEmail)=>
+  !!chatsSnapshot?.docs.find(
+      (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
+      );
+
+  const validate=Yup.object({
+    message:Yup.string()
+    .min(5,'Must be atleast 5 characters')
+    .max(100,'Must be 50 characters or less')
+    .required('Message is required'),
+    fname:Yup.string()
+    .min(4,'Must be atleast 4 characters')
+    .required('Fullname is required'),
+    email:Yup.string()
+    .email('Invalid email format').required('Required'),
+    
+  });
+
+  const [MessageInfo, setMessageInfo] = useState([]);
+  const [chatRefId, setChatRefId] = useState(null);
  
 
   const[startDate,setStartDate]=useState(new Date());
+  // let minimumDays=Number(listing?.minimumListingPeriod);
+  // console.log(String(minimumDays));
   const[endDate,setEndDate]=useState(new Date());
 
   useEffect(() => {
@@ -82,7 +139,7 @@ export default function ListingDetails() {
       // const reservationsQuerySnapshot = await getDocs(reservationsRef);
       const docSnap = await getDoc(docRef);
       promises.push(docSnap);
-      console.log(docSnap)
+      // console.log(docSnap)
       setListing(docSnap.data()); 
       Promise.all(promises)
       .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
@@ -101,7 +158,7 @@ export default function ListingDetails() {
   
 
   //const [value,listingSnapshot, loading, error] = useDocument(getDoc(doc(db, "listings", id)) );
-console.log(listing)
+// console.log(listing)
   // const listing=value?.data();
 
   const selectionRange={
@@ -112,26 +169,27 @@ console.log(listing)
 
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
-    setEndDate(ranges.selection.endDate)
+    setEndDate(addDays(ranges.selection.startDate,Math.max(Number(listing?.minimumListingPeriod), 1) - 1))
+}
+
+const messageEnquiry=()=>{
+  const enquiry=`Hello ${listing?.owneremail},${MessageInfo?.fname} is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid}.Additional message:
+  ${MessageInfo?.message}`
+  return enquiry;
 }
 
 const handleEnquireClick= async()=>{
-  // const promises=[];
-  // const chatRef = await addDoc(collection(db, "chats"), {
-  //   users:[user.email,listing?.owneremail],
-  //   lastMessage:null,
-  //   lastMessageTime:null,
-  //   lastSender:null,
-
-  // });
-  // promises.push(chatRef);
-  // Promise.all(promises)
-  // .then(()=>{setTimeout(() => { router.push(`/account/messages/${chatRef.id}`);}, 1000);})
-  // .catch((err)=>console.log(err));
+ 
   if(!user){
-    router.push('/login');
+    const prevPath=router.pathname;
+            router.push({
+                pathname:'/login',
+                query:{
+                  prevPath:prevPath
+                }
+              })
   }else{
-    router.push('/account/messages');
+    setShowModal(true);
 
   }
 
@@ -175,9 +233,9 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
               </Link>
       
-      {console.log("Hello",id)}
+      {/* {console.log("Hello",id)}
      
-      {console.log("Millo",listing)}
+      {console.log("Millo",listing)} */}
       
 
 {/* {loading && <LoadingScreen/>} */}
@@ -289,14 +347,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
 <div>
 <h4 className='font-bold text-xl m-4'>Ad Space overview</h4>
-{/* <div className='flex  p-3'>
-<Image src={billboard} alt='ad image' width={100} height={100}  objectFit="fit" className='rounded-2xl m-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl m-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl mx-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl mx-5'/>
 
-
-</div> */}
 <Swiper
         effect={"flip"}
         grabCursor={true}
@@ -330,12 +381,18 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               <div className='border-b pt-2 border-slate-200'/>
               <div className='flex justify-between py-2'>
               <p className='text-xs'>Available</p>
-              <p className='text-xs'>12th Dec 2022</p>
+              <p className='text-xs'>{format(startDate,"do 'of' MMMM yyyy")}</p>
               </div>
               <div className='flex justify-between py-2'>
               <p className='text-xs'>to</p>
-              <p className='text-xs'>12th Jan 2022</p>
+              <p className='text-xs'>{format(endDate,"do 'of' MMMM yyyy")}</p>
               </div>
+              <DateRange
+      ranges={[selectionRange]}
+      minDate={new Date()}
+      rangeColors={["#FAB038"]}
+      
+      onChange={handleSelect}/>
               <div className='flex justify-between py-2'>
               <p className='text-xs'>Contact</p>
               <p className='text-xs'>+254 712 345 678</p>
@@ -347,7 +404,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
 
   
-          <button onClick={() => setShowModal(true)} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+          <button onClick={handleEnquireClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
             >📫Enquire</button>
 
             </div>
@@ -367,8 +424,257 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
           {/* modal popup start */}
           {showModal ? (
         <>
-        <ListingModal/>
-        </>
+        {/* <ListingModal/> */}
+
+        <div className="justify-center  items-center flex overflow-x-hidden overflow-y-auto fixed  inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-5 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                {/*header*/}
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">
+                    Ready to Book?
+                  </h3>
+                  <button
+                    className="bg-transparent border-0 text-black float-right"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="text-black opacity-7 h-6 w-6 text-xl block bg-gray-400 py-0 rounded-full">
+                      x
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex-auto">
+                  <p className="my-2 text-slate-500 text-lg leading-relaxed">
+                  Enter your contact details, and we will let the ad manager know you
+                   want to submit an application. If they are interested, they will contact you with next steps.
+                    
+                  </p>
+
+
+
+                  <Formik
+                initialValues={{
+                message:'',
+                fname:'',
+                email:'',
+                phone:'',
+                
+                          }}
+
+                          validationSchema={validate}
+                          onSubmit={async (values)=>{
+                            
+                           
+                            setMessageInfo({
+                              fname:values.fname,
+                              message:values.message,
+                              email:values.email,
+                              phone:values.phone,
+                           });
+
+                           console.log(MessageInfo);
+                           const clientMessage=`Hello ${listing?.owneremail},${MessageInfo?.fname} 
+                           is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid} 
+                           availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")} . Additional message:${MessageInfo?.message}`;
+
+                           
+                           if(user?.email!==listing?.owneremail &&
+                            !chatAlreadyExists(listing?.owneremail)){
+                             
+                                const chatRef = await addDoc(collection(db, "chats"), {
+                                  users:[user.email,listing?.owneremail],
+                                  lastMessage:messageEnquiry(),
+                                  lastMessageTime:serverTimestamp(),
+                                  lastSender:user?.email,
+                                });
+                                setChatRefId(chatRef.id) ;
+
+                                const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
+                                const messageDoc=await addDoc(messagesCollectionRef, {
+                                  timestamp: serverTimestamp(),
+                                  message:clientMessage,
+                                  user:user.email
+                                  
+                                });
+
+                            }else{
+                              const chatRef=chatsSnapshot?.docs.find((chat)=>chat.data().users.find(user=>user===listing?.owneremail));
+                              setChatRefId(chatRef.id);
+                              const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
+                              const messageDoc=await addDoc(messagesCollectionRef, {
+                                timestamp: serverTimestamp(),
+                                message:clientMessage,
+                                user:user.email
+                                
+                              });
+                              const chatDocRef=doc(db,"chats",chatRef.id);
+
+                          await setDoc(chatDocRef,{lastMessage:clientMessage,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true })
+
+                            }
+                            
+
+                            // chatsSnapshot?.docs.find(
+                            //   (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
+                            //   );
+                            
+                            
+
+                           //update Last seen
+                          const userDocRef=doc(db,"users",user.uid);
+                          setDoc(userDocRef,{lastSeen:serverTimestamp(),workPhone:MessageInfo?.phone}, { merge: true });
+                          
+                        
+
+
+                  
+
+                          setShowModal(false)
+                        router.push(`/account/messages/${chatRefId}`);
+                           
+                          }}
+                          
+                          >
+
+                {formik=>(
+                  <div>
+                
+                    
+                    <Form>
+                     
+                        <div className=" p-1">
+                        <div>
+                            
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 ">Message<p className='text-[0.5rem] lowercase'>(Ask questions)</p></div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                              <textarea
+                              name="message"
+                              id="message"   
+                              placeholder="You may enter some of your specification"
+                              className="p-1 px-2 appearance-none outline-none w-full text-gray-800"
+                              onChange={formik.handleChange}
+                              value={formik.values.message}
+                              rows={4}
+                              cols={5}
+                              />
+                               
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="message" className="text-red-600"/>
+                            </div>
+
+                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">First and Last Name</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                                <Field id='fname' name="fname" placeholder="Your names" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                            
+                                
+                                 </div>
+                                 <ErrorMessage component="div"  name="fname" className="text-red-600"/>
+                            </div>
+
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Email</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                              <Field name="email"  placeholder="email" type="email" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="email" className="text-red-600"/>
+                            </div>
+
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Phone</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                              <PhoneInput
+                              name="phone"
+                              id="phone"
+                            inputProps={{
+                                name: 'phone',
+                                required: true,
+                                autoFocus: true
+                              }}
+                            country={'ke'}
+                            value={formik.values.phone}
+                            onChange={formik.handleChange('phone')}/>
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="phone" className="text-red-600"/>
+                            </div>
+
+
+                            
+
+
+                           
+
+
+
+            
+            
+           
+            
+            
+        </div>
+        
+        <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="submit"
+                    
+                  >
+                    Send Request
+                  </button>
+                </div>
+    
+</div>
+                                </Form>
+                                </div>
+                          )}
+                      </Formik>
+
+
+
+
+
+
+
+
+
+
+
+                  <p className="my-2 text-slate-500 text-xs">
+
+                 
+                  You agree to 3illboard Terms of Use and Privacy Policy. 
+                  By choosing to contact an adlister, you also agree that 3illboard,
+                   ad owners, and ad managers may call or text you about any inquiries
+                    you submit through our services.
+                      </p>
+
+
+                </div>
+                
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+
+
+
+        </> 
       ) : null}
 
           {/* modal popup end */}
