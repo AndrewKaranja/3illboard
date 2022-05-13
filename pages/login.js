@@ -39,7 +39,7 @@ function Login({user}) {
   const usersCollectionRef=collection(db,"users");
  
  
-  const {hostAd}=router.query;
+  const {prevPath}=router.query;
 
   const addUser=async(user)=>{
     const userDocRef = doc(db, "users", `${user.uid}`);
@@ -48,13 +48,13 @@ function Login({user}) {
  
  
   
-
+ 
   // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'popup',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-   signInSuccessUrl: choosePath(hostAd),
+signInSuccessUrl: prevPath,
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
