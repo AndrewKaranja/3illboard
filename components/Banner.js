@@ -7,6 +7,7 @@ function Banner() {
   return <div className='relative h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px] 2xl:h-[700px] select-none ' >
       <Image src={BannerImage}
              alt="banner"
+             priority="true"
              layout='fill'
              objectFit='cover'/>
              <div className='absolute top-1/2 w-full text-center'>

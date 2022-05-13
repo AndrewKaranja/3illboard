@@ -6,11 +6,16 @@ import Logo from '../../images/Logo.png';
 import OfficialLogoWhite from '../../images/3illboardLogoWhite.svg';
 import OfficialLogoMiniWhite from '../../images/3illboardLogoMiniWhite.svg';
 import SidebarLinkGroup from './SidebarLinkGroup';
+import { useAuth } from '../../context/AuthContext';
+import { useUserType } from '../../context/UserTypeContext';
 
 function Sidebar({ sidebarOpen,
   setSidebarOpen
 }) {
-
+ 
+  const {user}=useAuth();
+ const {userInfo}=useUserType();
+ 
   
   const router = useRouter();
   // const location = useLocation();

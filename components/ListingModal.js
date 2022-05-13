@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-function ListingModal() {
+   function ListingModal() {
     const validate=Yup.object({
         message:Yup.string()
         .min(5,'Must be atleast 5 characters')

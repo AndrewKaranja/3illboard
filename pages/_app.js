@@ -25,7 +25,9 @@ function MyApp({ Component, pageProps }) {
     <AuthContextProvider>
       <UserTypeContextProvider>
       <Component {...pageProps} />
+
       </UserTypeContextProvider>
+      
      </AuthContextProvider>
 
   )

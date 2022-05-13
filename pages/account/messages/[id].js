@@ -6,7 +6,7 @@ import Sidebar from '../../../components/dashboard/Sidebar';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
 import {useUserType} from '../../../context/UserTypeContext';
-import { withProtected } from '../../../hooks/route';
+import { withProtected} from '../../../hooks/route';
 import billboard from '../../../images/cat.png';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
 import {useCollection} from "react-firebase-hooks/firestore";
@@ -22,7 +22,7 @@ function Chat({chat,messages}) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     //get chats snapshots
     const userChatRef = collection(db, "chats");
-    const chatsQuery = query(userChatRef,where('users','array-contains',user.email));
+    const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
     const [chatsSnapshot]=useCollection(chatsQuery);
     const chatAlreadyExists=(recepientEmail)=>
     !!chatsSnapshot?.docs.find(
@@ -37,8 +37,8 @@ function Chat({chat,messages}) {
 
 {/*  Site header */}
 <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-<div className='flex flex-row flex-[10] '>
-<div className='flex flex-col text-black bg-slate-200 rounded-xl m-5 flex-grow-[1] overflow-y-scroll min-w-fit  max-h-[85vh] scrollbar-hide'>
+<div className='flex sm:flex-row sm:flex-[10] '>
+<div className='hidden  sm:flex sm:flex-col text-black bg-slate-200 rounded-xl m-5 sm:flex-grow-[1] sm:overflow-y-scroll sm:min-w-fit  sm:max-h-[85vh] sm:scrollbar-hide'>
     {/*Chat search*/}
     <div className='flex items-center md:border-2 rounded-full py-2 md:shadow-sm hover:border-2'>
           <input 
@@ -55,11 +55,11 @@ function Chat({chat,messages}) {
                lastMessageTime={chat.data().lastMessageTime?.toDate().getTime()} />
            ))}
             {/* <ChatCard/> */}
-              
+            
 </div>
 
 {/*chat screen*/}
-          <div className='flex flex-col flex-grow-[9] h-full'>
+          <div className='flex flex-col flex-grow-[9] w-full h-full'>
             <ChatScreen messages={messages} chat={chat}/>
           </div>
 
@@ -70,7 +70,7 @@ function Chat({chat,messages}) {
         </div>
   )
 }
-export default Chat;
+export default withProtected(Chat);
 
 export async function getServerSideProps(context){ 
     console.log(context.query.id)
@@ -100,7 +100,6 @@ export async function getServerSideProps(context){
     const chat={
         id:chatRes.id,
         lastMessage:chatRes.data().lastMessage,
-        lastMessageId:chatRes.data().lastMessageId,
         lastMessageTime:chatRes.data().lastMessageTime.toDate().getTime(),
         lastSender:chatRes.data().lastSender,
         users:chatRes.data().users,

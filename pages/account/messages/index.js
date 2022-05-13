@@ -18,33 +18,38 @@ import * as MdIcons from 'react-icons/md';
 import * as FcIcons from 'react-icons/fc';
 import ChatCard from '../../../components/dashboard/ChatCard';
 import ChatScreen from '../../../components/dashboard/ChatScreen';
+import SidebarClient from '../../../components/dashboard/SidebarClient';
 
 function Messages() {
     const {user}=useAuth();
     const {userInfo}=useUserType();
-    console.log(userInfo);
+    
     //get chats snapshots
     const userChatRef = collection(db, "chats");
     const chatsQuery = query(userChatRef,where('users','array-contains',user.email));
     const [chatsSnapshot]=useCollection(chatsQuery);
+    console.log("usertype"+userInfo?.usertype)
 
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const chatAlreadyExists=(recepientEmail)=>
         !!chatsSnapshot?.docs.find(
             (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
             );
+    
    
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
          {/* Sidebar */}
-    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+{userInfo?.usertype==="client" && <SidebarClient sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
+{userInfo?.usertype==="lister" && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
        {/* Content area */}
        <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
 
 {/*  Site header */}
 <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-<div className='flex flex-row flex-[10]'>
-<div className='flex flex-col text-black bg-slate-200 rounded-xl m-5 flex-grow-[1] overflow-y-scroll min-w-fit  h-[100vh] scrollbar-hide'>
+<div className='flex sm:flex-row sm:flex-[10]'>
+<div className='flex flex-col text-black bg-slate-200 rounded-xl m-5 sm:flex-grow-[1] overflow-y-scroll w-full sm:w-fit  h-[85vh] scrollbar-hide'>
     {/*Chat search*/}
     <div className='flex items-center md:border-2 rounded-full py-2 md:shadow-sm hover:border-2'>
           <input 
@@ -62,8 +67,14 @@ function Messages() {
 </div>
 
 {/*chat screen*/}
-          <div className='flex flex-col flex-grow-[9] h-full'>
+          <div className='hidden sm:flex sm:flex-col sm:flex-grow-[9] sm:h-full'>
             {/* <ChatScreen/> */}
+
+            <div className='p-5 relative  text-black bg-slate-200 rounded-xl m-5  h-[85vh] '>
+              <p className='my-auto absolute top-[50%] w-full text-center'>Click on one of the chats to view messages</p>
+            </div>
+
+
           </div>
 
 
