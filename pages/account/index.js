@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 
 import Sidebar from '../../components/dashboard/Sidebar';
+import SidebarClient from '../../components/dashboard/SidebarClient';
 import Header from '../../components/dashboard/Header';
 import WelcomeBanner from '../../components/dashboard/WelcomeBanner';
 import DashboardCard01 from '../../components/dashboard/CardCustomers';
+import DashboardCardBookings from '../../components/dashboard/BookingsCard';
+
 import DashboardCard02 from '../../components/dashboard/RecentCard';
+
+import { useAuth } from '../../context/AuthContext';
+import {useUserType} from '../../context/UserTypeContext';
 
 
 import Banner from '../../components/dashboard/Banner';
 import { withProtected } from '../../hooks/route';
 
 function Dashboard() {
+  const {user}=useAuth();
+    const {userInfo}=useUserType();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -18,7 +26,8 @@ function Dashboard() {
     <div className="flex h-screen overflow-hidden">
 
       {/* Sidebar */}
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      {userInfo?.usertype==="client" && <SidebarClient sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
+{userInfo?.usertype==="lister" && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
 
       {/* Content area */}
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
@@ -38,7 +47,10 @@ function Dashboard() {
             <div className="grid grid-cols-12 gap-6">
 
               {/* Line chart (Acme Plus) */}
-              <DashboardCard01 />
+              
+              {userInfo?.usertype==="client" && <DashboardCardBookings/> }
+{userInfo?.usertype==="lister" && <DashboardCard01 /> }
+
               {/* Line chart (Acme Advanced) */}
               <DashboardCard02 />
               {/* Line chart (Acme Professional) */}
