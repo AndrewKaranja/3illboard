@@ -1,5 +1,6 @@
 import React, {  useRef,useEffect, useState } from 'react';
 import {useRouter} from "next/router";
+import { Timeline, Text,Modal, Button, Group,NativeSelect   } from '@mantine/core';
 import { HeartIcon} from '@heroicons/react/outline'
 import { StarIcon } from '@heroicons/react/solid';
 import * as BiIcons from 'react-icons/bi';
@@ -7,6 +8,7 @@ import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
 import * as FcIcons from 'react-icons/fc';
 import * as AiIcons from 'react-icons/ai';
+import * as BsIcons from 'react-icons/bs';
 import FullCalendar ,{ formatDate } from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from '@fullcalendar/interaction'
@@ -35,6 +37,12 @@ import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
 import UploadedScreen from '../../../components/UploadedScreen';
 import LoadingScreen from '../../../components/LoadingScreen';
+import AddReservation from '../../../components/dashboard/AddReservation';
+import {
+  addDays,
+  addSeconds,
+  addHours
+} from 'date-fns';
 
 
 // export async function getServerSideProps({params}){
@@ -63,9 +71,13 @@ export default function ListingDetails() {
   const [bannerImage,setBannerImage]=useState(billboard);
   const [someReserved,setSomeReserved]=useState("");
   const[bookings,setBookings]=useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [timelineModalOpened, setTimelineModalOpened] = useState(false);
 
   const[startDate,setStartDate]=useState(new Date());
   const[endDate,setEndDate]=useState(new Date());
+
+
 
   const selectionRange={
     startDate:startDate,
@@ -77,6 +89,11 @@ console.log("Selection Range"+selectionRange);
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
+}
+
+
+const handleReservations=()=>{
+  setShowModal(true);
 }
 
 const handleCanlendar=(isPressed)=>{
@@ -100,7 +117,7 @@ const handleCanlendar=(isPressed)=>{
 />
 
     </div></div> ;
-  }
+   }
   
 }
 
@@ -115,7 +132,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 )
 
 
-
+// i should break this down break down this useeffect to track errors
   useEffect(() => {
     async function getListingDetail(user){
       const promises=[];
@@ -127,13 +144,13 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
       reservationsQuerySnapshot.docs?.forEach((doc) => {
         const event={
           title:doc.data().reservedBy,
-          start:doc.data().startDate.toDate().toISOString().replace(/T.*$/, ''),
+          start:doc.data().startDate.toDate().toString(),
           end:doc.data().endDate.toDate().toISOString().replace(/T.*$/, '')
         }
        
         reservedDates.push(event);
         
-        console.log("event"+event);
+        console.log("eventstart"+event.start);
         console.log("reservedDates"+reservedDates);
       });
 
@@ -145,7 +162,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
           allDay:true,
           backgroundColor:doc.data().background,
     }))
-  console.log("somereserved"+results);
+  console.log("somereserved start"+results.start);
     // setSomeReserved(results);
     setBookings(results);
 
@@ -169,7 +186,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
   }, [user,id]);
 
 
-
+  
 
   return (
     <div className='bg-slate-400 h-screen overflow-auto'>
@@ -256,6 +273,51 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
     <div className='flex flex-col lg:flex-row md:flex-[10]'>
     <div className='h-full  w-[70%] flex-grow-[6] m-5 '>
 
+    <h4 className='text-xl text-black font-bold m-2'>Listing Timeline</h4>
+    <Timeline active={0} bulletSize={24} lineWidth={2} color="orange">
+      <Timeline.Item bullet={<AiIcons.AiOutlineBook />} title="Booked">
+        <Text color="dimmed" size="sm">Listing booked by <Text variant="link" component="span" inherit>testclient@gmail.com</Text></Text>
+        <Text size="xs" mt={4}>2 hours ago</Text>
+      </Timeline.Item>
+
+      <Timeline.Item bullet={<MdIcons.MdDesignServices />} title="Design and Invoicing">
+        <Text color="dimmed" size="sm">This step indicates talks with the client including design and invoice discussions</Text>
+        <Text size="xs" mt={4}>52 minutes ago</Text>
+      </Timeline.Item>
+
+      <Timeline.Item title="Active" bullet={<BsIcons.BsBookmarkCheckFill />} lineVariant="dashed">
+        <Text color="dimmed" size="sm">This step indicates the ad is active or mounted</Text>
+        <Text size="xs" mt={4}>34 minutes ago</Text>
+      </Timeline.Item>
+
+      <Timeline.Item title="Unmounting" bullet={<MdIcons.MdOutlineReport />}>
+        <Text color="dimmed" size="sm">This step indicates end of tenure with the client and reactivates listing on the search page for more booking</Text>
+        <Text size="xs" mt={4}>12 minutes ago</Text>
+      </Timeline.Item>
+    </Timeline>
+    <Modal
+        opened={timelineModalOpened}
+        onClose={() => setTimelineModalOpened(false)}
+        title="Update Listing progress"
+      >
+        <NativeSelect
+      data={['Booked', 'Design and Invoice', 'Active', 'Inactive']}
+      placeholder="Pick one"
+      label="Select current Listing status"
+      required
+    />
+    <button onClick={() => setTimelineModalOpened(false)} className=' border-2 border-orange-200 bg-blue-500 w-fit  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+            >Confirm</button>
+      </Modal>
+      <button onClick={() => setTimelineModalOpened(true)} className=' border-2 mt-2 border-orange-200 bg-blue-500 w-fit  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+            >Update TimeLine</button>
+
+
+  {/* You&apos;ve  */}
+       
+
+    <div className='border-b pt-2 border-orange-100'/>
+
        <div>
        <h4 className='text-xl text-black font-bold m-2'>Ad Description</h4>
        {/* <p className='invisible text-white'>{listing.listingid}</p> */}
@@ -328,6 +390,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
           </div>
           <div className='flex flex-col flex-grow-[4] h-fit'>
+          <button onClick={handleReservations} className=' border-2 my-2  bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 py-2  rounded-xl'
+            >🎫 Add reservation</button>
             <div className='p-5 h-fit text-white bg-black rounded-xl m-5'>
             <div className='flex '>
               <Image src={billboard} alt='ad image' width={40} height={40} objectFit="cover" className='rounded-2xl'/>
@@ -383,6 +447,15 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
      
 
       </div>
+
+
+      {showModal ? (
+        <>
+        {/* <ListingModal/> */}
+        <AddReservation setShowModal={setShowModal} handleSelect={handleSelect} listingid={id} startDate={startDate} endDate={endDate}/>
+
+        </> 
+      ) : null}
        
         </div>
   )
