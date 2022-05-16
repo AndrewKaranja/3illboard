@@ -6,7 +6,7 @@ import billboard from '../../images/cat.png';
 import Link from 'next/link';
 import * as BsIcons from 'react-icons/bs';
 
-export default function ListingCard({img,title,location,interval,price,rating,listingid,otherServices}) {
+export default function ListingCard({img,title,location,activated,interval,price,rating,listingid,otherServices}) {
   return (
     <Link
     className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
@@ -26,8 +26,11 @@ export default function ListingCard({img,title,location,interval,price,rating,li
             <div className='flex flex-col flex-grow-[9] pl-5 h-fit'>
                 <div className='flex justify-between'>
                 <h4 className='text-xl text-black font-bold'>{title}</h4>
-                    <button className='hidden md:inline h-8 border-2 border-red-600 bg-red-200 rounded text-black hover:bg-orange-300 p-2'
-              >Unlisted</button>
+                {activated && <button className='hidden md:inline text-xs  border-2 border-green-600 bg-green-200 rounded text-black  p-2'
+              >listed</button> }
+              {!activated && <button className='hidden md:inline text-xs  border-2 border-red-600 bg-red-200 rounded text-black p-2'
+              >Unlisted</button> }
+                    
                     
                 </div>
                 
