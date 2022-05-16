@@ -256,6 +256,12 @@ function Header({placeholder}) {
                 </li>
               );
             })}
+            {user ? <li onClick={async ()=>await logout()} className="flex text-[#f5f5f5] text-sm h-12 justify-center list-none cursor-pointer  items-center">
+                      <div className='flex text-[#f5f5f5] text-lg h-[100%] w-[95%] mx-auto justify-start list-none  items-center rounded hover:bg-black '>
+                      <IoIcons.IoIosLogIn />
+                    <span className='ml-4'>Sign out</span>
+                    </div>
+                </li>:null}
             
             
           </ul>
