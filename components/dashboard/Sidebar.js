@@ -262,28 +262,24 @@ function Sidebar({ sidebarOpen,
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Notifications</span>
+                          <Link passHref href="/account/settings/notifications" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Notifications</span>
+                          </Link>
+                        </li>
+                        
+                        <li className="mb-1 last:mb-0">
+                          <Link passHref href="/account/settings/plans" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Plans</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Connected Apps</span>
+                          <Link passHref href="/account/settings/billing" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Billing and Invoices</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Plans</span>
-                          </Link>
-                        </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Billing & Invoices</span>
-                          </Link>
-                        </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Give Feedback</span>
+                          <Link passHref href="/account/settings/feedback" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Give Feedback</span>
                           </Link>
                         </li>
                       </ul>

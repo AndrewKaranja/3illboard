@@ -7,27 +7,15 @@ import * as FcIcons from 'react-icons/fc';
 
 export const SidebarData = [
   {
-    title: 'Signup',
-    path: '/signup',
-    icon: <IoIcons.IoIosCreate />,
-    cName: 'navText'
-  },
-  {
-    title: 'Login',
+    title: 'Sign in',
     path: '/login',
     icon: <IoIcons.IoIosLogIn />,
     cName: 'navText'
   },
   {
     title: 'Host Ad',
-    path: '/search',
+    path: '/listing/listingtype',
     icon: <FcIcons.FcAddDatabase />,
-    cName: 'navText'
-  },
-  {
-    title: 'Team',
-    path: '/team',
-    icon: <IoIcons.IoMdPeople />,
     cName: 'navText'
   },
   {
@@ -38,7 +26,7 @@ export const SidebarData = [
   },
   {
     title: 'Support',
-    path: '/support',
+    path: '/account/settings/feedback',
     icon: <IoIcons.IoMdHelpCircle />,
     cName: 'navText'
   }
@@ -53,8 +41,8 @@ export const SidebarDataLoggedIn = [
     cName: 'navText'
   },
   {
-    title: 'Team',
-    path: '/team',
+    title: 'Dashboard',
+    path: '/account',
     icon: <IoIcons.IoMdPeople />,
     cName: 'navText'
   },
@@ -66,14 +54,8 @@ export const SidebarDataLoggedIn = [
   },
   {
     title: 'Support',
-    path: '/support',
+    path: '/account/settings/feedback',
     icon: <IoIcons.IoMdHelpCircle />,
-    cName: 'navText'
-  },
-  {
-    title: 'signout',
-    path: '/signout',
-    icon: <IoIcons.IoIosLogIn />,
     cName: 'navText'
   }
 ];
