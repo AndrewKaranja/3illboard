@@ -12,6 +12,7 @@ import {useCollection} from "react-firebase-hooks/firestore";
 import { collection, query, where } from "firebase/firestore";
 
 
+
 import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
@@ -60,7 +61,12 @@ function Messages() {
           <SearchIcon className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
            {chatsSnapshot?.docs.map((chat)=>(
-               <ChatCard key={chat.id} id={chat.id} users={chat.data().users}/>
+               <ChatCard key={chat.id} id={chat.id} 
+               users={chat.data().users}
+               lastMessage={chat.data().lastMessage} 
+               lastSender={chat.data().lastSender} 
+               lastMessageTime={chat.data().lastMessageTime?.toDate().getTime()}
+               />
            ))}
             {/* <ChatCard/> */}
               
