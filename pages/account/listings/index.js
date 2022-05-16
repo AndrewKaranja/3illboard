@@ -8,6 +8,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import ListingCard from '../../../components/dashboard/ListingCard';
 import { db } from '../../../firebase';
 import LoadingScreen from '../../../components/LoadingScreen';
+import { Chips, Chip } from '@mantine/core';
 
 
 
@@ -22,6 +23,7 @@ function Listings() {
     const [details,setDetails] =useState([]);
     const [listings,setListings] =useState([]);
     const [done, setDone] = useState(undefined);
+    const [chipValue, setChipValue] = useState('all');
 
 
 
@@ -66,18 +68,19 @@ useEffect(() => {
 <main>
 <div className='flex justify-between mx-6 my-3'>
 <h4 className='text-lg lg:text-2xl font-semibold'>Listings</h4>
-<div>
+<div className='flex flex-row'>
 <button onClick={handleCreateListing} className='hidden md:inline border-2 mx-3 border-gray-600 bg-[#fab038] font-semibold rounded text-white p-2'
           >Create New Listing</button>
-<button className='hidden md:inline border-2 border-gray-600 bg-gray-400 rounded text-black p-2'
-          >Active</button>
-          <button className='hidden md:inline border-2 border-gray-600 bg-gray-200 rounded text-black hover:bg-orange-300 p-2'
-          >inactive</button>
+<Chips multiple={false} value={chipValue} onChange={setChipValue}>
+<Chip value="all">All</Chip>
+      <Chip value="active">Active</Chip>
+      <Chip value="inactive">Inactive</Chip>
+    </Chips>
 </div>
                 
                 
             </div>
-   {!done ?(
+   {!done ?( 
       <LoadingScreen/>
 
    ):(
@@ -86,6 +89,7 @@ useEffect(() => {
       <ListingCard
       key={listing.listingid}
       listingid={listing.listingid}
+      activated={listing.activated}
       rating={listing.rating}
       title={listing.details.billboardTitle}
       location={listing.details.locationDescription}
