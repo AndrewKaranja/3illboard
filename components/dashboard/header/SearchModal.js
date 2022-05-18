@@ -84,10 +84,9 @@ function SearchModal({
               <div className="text-xs font-semibold text-slate-400 uppercase px-2 mb-2">Recent searches</div>
               <ul className="text-sm">
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -96,13 +95,12 @@ function SearchModal({
                     </svg>
                     <span>Form Builder - 23 hours on-demand video</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -111,13 +109,12 @@ function SearchModal({
                     </svg>
                     <span>Access Mosaic on mobile and TV</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -126,13 +123,12 @@ function SearchModal({
                     </svg>
                     <span>Product Update - Q4 2021</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -141,13 +137,12 @@ function SearchModal({
                     </svg>
                     <span>Master Digital Marketing Strategy course</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -156,13 +151,12 @@ function SearchModal({
                     </svg>
                     <span>Dedicated forms for products</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -171,7 +165,7 @@ function SearchModal({
                     </svg>
                     <span>Product Update - Q4 2021</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -180,10 +174,9 @@ function SearchModal({
               <div className="text-xs font-semibold text-slate-400 uppercase px-2 mb-2">Recent pages</div>
               <ul className="text-sm">
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div>
@@ -192,13 +185,12 @@ function SearchModal({
                     </svg>
                     <span><span className="font-medium text-slate-800 group-hover:text-white">Messages</span> - Conversation / … / Mike Mills</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
                 <li>
-                  <Link
+                  <div
                     className="flex items-center p-2 text-slate-800 hover:text-white hover:bg-indigo-500 rounded group"
-                    href="/"
-                    passHref
+                    
                     onClick={() => setModalOpen(!modalOpen)}
                   >
                     <div className="flex flex-col">
@@ -207,7 +199,7 @@ function SearchModal({
                     </svg>
                     <span><span className="font-medium text-slate-800 group-hover:text-white">Messages</span> - Conversation / … / Eva Patrick</span>
                     </div>
-                  </Link>
+                  </div>
                 </li>
               </ul>
             </div>

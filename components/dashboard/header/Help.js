@@ -62,9 +62,9 @@ function Help() {
           <div className="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Need help?</div>
           <ul>
             <li>
-              <Link
+              <div
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href="/"
+                
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <div>
@@ -74,13 +74,13 @@ function Help() {
                 </svg>
                 <span>Documentation</span>
                 </div>
-              </Link>
+              </div>
             </li>
             <li>
               
-              <Link
+              <div
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href="/"
+                
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <div>
@@ -89,12 +89,12 @@ function Help() {
                 </svg>
                 <span>Support Site</span>
                 </div>
-              </Link>
+              </div>
             </li>
             <li>
-              <Link
+              <div
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href="/"
+                
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <div>
@@ -103,7 +103,7 @@ function Help() {
                 </svg>
                 <span>Contact us</span>
                 </div>
-              </Link>
+              </div>
             </li>
           </ul>
         </div>

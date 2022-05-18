@@ -91,13 +91,13 @@ const [error,setError]=useState("")
           </div>
           <ul>
             <li>
-              <Link
+              <div
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
-                href="/"
+                
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 Settings
-              </Link>
+              </div>
             </li>
             <li>
               <div
