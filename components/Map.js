@@ -1,11 +1,20 @@
 import React, { useState,useMemo} from 'react';
-import Image from 'next/image';
+import {useRouter} from "next/router";
 import ReactMapGL,{Marker,Popup} from 'react-map-gl';
 import getCenter from 'geolib/es/getCenter';
 import imgbill from '../images/billboard_fl2.png';
+import { Card,Image, Text, Badge, Button, Group, useMantineTheme } from '@mantine/core';
+import Link from 'next/link'
 
 function Map({searchResults}) {
   const [selectedLocation, setSelectedLocation] = useState({});
+  const router = useRouter();
+
+  const redirect=(listingurl)=>{
+   
+    router.push(`/search/${listingurl}`);
+
+  }
   
   const markers = useMemo(()=> JSON.parse(searchResults)?.map(result=>(
     
@@ -35,11 +44,34 @@ function Map({searchResults}) {
             closeOnClick={true}
             latitude={result?.location?.lat}
             longitude={result?.location?.long}>
-              <div className='flex flex-col'>
+              {/* <div className='flex flex-col'>
               <Image src={result?.photosURLS?.[0]}  alt='ad image' width={70} height={70} className='rounded-lg'/>
               <p>{result?.details?.billboardTitle}</p>
 
-              </div>
+              </div> */}
+
+              <Card shadow="sm" p="lg">
+                <Card.Section>
+                  <Image
+                  src={result?.photosURLS?.[0]}
+                  height={160}
+                  alt={result?.details?.billboardTitle}/>
+                </Card.Section>
+
+      
+
+      <Group position="apart" style={{ marginBottom: 3, marginTop: 1 }}>
+        <Text weight={500}>{result?.details?.billboardTitle}</Text>
+        <Badge color="green" variant="light">
+        {result?.price.price}/{result?.price.interval}
+        </Badge>
+      </Group>
+
+
+      <Button onClick={()=>redirect(result?.listingid)} variant="light" color="yellow" fullWidth style={{ marginTop: 10 }}>
+        Learn More
+      </Button>
+    </Card>
                
               
             </Popup>
