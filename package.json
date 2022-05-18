@@ -31,6 +31,7 @@
     "formik": "^2.2.9",
     "geofire-common": "^5.2.0",
     "geolib": "^3.3.3",
+    "localforage": "^1.10.0",
     "mapbox-gl": "^2.7.0",
     "moment": "^2.29.3",
     "next": "^12.1.6",
