@@ -217,7 +217,7 @@ function Preview() {
 
             
                
-
+<p>Approval should take less than 3 business days</p>
 
           </div>
         </div>
