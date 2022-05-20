@@ -94,10 +94,6 @@ export default function ListingDetails() {
   const [showModal, setShowModal] = React.useState(false);
 
 
-  //variables to add mesage
-  if(user!=null){
-
-  }
 
   // remember to fix this issue---> when user is logged out
   // this section returns an error
@@ -169,9 +165,9 @@ export default function ListingDetails() {
 
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
-    setEndDate(addDays(ranges.selection.startDate,Math.max(Number(listing?.minimumListingPeriod), 1) - 1))
+    setEndDate(addDays(ranges.selection.startDate,Math.max(Number(listing?.price?.minimumBookingPeriod), 1) - 1))
 }
-
+ 
 const messageEnquiry=()=>{
   const enquiry=`Hello ${listing?.owneremail},${MessageInfo?.fname} is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid}.Additional message:
   ${MessageInfo?.message}`
@@ -474,10 +470,10 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                               phone:values.phone,
                            });
 
-                           console.log(MessageInfo);
-                           const clientMessage=`Hello ${listing?.owneremail},${MessageInfo?.fname} 
+                           console.log(values.fname);
+                           const clientMessage=`Hello ${listing?.owneremail},${values.fname} 
                            is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid} 
-                           availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")} . Additional message:${MessageInfo?.message}`;
+                           availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")} . Additional message:${values.message}`;
 
                            
                            if(user?.email!==listing?.owneremail &&
@@ -485,24 +481,27 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                              
                                 const chatRef = await addDoc(collection(db, "chats"), {
                                   users:[user.email,listing?.owneremail],
-                                  lastMessage:messageEnquiry(),
+                                  lastMessage:clientMessage,
                                   lastMessageTime:serverTimestamp(),
                                   lastSender:user?.email,
                                 });
                                 setChatRefId(chatRef.id) ;
 
                                 const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
+                                const requestCollectionRef=collection(db,`users/${listing?.ownerid}/requests`)
                                 const messageDoc=await addDoc(messagesCollectionRef, {
                                   timestamp: serverTimestamp(),
                                   message:clientMessage,
                                   user:user.email
                                   
                                 });
+                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedStart:startDate,requestedEnd:endDate,listingid:listing?.listingid,chatid:chatRef.id,listingTitle:listing?.details?.billboardTitle,requestTime:serverTimestamp()})
 
                             }else{
                               const chatRef=chatsSnapshot?.docs.find((chat)=>chat.data().users.find(user=>user===listing?.owneremail));
                               setChatRefId(chatRef.id);
                               const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
+                              const requestCollectionRef=collection(db,`users/${listing?.ownerid}/requests`)
                               const messageDoc=await addDoc(messagesCollectionRef, {
                                 timestamp: serverTimestamp(),
                                 message:clientMessage,
@@ -511,7 +510,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                               });
                               const chatDocRef=doc(db,"chats",chatRef.id);
 
-                          await setDoc(chatDocRef,{lastMessage:clientMessage,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true })
+                          await setDoc(chatDocRef,{lastMessage:clientMessage,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true });
+                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedStart:startDate,requestedEnd:endDate,listingid:listing?.listingid,listingTitle:listing?.details?.billboardTitle,chatid:chatRef.id,requestTime:serverTimestamp()})
 
                             }
                             
@@ -524,7 +524,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
                            //update Last seen
                           const userDocRef=doc(db,"users",user.uid);
-                          setDoc(userDocRef,{lastSeen:serverTimestamp(),workPhone:MessageInfo?.phone}, { merge: true });
+                          setDoc(userDocRef,{lastSeen:serverTimestamp(),phone:values.phone}, { merge: true });
                           
                         
 
@@ -532,7 +532,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                   
 
                           setShowModal(false)
-                        router.push(`/account/messages/${chatRefId}`);
+                        // router.push(`/account/messages/${chatRefId}`);
                            
                           }}
                           
