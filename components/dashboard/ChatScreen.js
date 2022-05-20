@@ -16,6 +16,7 @@ import TimeAgo from 'timeago-react';
 import { FirebaseError } from 'firebase/app';
 import getRecipientEmail from '../../utils/getRecipientEmail';
 import * as AiIcons from 'react-icons/ai';
+import { useMediaQuery } from 'react-responsive';
 
 
 
@@ -27,6 +28,10 @@ function ChatScreen({chat,messages}) {
     const [input, setInput] = useState("");
     const [messagesSnapshot]=useCollection(query(collection(db,`chats/${router.query.id}/messages`)
     ,orderBy("timestamp","asc")));
+
+    const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+    
+    
 
     const [recipientSnapshot]=useCollection(query(collection(db,"users"),where("email","==",getRecipientEmail(chat.users,user))));
 
@@ -145,7 +150,10 @@ function ChatScreen({chat,messages}) {
 
 </form>
 
-<Link passHref href="/account/messages" >
+
+
+{isMobile && <>
+<Link passHref href="/account/messages"  >
       <div className="bg-white w-full flex flex-row text-[#fab038] justify-center items-center cursor-pointer p-2">
         <AiIcons.AiOutlineRollback className='h-10 w-10'/>
         <p className='text-xl align-middle font-bold'>Back to messages</p>
@@ -153,6 +161,8 @@ function ChatScreen({chat,messages}) {
         </div>
               
               </Link>
+              </> }
+
 
     </div>
   )
