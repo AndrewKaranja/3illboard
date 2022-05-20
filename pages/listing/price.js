@@ -46,6 +46,7 @@ function Price() {
             <Formik
                 initialValues={{
                 price:'',
+                minimum:'1',
                 interval:'monthly',
                 hidePrice:false,
                           }}
@@ -56,6 +57,7 @@ function Price() {
                                 setlistingPrice({
                                   price:values.price,
                                   interval:values.interval,
+                                  minimumBookingPeriod:values.minimum,
                                   hidePrice:values.hidePrice,
                                 });
                                 router.push("/listing/legal")
@@ -87,6 +89,15 @@ function Price() {
                         <option value="daily">Daily</option>
                         </Field>
                 </div>
+
+                <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Minimum Booking period</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                                <Field id="minimum" name="minimum" type="number" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                <ErrorMessage component="div"  name="minimum" className="text-red-600"/> </div>
+                            </div>
+
+
                 <div className='flex flex-row mt-4 ml-2 items-center'>
               <Field type="checkbox" name="hidePrice" className="m-2"/>
               <p>Hide Price from search page</p>
