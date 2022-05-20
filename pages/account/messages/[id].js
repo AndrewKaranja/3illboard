@@ -50,9 +50,9 @@ function Chat({chat,messages}) {
       </div>
            {chatsSnapshot?.docs.map((chat)=>(
                <ChatCard key={chat.id} id={chat.id} users={chat.data().users} 
-               lastMessage={chat.data().lastMessage} 
-               lastSender={chat.data().lastSender} 
-               lastMessageTime={chat.data().lastMessageTime?.toDate().getTime()} />
+               lastMessage={chat.data()?.lastMessage} 
+               lastSender={chat.data()?.lastSender} 
+               lastMessageTime={chat.data()?.lastMessageTime?.toDate().getTime()} />
            ))}
             {/* <ChatCard/> */}
             
