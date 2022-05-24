@@ -191,7 +191,7 @@ function Sidebar({ sidebarOpen,
            
             
             {/* Analytics */}
-            <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('analytics') && 'bg-slate-900'}`}>
+            {/* <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('analytics') && 'bg-slate-900'}`}>
               <Link passHref href="/" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('analytics') && 'hover:text-slate-200'}`}>
                 <div className="flex items-center hover:cursor-pointer">
                   <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
@@ -201,10 +201,10 @@ function Sidebar({ sidebarOpen,
                   <span className="text-sm text-white font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Analytics</span>
                 </div>
               </Link>
-            </li>
+            </li> */}
             
             {/* Campaigns */}
-            <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('campaigns') && 'bg-slate-900'}`}>
+            {/* <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('campaigns') && 'bg-slate-900'}`}>
               <Link passHref href="/" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('campaigns') && 'hover:text-slate-200'}`}>
                 <div className="flex items-center hover:cursor-pointer">
                   <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
@@ -214,12 +214,12 @@ function Sidebar({ sidebarOpen,
                   <span className="text-sm text-white font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Campaigns</span>
                 </div>
               </Link>
-            </li>
+            </li> */}
             
         
            
             {/* Calendar */}
-            <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('calendar') && 'bg-slate-900'}`}>
+            {/* <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('calendar') && 'bg-slate-900'}`}>
               <Link passHref href="/" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('calendar') && 'hover:text-slate-200'}`}>
                 <div className="flex items-center hover:cursor-pointer">
                   <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
@@ -229,7 +229,8 @@ function Sidebar({ sidebarOpen,
                   <span className="text-sm text-white font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Calendar</span>
                 </div>
               </Link>
-            </li>
+            </li> */}
+            
             {/* Settings */}
             <SidebarLinkGroup activecondition={router.pathname.includes('profile')}>
               {(handleClick, open) => {
@@ -257,7 +258,7 @@ function Sidebar({ sidebarOpen,
                     <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                       <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/account/profile" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                          <Link passHref href="/account/settings/profile" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
                             <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Account</span>
                           </Link>
                         </li>
@@ -315,30 +316,21 @@ function Sidebar({ sidebarOpen,
                     <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
                       <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Changelog</span>
+                          <Link passHref href="/account/utility/changelog" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Changelog</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Roadmap</span>
+                          <Link passHref href="/account/utility/roadmap" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Roadmap</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">FAQs</span>
+                          <Link passHref href="/account/utility/faqs" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">FAQs</span>
                           </Link>
                         </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Empty State</span>
-                          </Link>
-                        </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">404</span>
-                          </Link>
-                        </li>
+                        
                       </ul>
                     </div>
                   </React.Fragment>

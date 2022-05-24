@@ -9,7 +9,7 @@ import billboard from '../../../images/cat.png';
 import {db} from '../../../firebase';
 import {SearchIcon,GlobeAltIcon,UserIcon,MenuIcon,UserCircleIcon} from '@heroicons/react/solid';
 import {useCollection} from "react-firebase-hooks/firestore";
-import { collection, query, where } from "firebase/firestore";
+import { collection, query, where,orderBy } from "firebase/firestore";
 
 
 
