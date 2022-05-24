@@ -3,19 +3,25 @@ import Sidebar from '../../../components/dashboard/Sidebar';
 import SidebarClient from '../../../components/dashboard/SidebarClient';
 import Header from '../../../components/dashboard/Header';
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
+import { query,collection, doc,where,getDocs, addDoc,serverTimestamp} from "firebase/firestore";
 import * as Yup from 'yup';
 
 
 import { useAuth } from '../../../context/AuthContext';
 import {useUserType} from '../../../context/UserTypeContext';
+import { db } from '../../../firebase';
+import {useRouter} from "next/router";
 
 
 
 import { withProtected } from '../../../hooks/route';
 
 function Feedback() {
+  
     const {user}=useAuth();
     const {userInfo}=useUserType();
+    const router=useRouter();
+    
     const [feedbackInfo, setFeedbackInfo] = useState([]);
     const validate=Yup.object({
         fname:Yup.string()
@@ -27,7 +33,7 @@ function Feedback() {
         message:Yup.string()
         .min(10,'Must be atleast 10 characters')
         .max(500,'Must be less than 500 characters')
-        .required('Fullname is required'),
+        .required('Message is required'),
        
         
       });
@@ -69,15 +75,26 @@ function Feedback() {
 
                           validationSchema={validate}
                           onSubmit={async (values)=>{
+                            const promises=[];
+                            const feedbackRef= collection(db, "feedback");
+                           const docData = {
+                            fullname:values.fname,
+                            email:values.email,
+                            message: values.message,
+                            feedbackTime:serverTimestamp(),
+                            userid:user.uid
                             
-                           
-                            setFeedbackInfo({
-                              fname:values.fname,
-                              email:values.email,
-                              message:values.message
+                        };
+                        
+                        
 
-                           });
-                           
+                        
+                        const docSnap=await addDoc(feedbackRef, docData);
+                        promises.push(docSnap);
+                        Promise.all(promises)
+                        .then(()=>{router.push("/account")})
+                        .catch((err)=>console.log(err));
+                            
                           }}
                           
                           >
@@ -104,7 +121,7 @@ function Feedback() {
                             </div>
 
 
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Client Email</div>
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Your Email</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
                               <Field name="email"  placeholder="email" type="email" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
