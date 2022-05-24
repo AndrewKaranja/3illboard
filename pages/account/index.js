@@ -75,10 +75,14 @@ function Dashboard() {
 
               
             
-
-              {/* Line chart (Acme Advanced) */}
+              <div className='col-span-full xl:col-span-6'>
+              <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} />
+              
               <DashboardCard02 />
-              {/* Line chart (Acme Professional) */}
+              
+
+              </div>
+              
 
               
 
