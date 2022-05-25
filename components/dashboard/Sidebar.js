@@ -269,7 +269,7 @@ function Sidebar({ sidebarOpen,
                         </li>
                         
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/account/settings/plans" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                          <Link passHref href="/account/settings/pricing" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
                             <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Plans</span>
                           </Link>
                         </li>
