@@ -1,31 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../../components/dashboard/Sidebar';
+import SidebarClient from '../../../components/dashboard/SidebarClient';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
-import { query,collection, doc,where,getDocs, addDoc,serverTimestamp} from "firebase/firestore";
+import { query,collection, doc,where,getDocs,setDoc, addDoc,serverTimestamp} from "firebase/firestore";
 import { db } from '../../../firebase';
 import * as Yup from 'yup';
 import PhoneInput from 'react-phone-input-2';
 import {useUserType} from '../../../context/UserTypeContext';
+import {useRouter} from "next/router";
 
 function Profile() {
   const {user}=useAuth();
   const {userInfo}=useUserType();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [name, setName] = useState("");
+  const router=useRouter();
   
   const validate=Yup.object({
     fname:Yup.string()
     .min(5,'Must be atleast 5 characters')
     .required('Fullname is required'),
-    email:Yup.string()
-    .min(10,'Must be atleast 10 characters')
-    .required('Email is required'),
-    message:Yup.string()
-    .min(10,'Must be atleast 10 characters')
-    .max(500,'Must be less than 500 characters')
-    .required('Message is required'),
+    companyName:Yup.string()
+    .min(5,'Must be atleast 5 characters')
+    .required('Company name is required'),
+    address:Yup.string()
+    .min(3,'Must be atleast 3 characters')
+    .required('Street address is required'),
+    city:Yup.string()
+    .min(3,'Must be atleast 3 characters')
+    .required('City is required'),
+    region:Yup.string()
+    .min(3,'Must be atleast 3 characters')
+    .required('region is required'),
+    postalCode:Yup.string()
+    .min(5,'Must be atleast 5 characters')
+    .required('Postal Code is required'),
    
     
   });
@@ -46,8 +57,9 @@ function Profile() {
   return (
     <div className="flex h-screen overflow-hidden">
 
-    {/* Sidebar */}
-    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+     {/* Sidebar */}
+     {userInfo?.usertype==="client" && <SidebarClient sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
+{userInfo?.usertype==="lister" && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
 
     {/* Content area */}
     <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
@@ -68,39 +80,44 @@ function Profile() {
       </div>
       <div className="mt-5 md:mt-0 md:col-span-2">
       <Formik
+      enableReintialize
                 initialValues={{
                 fname:userInfo?.name,
                 email:userInfo?.email,
                 phone:userInfo?.workPhone,
-                companyName:'',
-                country:'',
-                address:'',
-                city:'',
-                region:'',
-                postalCode:'',
+                companyName:userInfo?.companyName,
+                country:userInfo?.country,
+                address:userInfo?.address,
+                city:userInfo?.city,
+                region:userInfo?.region,
+                postalCode:userInfo?.postalCode,
                 
                           }}
 
                           validationSchema={validate}
                           onSubmit={async (values)=>{
+                            console.log("which city?"+values.city)
                             const promises=[];
-                            const feedbackRef= collection(db, "feedback");
+                            const userDocRef=doc(db,"users",user.uid);
+                            
                            const docData = {
-                            fullname:values.fname,
-                            email:values.email,
-                            message: values.message,
-                            feedbackTime:serverTimestamp(),
-                            userid:user.uid
+                            name:values.fname,
+                            workPhone:values.phone,
+                            companyName: values.companyName,
+                            country:values.country,
+                            address:values.address,
+                            city:values.city,
+                            region:values.region,
+                            postalCode:values.postalCode,
                             
                         };
                         
-                        
+                        const docSnap=await setDoc(userDocRef,docData, { merge: true });
 
                         
-                        const docSnap=await addDoc(feedbackRef, docData);
                         promises.push(docSnap);
                         Promise.all(promises)
-                        .then(()=>{router.push("/account")})
+                        .then(()=>{router.reload()})
                         .catch((err)=>console.log(err));
                             
                           }}
@@ -121,7 +138,7 @@ function Profile() {
                             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Name</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <Field id='fname' name="fname" placeholder={userInfo?.name} className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                <Field id='fname' name="fname" autoComplete="name"  placeholder={userInfo?.name ?`${userInfo?.name} `:"Enter full Name"} className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
                                  </div>
                                  <ErrorMessage component="div"  name="fname" className="text-red-600"/>
                             </div>
@@ -130,14 +147,25 @@ function Profile() {
                             <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Email address</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                              <Field name="email"  placeholder={userInfo?.email} type="email" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                              <Field name="email"  placeholder={userInfo?.email} type="email" disabled className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
                                 
                                  </div>
                                  <ErrorMessage component="div" name="email" className="text-red-600"/>
                             </div>
 
 
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Phone</div>
+
+                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Phone</div>
+                            <div className="w-full flex-1 mx-2">
+                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
+                              <Field name="phone"  placeholder={"+"+userInfo?.workPhone} type="phone" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                
+                                 </div>
+                                 <ErrorMessage component="div" name="phone" className="text-red-600"/>
+                            </div>
+
+
+                            {/* <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Phone</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
                               <PhoneInput
@@ -150,7 +178,7 @@ function Profile() {
                                 
                                  </div>
                                  <ErrorMessage component="div" name="phone" className="text-red-600"/>
-                            </div>
+                            </div> */}
 
 
                             <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-2">Company Name</div>
@@ -176,7 +204,7 @@ function Profile() {
                               name="country"
                               autoComplete="country-name"
                               className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                <option value="Kenya">Kenya</option>
+                                <option defaultValue value="Kenya">Kenya</option>
                                 <option value="Uganda">Uganda</option>
                                 <option value="Tanzania">Tanzania</option>
                                 </select>
@@ -242,19 +270,19 @@ function Profile() {
                 </div>
                 
             </div>
+            <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+              <button
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                type="submit">
+                Save
+              </button>
+            </div>
 
             
             
         </div>
         
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-              <button
-                type="submit"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Save
-              </button>
-            </div>
+        
     
 </div>
                                 </Form>
