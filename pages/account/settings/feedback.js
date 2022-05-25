@@ -28,7 +28,7 @@ function Feedback() {
         .min(5,'Must be atleast 5 characters')
         .required('Fullname is required'),
         email:Yup.string()
-        .min(10,'Must be atleast 10 characters')
+        .email('Invalid email format')
         .required('Email is required'),
         message:Yup.string()
         .min(10,'Must be atleast 10 characters')
