@@ -91,13 +91,15 @@ const [error,setError]=useState("")
           </div>
           <ul>
             <li>
+            <Link passHref href="/account/settings/profile" className="block">
               <div
-                className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
+                className="font-medium text-sm cursor-pointer text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                 
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 Settings
               </div>
+              </Link>
             </li>
             <li>
               <div

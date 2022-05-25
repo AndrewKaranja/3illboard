@@ -92,6 +92,7 @@ function Help() {
               </div>
             </li>
             <li>
+            <Link passHref href="/account/settings/feedback" className="block">
               <div
                 className="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                 
@@ -104,6 +105,7 @@ function Help() {
                 <span>Contact us</span>
                 </div>
               </div>
+              </Link>
             </li>
           </ul>
         </div>
