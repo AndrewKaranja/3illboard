@@ -5,17 +5,20 @@ import Header from '../../../../components/dashboard/Header';
 import { useAuth } from '../../../../context/AuthContext';
 import {useUserType} from '../../../../context/UserTypeContext';
 import imgprint from '../../../../images/billboard_fl2.png';
+import imgmpesa from '../../../../images/mpesa.png';
+import imgwire from '../../../../images/wire.png';
+import imgpaypal from '../../../../images/paypal.png';
 import Image from 'next/image';
 import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
 import {useRouter} from "next/router";
 import billboard from '../../../../images/cat.png';
 
-import { Chips, Chip,Table } from '@mantine/core';
+import { Badge,Chips, Chip,Table } from '@mantine/core';
 
 import Link from 'next/link';
 import { db } from '../../../../firebase';
-import { doc, getDoc,collection,getDocs } from "firebase/firestore";
+import { query,doc, getDoc,collection,getDocs,orderBy,limit  } from "firebase/firestore";
 import {
     addDays,
     format,
@@ -28,8 +31,28 @@ function BillingDetails() {
     const{query:{id}}=useRouter();
     const [done, setDone] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [value, setValue] = useState('mpesa');
     const basic=["Client Chat Features","Listing analytics","Calender Scheduling","Booking"];
     const [listing,setListing]=useState("");
+    const [paymentHistory,setPaymentHistory]=useState("");
+
+
+    useEffect(() => {
+      async function getPaymentHistory(user){
+         const promises=[];
+         const q = query(collection(db, `users/${user.uid}/listings/${id}/payments`), orderBy("date", "desc"), limit(10));
+        const querySnapshot = await getDocs(q);
+        promises.push(querySnapshot);
+        setPaymentHistory(querySnapshot.docs.map(docSnapshot => docSnapshot.data()));
+              Promise.all(promises)
+              .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
+              .catch((err)=>console.log(err));
+      }
+      
+      getPaymentHistory(user);
+     
+    
+    }, [user,id])
 
 
     useEffect(() => {
@@ -71,6 +94,20 @@ function BillingDetails() {
           <td>{element.mass}</td>
         </tr>
       ));
+
+      const paymentHistoryRows=paymentHistory && paymentHistory?.map((payment)=>(
+        <tr key={payment.paymentID}>
+          <td>{format(payment.date.toDate(),"do MMMM yyyy")}</td>
+          <td>
+          <Badge color={payment.status==="successful"?"green":"dark"} variant="light">
+          {payment.status}
+        </Badge>
+            </td>
+          <td>{payment.amount}</td>
+          <td>{payment.paymentMethod}</td>
+        </tr>
+
+      ))
   return (
     <div className="flex h-screen overflow-hidden">
 
@@ -109,19 +146,23 @@ function BillingDetails() {
                 
                 <p className='text-sm text-gray-500 font-semibold'>📍{listing.details?.locationDescription}</p>
                 
-                <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
-               
-                <div className='flex flex-row m-2 items-center'>
-                  <MdIcons.MdOutlinePeopleAlt />
-                  <p className='px-1 '>6 clients</p>
-                </div>
-                <div className='flex flex-row m-2 items-center'>
-                  <MdIcons.MdOutlineReport />
-                  <p className='px-1 '>10 requests</p>
-                </div>
-
-                </div>
               
+            </div>
+
+
+
+            <div className='p-5 h-fit text-black font-semibold bg-white rounded-xl m-5 cursor-pointer  select-none '>
+            
+
+              <div className='flex ml-2 p-5 flex-col bg-orange-100'>
+              <p className='text-xs font-semibold text-gray-600 '>Next Payment</p>
+                <p className='text-xl font-bold justify-center '>Ksh. 5000</p>
+                
+                  <p className='text-sm font-semibold text-gray-800 '>on {listing ? format(listing?.nextPayment.toDate(),"do MMMM yyyy"): "Unknown"}</p>
+             </div>
+              
+           
+
             </div>
           
             </div>
@@ -131,23 +172,23 @@ function BillingDetails() {
                 <Table>
       <thead>
         <tr>
-          <th>Element position</th>
-          <th>Element name</th>
-          <th>Symbol</th>
-          <th>Atomic mass</th>
+          <th>Payment Date</th>
+          <th>Status</th>
+          <th>Amount</th>
+          <th>Payment Method</th>
         </tr>
       </thead>
-      <tbody>{rows}</tbody>
+      <tbody>{paymentHistoryRows}</tbody>
     </Table>
     </div>
 
                 </div>
                 <div className="flex-grow-[2] ">
                     <h4 className='px-5 font-semibold text-xl text-slate-900'>Payment Method</h4>
-                    <Chips direction='column' radius='md' size='xl' className='m-5' >
-                        <Chip value="mpesa" >mpesa</Chip>
-                        <Chip value="wire" >wire</Chip>
-                        <Chip value="paypal" >paypal</Chip>
+                    <Chips direction='column' radius='md' size='xl' className='m-5' color="yellow" multiple={false} value={value} onChange={setValue} >
+                        <Chip value="mpesa" ><Image height={35} width={40} src={imgmpesa}  alt='ad image' objectFit='cover' /></Chip>
+                        <Chip value="wire" ><Image height={35} width={40} src={imgwire}  alt='ad image' objectFit='cover' /></Chip>
+                        <Chip value="paypal" ><Image height={35} width={40} src={imgpaypal}  alt='ad image' objectFit='cover' /></Chip>
                     </Chips>
 
                     <h4 className='px-5 font-semibold text-xl text-slate-900'>Details</h4>
@@ -171,7 +212,7 @@ function BillingDetails() {
                   <h4>Total:</h4>
                   <p className='text-[#FAB038] mb-3'>KES 5000</p>
               </div>
-              <button className=' border-2 border-orange-200 bg-orange-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl '
+              <button className=' border-2 border-orange-200 bg-[#FAB038] w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl '
             >Continue to Pay</button>
 
             </div>
