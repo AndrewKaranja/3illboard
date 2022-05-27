@@ -51,9 +51,9 @@ function Preview() {
     const userDocRef = doc(db, "users", `${user.uid}`);
     const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID)
     const promises=[];
-    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
+    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
     promises.push(uploadUserListing);
-    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
+    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
     promises.push(uploadListing);
     // console.log(FieldValue.increment(1));
 
@@ -93,7 +93,7 @@ function Preview() {
       setLocation(listingLocation);
       
       setHash(geohashForLocation([listingLocation.lat,listingLocation.long]))
-      console.log(hash);
+      
      }
      if (photosURLS) {
       setPhotosURLS(photosURLS);
