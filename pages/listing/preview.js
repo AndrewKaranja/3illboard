@@ -22,7 +22,7 @@ import "swiper/css/pagination";
 
 // import required modules
 import { EffectFade, Navigation, Pagination } from "swiper";
-import { collection,addDoc,serverTimestamp,setDoc,doc, Firestore} from 'firebase/firestore';
+import { writeBatch,collection,addDoc,serverTimestamp,setDoc,doc, Firestore} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 
@@ -46,21 +46,28 @@ function Preview() {
  
 
   const addListing =async(user)=>{
-   
     const listingDocRef=doc(db,"listings",listingID);
     const userDocRef = doc(db, "users", `${user.uid}`);
-    const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID)
+    const listingUserDocRef=doc(db,`users/${user.uid}/listings`,listingID);
     const promises=[];
-    const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
-    promises.push(uploadUserListing);
-    const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
-    promises.push(uploadListing);
-    // console.log(FieldValue.increment(1));
+    const increment = firebase.firestore.FieldValue.increment(1);
 
 
-     const increment = firebase.firestore.FieldValue.increment(1);
-    const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:increment}, { merge: true });
-    promises.push(setUserType);
+    const batch = writeBatch(db);
+    batch.set(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
+    batch.set(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
+    batch.update(userDocRef,{usertype:"lister",totalListings:increment});
+
+    const addListingBatch= await batch.commit();
+    promises.push(addListingBatch);
+   
+    
+    // const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
+    // promises.push(uploadUserListing);
+    // const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
+    // promises.push(uploadListing);
+    // const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:increment}, { merge: true });
+    // promises.push(setUserType);
   
     Promise.all(promises)
   .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
@@ -143,7 +150,7 @@ function Preview() {
         
             
 
-            <div className='items-center sm:h-1/3 w-full justify-self-center bg-white  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
+            <div className='items-center sm:h-1/3 w-fit justify-self-center bg-white  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
         <div className='relative  h-52 w-full  flex-shrink-0'>
         {/* <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/> */}
         <Swiper
@@ -192,11 +199,7 @@ function Preview() {
             </div>
         </div>
         </div>
-        
 
-        </div>
-
-           
         <div className="flex p-2 mt-4">
             <button className="text-base hover:scale-110 focus:outline-none flex justify-center px-4 py-2 rounded font-bold cursor-pointer 
         hover:bg-gray-200  
@@ -214,6 +217,12 @@ function Preview() {
                
             </div>
         </div>
+        
+
+        </div>
+
+           
+        
 
             
                
