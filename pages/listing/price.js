@@ -19,6 +19,9 @@ function Price() {
         price:Yup.number()
         .min(4,'Must be atleast KES.999')
         .required('Price is required'),
+        minimum:Yup.number()
+        .max(90,'Must be less than 90 days')
+        .required('Value is required'),
         
       });
 
@@ -90,10 +93,10 @@ function Price() {
                         </Field>
                 </div>
 
-                <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Minimum Booking period</div>
+                <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Minimum Listing period in days</div>
                             <div className="w-full flex-1 mx-2">
                               <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <Field id="minimum" name="minimum" type="number" placeholder="KES" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
+                                <Field id="minimum" name="minimum" type="number" placeholder="in days" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
                                 <ErrorMessage component="div"  name="minimum" className="text-red-600"/> </div>
                             </div>
 
