@@ -158,7 +158,7 @@ function BillingDetails() {
               <p className='text-xs font-semibold text-gray-600 '>Next Payment</p>
                 <p className='text-xl font-bold justify-center '>Ksh. 5000</p>
                 
-                  <p className='text-sm font-semibold text-gray-800 '>on {listing ? format(listing?.nextPayment.toDate(),"do MMMM yyyy"): "Unknown"}</p>
+                  <p className='text-sm font-semibold text-gray-800 '>on {listing.nextPayment ? format(listing?.nextPayment.toDate(),"do MMMM yyyy"): "Unknown"}</p>
              </div>
               
            

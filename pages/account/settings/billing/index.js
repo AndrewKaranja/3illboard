@@ -51,10 +51,10 @@ function Billing() {
           <td>
           <Image height={50} width={50} src={listing.photosURLS?.[0]}  alt='ad image' objectFit='cover' /></td>
           <td>{listing.details.billboardTitle}</td>
-          <td>{format(listing.lastPayment.toDate(),"do MMMM yyyy")}</td>
-          <td>{format(listing.nextPayment.toDate(),"do MMMM yyyy")}</td>
+          <td>{listing.lastPayment ? format(listing.lastPayment.toDate(),"do MMMM yyyy"): "Unknown"}</td>
+          <td>{listing.lastPayment ? format(listing.nextPayment.toDate(),"do MMMM yyyy"): "Unknown"}</td>
           <td><Badge color={listing.paymentStatus==="pending"?"red":"green"} variant="light">
-        {listing.paymentStatus}
+        {listing?.paymentStatus}
         </Badge></td>
           <td>Ksh 5000</td>
           <td><button className=' text-white bg-emerald-500 text-xs px-3 py-1 h-fit font-semibold rounded'>Pay</button></td>
