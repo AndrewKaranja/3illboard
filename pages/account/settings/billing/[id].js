@@ -24,6 +24,7 @@ import {
     format,
   } from 'date-fns';
 import { withProtected } from '../../../../hooks/route';
+import PaypalCheckoutButton from '../../../../components/dashboard/PaypalCheckoutButton';
 
 function BillingDetails() {
     const {user}=useAuth();
@@ -35,6 +36,10 @@ function BillingDetails() {
     const basic=["Client Chat Features","Listing analytics","Calender Scheduling","Booking"];
     const [listing,setListing]=useState("");
     const [paymentHistory,setPaymentHistory]=useState("");
+    const product={
+      productid:listing?.listingid,
+      listingowner:listing?.owneremail,
+    }
 
 
     useEffect(() => {
@@ -101,8 +106,7 @@ function BillingDetails() {
           <td>
           <Badge color={payment.status==="successful"?"green":"dark"} variant="light">
           {payment.status}
-        </Badge>
-            </td>
+        </Badge></td>
           <td>{payment.amount}</td>
           <td>{payment.paymentMethod}</td>
         </tr>
@@ -184,12 +188,12 @@ function BillingDetails() {
 
                 </div>
                 <div className="flex-grow-[2] ">
-                    <h4 className='px-5 font-semibold text-xl text-slate-900'>Payment Method</h4>
+                    {/* <h4 className='px-5 font-semibold text-xl text-slate-900'>Payment Method</h4>
                     <Chips direction='column' radius='md' size='xl' className='m-5' color="yellow" multiple={false} value={value} onChange={setValue} >
                         <Chip value="mpesa" ><Image height={35} width={40} src={imgmpesa}  alt='ad image' objectFit='cover' /></Chip>
                         <Chip value="wire" ><Image height={35} width={40} src={imgwire}  alt='ad image' objectFit='cover' /></Chip>
                         <Chip value="paypal" ><Image height={35} width={40} src={imgpaypal}  alt='ad image' objectFit='cover' /></Chip>
-                    </Chips>
+                    </Chips> */}
 
                     <h4 className='px-5 font-semibold text-xl text-slate-900'>Details</h4>
                     <div className='p-5 h-fit text-black font-semibold bg-white rounded-xl m-5 cursor-pointer  select-none '>
@@ -212,8 +216,14 @@ function BillingDetails() {
                   <h4>Total:</h4>
                   <p className='text-[#FAB038] mb-3'>KES 5000</p>
               </div>
-              <button className=' border-2 border-orange-200 bg-[#FAB038] w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl '
-            >Continue to Pay</button>
+              <PaypalCheckoutButton product={product} listingID={id} />
+              {/* <button className=' border-2 border-orange-200 bg-[#FAB038] w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl '
+            >Continue to Pay</button> */}
+            
+            
+
+            
+            
 
             </div>
 
