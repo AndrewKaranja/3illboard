@@ -76,7 +76,7 @@ function Dashboard() {
               
             
               <div className='col-span-full xl:col-span-6'>
-              <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} />
+              {/* <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} /> */}
               
               <DashboardCard02 />
               
