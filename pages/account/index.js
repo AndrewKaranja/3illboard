@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import Sidebar from '../../components/dashboard/Sidebar';
 import SidebarClient from '../../components/dashboard/SidebarClient';
 import Header from '../../components/dashboard/Header';
@@ -24,12 +24,24 @@ import NewRequestsCard from '../../components/dashboard/NewRequestsCard';
 
 function Dashboard() {
   const {user}=useAuth();
-    const {userInfo}=useUserType();
-
+  const {userInfo}=useUserType();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const [show,setShow]=useState(false);
   const [notification, setNotification] = useState({title:"",body:""});
+  useEffect(() => {
+    firebaseCloudMessaging.init();
+    const setToken = async () => {
+      const token = await firebaseCloudMessaging.tokenInlocalforage();
+      if (token) {
+        setMounted(true);
+        // not working
+        console.log("token",token)
+      }
+    };
+    const result = setToken();
+    console.log("result", result);
+  }, []);
+
   const messaging = getMessaging();
   console.log(show,notification);
   onMessage(messaging,(payload) => {
@@ -44,6 +56,11 @@ function Dashboard() {
 
   return (
     <div className="flex h-screen overflow-hidden">
+    <Head>
+    <title>Dashboard</title>
+    <meta name="description" content="3ilboard dashboard" />
+    <link rel="icon" href="/3illboardLogoMini.ico" />
+  </Head>
 
       {/* Sidebar */}
       {userInfo?.usertype==="client" && <SidebarClient sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }

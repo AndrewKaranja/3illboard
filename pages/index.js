@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
 import Banner from '../components/Banner'
 import Header from '../components/Header'
@@ -29,7 +29,7 @@ export default function Home() {
       <Head>
         <title>3illboard</title>
         <meta name="description" content="A billboard marketplace" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/3illboardLogoMini.ico" />
       </Head>
 
       {/* Header */}

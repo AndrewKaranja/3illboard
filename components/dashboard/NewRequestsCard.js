@@ -63,7 +63,7 @@ function NewRequestsCard() {
               <p className='text-xs'>{request?.email}</p>
           </div>
           <div onClick={()=>{handleRequestedListing(request?.listingid)}}  className='text-xs text-ellipsis overflow-hidden hover:text-[#fab038] hover:cursor-pointer  whitespace-nowrap inline-block'>A beautiful billboard in ngong</div>
-          <div><h4 className='font-semibold text-sm text-gray-700'>24 July-30 Sept</h4></div>
+          <div><h4 className='font-semibold text-sm text-gray-700'>{request?.requestedPeriod}</h4></div>
           <button onClick={()=>{handleRespondClick(request?.chatid)}} className='bg-[#fab038] text-white text-xs p-1 h-fit font-semibold rounded'>Respond</button>
 
       </div>

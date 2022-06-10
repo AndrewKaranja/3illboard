@@ -3,6 +3,7 @@ import {  query, orderBy, doc, getDoc,getDocs,collection,where } from "firebase/
 import { db } from '../../../firebase';
 import Image from 'next/image';
 import Sidebar from '../../../components/dashboard/Sidebar';
+import SidebarClient from '../../../components/dashboard/SidebarClient';
 import Header from '../../../components/dashboard/Header';
 import { useAuth } from '../../../context/AuthContext';
 import {useUserType} from '../../../context/UserTypeContext';
@@ -31,7 +32,8 @@ function Chat({chat,messages}) {
   return (
     <div className="flex h-screen  bg-gray-100  max-h-[100vh]">
          {/* Sidebar */}
-    <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+         {userInfo?.usertype==="client" && <SidebarClient sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
+{userInfo?.usertype==="lister" && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> }
        {/* Content area */}
        <div className="relative flex flex-col flex-1 overflow-hidden max-h-screen">
 
