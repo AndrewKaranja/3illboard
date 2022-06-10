@@ -56,32 +56,6 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { db } from '../../firebase';
 import ListingModal from '../../components/ListingModal';
 
-
-
-
-
-
-// export async function getServerSideProps() {
-//   const listingsRef = collection(db, "listings");
-//   const listingQuery=query(listingsRef,where('activated','==',false));
- 
-//   const listingsRes=await getDocs(listingQuery) ;
-
-//     const listings=listingsRes.docs?.map((doc)=>({
-//         id:doc.id,
-//         ...doc.data(),
-//     }));
-
-
-//   return{
-//     props:{
-
-//       listing:JSON.stringify(listings),
-//     }
-//   }
-// }
-
-
 export default function ListingDetails() {
   const {user}=useAuth();
   const{query:{id}}=useRouter();
@@ -97,13 +71,14 @@ export default function ListingDetails() {
 
   // remember to fix this issue---> when user is logged out
   // this section returns an error
-  const userChatRef = collection(db, "chats");
-  const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
-  const [chatsSnapshot]=useCollection(chatsQuery);
-  const chatAlreadyExists=(recepientEmail)=>
-  !!chatsSnapshot?.docs.find(
-      (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
-      );
+  // const userChatRef = collection(db, "chats");
+  // const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
+  // const [chatsSnapshot]=getDocs(chatsQuery);
+
+  // const chatAlreadyExists=(recepientEmail)=>
+  // !!chatsSnapshot?.docs.find(
+  //     (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
+  //     );
 
   const validate=Yup.object({
     message:Yup.string()
@@ -175,17 +150,28 @@ const messageEnquiry=()=>{
 }
 
 const handleEnquireClick= async()=>{
+
  
   if(!user){
     const prevPath=router.pathname;
             router.push({
                 pathname:'/login',
                 query:{
-                  prevPath:prevPath
+                  prevPath:`/search/${listing?.listingid}`
                 }
               })
   }else{
-    setShowModal(true);
+    const requestedPeriod=`${format(startDate,"do 'of' MMMM yyyy")} - ${format(endDate,"do 'of' MMMM yyyy")}`
+    router.push({
+      pathname:'/enquire',
+      query:{
+        owneremail:listing?.owneremail,
+        listingID:listing?.listingid,
+        ownerID:listing?.ownerid,
+        billboardTitle:listing?.details?.billboardTitle,
+        requestedPeriod:requestedPeriod,
+      }
+    })
 
   }
 
@@ -273,7 +259,9 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
             <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
               onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button>
               
-            </div>
+            
+              </div>
+
             {handleCanlendar(showCalendar)}
             {/* {()=>{
               if (showCalendar) {
@@ -417,267 +405,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
           </div>
 
-          {/* modal popup start */}
-          {showModal ? (
-        <>
-        {/* <ListingModal/> */}
-
-        <div className="justify-center  items-center flex overflow-x-hidden overflow-y-auto fixed  inset-0 z-50 outline-none focus:outline-none">
-            <div className="relative w-auto my-5 mx-auto max-w-3xl">
-              {/*content*/}
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                {/*header*/}
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
-                    Ready to Book?
-                  </h3>
-                  <button
-                    className="bg-transparent border-0 text-black float-right"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="text-black opacity-7 h-6 w-6 text-xl block bg-gray-400 py-0 rounded-full">
-                      x
-                    </span>
-                  </button>
-                </div>
-                {/*body*/}
-                <div className="relative p-6 flex-auto">
-                  <p className="my-2 text-slate-500 text-lg leading-relaxed">
-                  Enter your contact details, and we will let the ad manager know you
-                   want to submit an application. If they are interested, they will contact you with next steps.
-                    
-                  </p>
-
-
-
-                  <Formik
-                initialValues={{
-                message:'',
-                fname:'',
-                email:'',
-                phone:'',
-                
-                          }}
-
-                          validationSchema={validate}
-                          onSubmit={async (values)=>{
-                            
-                           
-                            setMessageInfo({
-                              fname:values.fname,
-                              message:values.message,
-                              email:values.email,
-                              phone:values.phone,
-                           });
-
-                           console.log(values.fname);
-                           const clientMessage=`Hello ${listing?.owneremail},${values.fname} 
-                           is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid} 
-                           availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")} . Additional message:${values.message}`;
-
-                           
-                           if(user?.email!==listing?.owneremail &&
-                            !chatAlreadyExists(listing?.owneremail)){
-                             
-                                const chatRef = await addDoc(collection(db, "chats"), {
-                                  users:[user.email,listing?.owneremail],
-                                  lastMessage:clientMessage,
-                                  lastMessageTime:serverTimestamp(),
-                                  lastSender:user?.email,
-                                });
-                                setChatRefId(chatRef.id) ;
-
-                                const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
-                                const requestCollectionRef=collection(db,`users/${listing?.ownerid}/requests`)
-                                const messageDoc=await addDoc(messagesCollectionRef, {
-                                  timestamp: serverTimestamp(),
-                                  message:clientMessage,
-                                  user:user.email
-                                  
-                                });
-                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedStart:startDate,requestedEnd:endDate,listingid:listing?.listingid,chatid:chatRef.id,listingTitle:listing?.details?.billboardTitle,requestTime:serverTimestamp()})
-
-                            }else{
-                              const chatRef=chatsSnapshot?.docs.find((chat)=>chat.data().users.find(user=>user===listing?.owneremail));
-                              setChatRefId(chatRef.id);
-                              const messagesCollectionRef=collection(db,`chats/${chatRef.id}/messages`);
-                              const requestCollectionRef=collection(db,`users/${listing?.ownerid}/requests`)
-                              const messageDoc=await addDoc(messagesCollectionRef, {
-                                timestamp: serverTimestamp(),
-                                message:clientMessage,
-                                user:user.email
-                                
-                              });
-                              const chatDocRef=doc(db,"chats",chatRef.id);
-
-                          await setDoc(chatDocRef,{lastMessage:clientMessage,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true });
-                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedStart:startDate,requestedEnd:endDate,listingid:listing?.listingid,listingTitle:listing?.details?.billboardTitle,chatid:chatRef.id,requestTime:serverTimestamp()})
-
-                            }
-                            
-
-                            // chatsSnapshot?.docs.find(
-                            //   (chat)=>chat.data().users.find(user=>user===recepientEmail)?.length>0
-                            //   );
-                            
-                            
-
-                           //update Last seen
-                          const userDocRef=doc(db,"users",user.uid);
-                          setDoc(userDocRef,{lastSeen:serverTimestamp(),phone:values.phone}, { merge: true });
-                          
-                        
-
-
-                  
-
-                          setShowModal(false)
-                        // router.push(`/account/messages/${chatRefId}`);
-                           
-                          }}
-                          
-                          >
-
-                {formik=>(
-                  <div>
-                
-                    
-                    <Form>
-                     
-                        <div className=" p-1">
-                        <div>
-                            
-
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 ">Message<p className='text-[0.5rem] lowercase'>(Ask questions)</p></div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                              <textarea
-                              name="message"
-                              id="message"   
-                              placeholder="You may enter some of your specification"
-                              className="p-1 px-2 appearance-none outline-none w-full text-gray-800"
-                              onChange={formik.handleChange}
-                              value={formik.values.message}
-                              rows={4}
-                              cols={5}
-                              />
-                               
-                                
-                                 </div>
-                                 <ErrorMessage component="div" name="message" className="text-red-600"/>
-                            </div>
-
-                            <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">First and Last Name</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                                <Field id='fname' name="fname" placeholder="Your names" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
-                            
-                                
-                                 </div>
-                                 <ErrorMessage component="div"  name="fname" className="text-red-600"/>
-                            </div>
-
-
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Email</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                              <Field name="email"  placeholder="email" type="email" className="p-1 px-2 appearance-none outline-none w-full text-gray-800"/>
-                                
-                                 </div>
-                                 <ErrorMessage component="div" name="email" className="text-red-600"/>
-                            </div>
-
-
-                            <div className="flex flex-row font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Phone</div>
-                            <div className="w-full flex-1 mx-2">
-                              <div className="bg-white my-2 p-1 flex border border-gray-200 rounded">
-                              <PhoneInput
-                              name="phone"
-                              id="phone"
-                            inputProps={{
-                                name: 'phone',
-                                required: true,
-                                autoFocus: true
-                              }}
-                            country={'ke'}
-                            value={formik.values.phone}
-                            onChange={formik.handleChange('phone')}/>
-                                
-                                 </div>
-                                 <ErrorMessage component="div" name="phone" className="text-red-600"/>
-                            </div>
-
-
-                            
-
-
-                           
-
-
-
-            
-            
-           
-            
-            
-        </div>
-        
-        <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="submit"
-                    
-                  >
-                    Send Request
-                  </button>
-                </div>
-    
-</div>
-                                </Form>
-                                </div>
-                          )}
-                      </Formik>
-
-
-
-
-
-
-
-
-
-
-
-                  <p className="my-2 text-slate-500 text-xs">
-
-                 
-                  You agree to 3illboard Terms of Use and Privacy Policy. 
-                  By choosing to contact an adlister, you also agree that 3illboard,
-                   ad owners, and ad managers may call or text you about any inquiries
-                    you submit through our services.
-                      </p>
-
-
-                </div>
-                
-              </div>
-            </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-
-
-
-        </> 
-      ) : null}
-
-          {/* modal popup end */}
+       
 
     </div>
       
