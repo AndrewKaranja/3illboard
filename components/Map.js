@@ -19,7 +19,7 @@ function Map({searchResults}) {
   
   const markers = useMemo(()=> JSON.parse(searchResults)?.map((result)=>(
     
-    <div key={result?.created}>
+    <div key={result?.listingid}>
      
           <Marker
           longitude={result?.location?.long}
@@ -69,7 +69,7 @@ function Map({searchResults}) {
   return (
     <ReactMapGL
     mapStyle='mapbox://styles/karanjah/ckzmwpzfk003m14p4x5mrjswi'
-    style={{width: '40vw', height: '100vh'}}
+    style={{width: '100%', height: '100%'}}
     {...viewstate}
     onMove={(nextViewstate)=>setViewstate(nextViewstate)}
     mapboxAccessToken={process.env.mapbox_key}
