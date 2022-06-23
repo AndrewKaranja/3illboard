@@ -5,6 +5,7 @@ import { withProtected } from '../hooks/route';
 import {useRouter} from "next/router";
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+import { LoadingOverlay, Affix,Notification } from '@mantine/core';
 import * as Yup from 'yup';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -20,6 +21,8 @@ function Enquire() {
     const {owneremail,listingID,ownerID,billboardTitle,requestedPeriod}=router.query;
     const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
     const [chatsSnapshot]=useCollectionOnce(chatsQuery);
+    const [visible, setVisible] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
   
     const chatAlreadyExists=(recepientEmail)=>
     !!chatsSnapshot?.docs.find(
@@ -71,6 +74,13 @@ function Enquire() {
                    want to submit an application. If they are interested, they will contact you with next steps.
                     
                   </p>
+                  <LoadingOverlay visible={visible} />
+                  
+                   {isOwner && <Affix position={{ bottom: 20, right: 20 }}>
+                  <Notification title="Wait a minute" color="yellow">
+                   Seems like you own this listing
+                   </Notification>
+                   </Affix> }
 
 
 
@@ -85,6 +95,7 @@ function Enquire() {
 
                           validationSchema={validate}
                           onSubmit={async (values)=>{
+                            setVisible(true);
                             
                            
                             setMessageInfo({
@@ -96,7 +107,7 @@ function Enquire() {
 
                            console.log(values.fname);
                            const clientMessage=`Hello ${owneremail},${values.fname} 
-                           is inquiring about your Listing http://localhost:3000/account/listings/${listingID} 
+                           is inquiring about your Listing http://3illboard.com/account/listings/${listingID} 
                            availability from ${requestedPeriod} . Additional message:${values.message}`;
 
                            
@@ -126,7 +137,7 @@ function Enquire() {
                                   
                                 });
                                 promises.push(messageDoc);
-                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingID:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
+                                const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingid:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
                                 promises.push(requestDoc);
                                 // batch.set(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingID:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
                                 const userDoc=await setDoc(userDocRef,{lastSeen:serverTimestamp(),phone:values.phone}, { merge: true });
@@ -135,7 +146,11 @@ function Enquire() {
 
                                 Promise.all(promises).then(()=>{router.push(`/account/messages/${chatRef.id}`);}).catch((err)=>console.log(err));
 
-                            }else{
+                            }else if(user?.email===owneremail){
+                              setIsOwner(true);
+
+                            }
+                            else{
                               const promises=[];
                               // const batch = writeBatch(db);
                               const chatRef=chatsSnapshot?.docs.find((chat)=>chat.data().users.find(user=>user===owneremail));
@@ -154,7 +169,7 @@ function Enquire() {
                               const chatDocRef=doc(db,"chats",chatRef.id);
                               const chatDoc=await setDoc(chatDocRef,{lastMessage:clientMessage,lastMessageTime:serverTimestamp(),lastSender:user.email},{ merge: true });
                               promises.push(chatDoc);
-                              const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingID:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
+                              const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingid:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
                               promises.push(requestDoc);
                               const userDoc=await setDoc(userDocRef,{lastSeen:serverTimestamp(),phone:values.phone}, { merge: true });
                               promises.push(userDoc);
@@ -257,7 +272,7 @@ function Enquire() {
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => router.back() }
                   >
                     Close
                   </button>
