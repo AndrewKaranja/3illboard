@@ -4,11 +4,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export":"next export",
+    "export": "next export",
     "start": "next start",
     "lint": "next lint",
-    "proxystart":"node index",
-    "proxydev":"nodemon index"
+    "proxystart": "node index",
+    "proxydev": "nodemon index"
   },
   "dependencies": {
     "@babel/preset-react": "^7.16.7",
@@ -62,6 +62,7 @@
     "tailwind-scrollbar-hide": "^1.1.7",
     "timeago-react": "^3.0.4",
     "use-places-autocomplete": "^1.11.0",
+    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {
