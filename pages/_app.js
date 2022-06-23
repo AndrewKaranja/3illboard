@@ -16,6 +16,7 @@ import { useState } from "react";
 import { firebaseCloudMessaging, onMessageListener } from "../firebase";
 import ReactNotificationComponent from "../components/Notifications/ReactNotification";
 import Notifications from "../components/Notifications/Notifications";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 
 const progress=new ProgressBar({
@@ -32,19 +33,19 @@ Router.events.on('routeChangeError',progress.finish);
 function MyApp({ Component, pageProps }) {
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    firebaseCloudMessaging.init();
-    const setToken = async () => {
-      const token = await firebaseCloudMessaging.tokenInlocalforage();
-      if (token) {
-        setMounted(true);
-        // not working
-        console.log("token",token)
-      }
-    };
-    const result = setToken();
-    console.log("result", result);
-  }, []);
+  // useEffect(() => {
+  //   firebaseCloudMessaging.init();
+  //   const setToken = async () => {
+  //     const token = await firebaseCloudMessaging.tokenInlocalforage();
+  //     if (token) {
+  //       setMounted(true);
+  //       // not working
+  //       console.log("token",token)
+  //     }
+  //   };
+  //   const result = setToken();
+  //   console.log("result", result);
+  // }, []);
 
 
 
@@ -52,11 +53,15 @@ function MyApp({ Component, pageProps }) {
  
 
   return(
+    
     <AuthContextProvider>
       <UserTypeContextProvider>
+      <PayPalScriptProvider options={{"client-id":`${process.env.NEXT_PUBLIC_PAYPAL_CLIENTID_KEY}`,intent: "subscription",vault: true}}>
       <Component {...pageProps} />
+      </PayPalScriptProvider>
       </UserTypeContextProvider>
      </AuthContextProvider>
+     
 
   )
 }
