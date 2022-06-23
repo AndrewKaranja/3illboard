@@ -21,7 +21,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { EffectFade, Navigation, Pagination } from "swiper";
+import { EffectFade, Navigation, EffectFlip, Pagination } from "swiper";
 import { writeBatch,collection,addDoc,serverTimestamp,setDoc,doc, Firestore} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
@@ -79,7 +79,7 @@ function Preview() {
     <SwiperSlide key={photosURL}>
             
             {/* <Image src={photosURL} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl w-full h-full'/> */}
-            <img src={photosURL} alt="listing images" />
+            <Image src={photosURL} layout="fill" alt='ad image' objectFit="contain"  className='rounded-2xl w-full h-full'/>
         </SwiperSlide>
   </>
   )
@@ -153,21 +153,16 @@ function Preview() {
             <div className='items-center sm:h-1/3 w-fit justify-self-center bg-white  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
         <div className='relative  h-52 w-full  flex-shrink-0'>
         {/* <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/> */}
-        <Swiper
-        spaceBetween={30}
-        effect={"fade"}
+      
+      <Swiper
+        effect={"flip"}
+        grabCursor={true}
+        pagination={true}
         navigation={true}
-        pagination={{
-          clickable: true,
-        }}
-        modules={[EffectFade, Navigation, Pagination]}
-        className=" w-[100%] md:w-[80%] h-[100%] rounded-2xl"
+        modules={[EffectFlip, Pagination, Navigation]}
+        className="lg:w-[40vw] w-[80vw] h-[100%]"
       >
         {images}
-        {/* <SwiperSlide>
-          <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-        </SwiperSlide> */}
-       
       </Swiper>
         </div>
         <div className='flex flex-col flex-grow pl-5 mt-6 sm:mt-0'>

@@ -84,7 +84,8 @@ function Dashboard() {
             <div className="grid grid-cols-12 gap-6">
               <div className='col-span-full xl:col-span-6'>
               <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} />
-              <NewRequestsCard/>
+              
+              {userInfo?.usertype==="lister" && <NewRequestsCard/> }
               {userInfo?.usertype==="client" && <DashboardCardBookings/> }
 {/* {userInfo?.usertype==="lister" && <DashboardCard01 /> } */}
 

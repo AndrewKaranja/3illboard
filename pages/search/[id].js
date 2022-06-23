@@ -44,6 +44,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 import Image from 'next/image';
 import billboard from '../../images/cat.png';
+import preLoadGif from '../../images/uploaded.gif'
 import Link from 'next/link';
 import { async } from '@firebase/util';
 import { collection, doc, getDoc,addDoc,getDocs,query, orderBy,where,setDoc,serverTimestamp  } from "firebase/firestore";
@@ -55,6 +56,7 @@ import { useAuth } from '../../context/AuthContext';
 import LoadingScreen from '../../components/LoadingScreen';
 import { db } from '../../firebase';
 import ListingModal from '../../components/ListingModal';
+import Footer from '../../components/Footer';
 
 export default function ListingDetails() {
   const {user}=useAuth();
@@ -66,6 +68,35 @@ export default function ListingDetails() {
   const [showCalendar,setShowCalendar]=useState(false);
   const [listing,setListing]=useState("");
   const [showModal, setShowModal] = React.useState(false);
+
+  const dates = [];
+
+
+    const getReservations=async ()=>{
+      
+      const q = query(collection(db, `listings/${id}/reservations`), where("status", "==", "booked"));
+
+const querySnapshot = await getDocs(q);
+querySnapshot.forEach((doc) => {
+  
+  // doc.data() is never undefined for query doc snapshots
+  const date = new Date(doc.data().startDate.toDate().getTime());
+
+
+
+  while (date <= doc.data().endDate.toDate()) {
+    dates.push(new Date(date));
+    date.setDate(date.getDate() + 1);
+  }
+
+
+});
+
+
+
+    }
+
+getReservations();
 
 
 
@@ -183,6 +214,7 @@ const handleCanlendar=(isPressed)=>{
     <DateRange
       ranges={[selectionRange]}
       minDate={new Date()}
+      disabledDates={dates}
       rangeColors={["#FAB038"]}
       
       onChange={handleSelect}/>
@@ -223,11 +255,11 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 {/* {loading && <LoadingScreen/>} */}
       
     
-    <div className='flex lg:mt-10 lg:ml-12 lg:mr-12 mb-2   h-84  lg:rounded-xl bg-white select-none '>
+    <div className='flex lg:mt-10 lg:ml-8 lg:mr-8 mb-2   h-84  lg:rounded-xl bg-white select-none '>
     
       <div className='flex flex-col lg:flex-row mx-auto lg:flex-[10]'>
             <div className='relative h-full w-32 flex-grow-[1]  '>
-              <Image src={listing.length==0 ? billboard : listing?.photosURLS?.[0]} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
+              <Image src={listing.length==0 ? preLoadGif : listing?.photosURLS?.[0]} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
               {/* <Link passHref href="/account/listings">
               <AiIcons.AiOutlineRollback className='h-full w-full'/>
               </Link> */}
@@ -283,10 +315,10 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
         </div>
 
         {/* main body */}
-        <div className='flex mt-3 lg:ml-12 lg:mr-12 lg:mb-12 h-84  lg:rounded-xl bg-white cursor-pointer select-none '>
+        <div className='flex  mt-3  h-fit  lg:rounded-xl bg-white cursor-pointer select-none '>
     
-    <div className='flex flex-col  mx-auto lg:flex-row md:flex-[10]'>
-    <div className='h-full  w-[70%] flex-grow-[6] m-5 '>
+    <div className='flex flex-col md:flex-row md:justify-between w-full '>
+    <div className='h-full w-full  md:w-[50%] lg:w-[60%]  md:p-5 '>
 
        <div>
        <h4 className='text-xl text-black font-bold m-2'>Ad Description</h4>
@@ -338,7 +370,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
         pagination={true}
         navigation={true}
         modules={[EffectFlip, Pagination, Navigation]}
-        className="mySwiper lg:w-[60vw] w-[80vw] h-80"
+        className="mySwiper md:w-[45vw] lg:w-[50vw] w-[80vw] h-80"
       >
         {listingImage}
       </Swiper>
@@ -348,8 +380,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
 
           </div>
-          <div className='flex flex-col flex-grow-[4] h-fit'>
-            <div className='p-5 h-fit text-white bg-black rounded-xl m-5'>
+          <div className='flex flex-col md:w-fit w-full h-fit '>
+            <div className='p-5 h-fit w-full md:w-fit   text-white bg-black rounded-xl '>
             <div className='flex '>
               <Image src={billboard} alt='ad image' width={40} height={40} objectFit="cover" className='rounded-2xl'/>
               <div className='flex ml-2  flex-col'>
@@ -371,12 +403,16 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               <p className='text-xs'>to</p>
               <p className='text-xs'>{format(endDate,"do 'of' MMMM yyyy")}</p>
               </div>
+              <div className="mx-auto">
               <DateRange
       ranges={[selectionRange]}
       minDate={new Date()}
       rangeColors={["#FAB038"]}
-      
+      disabledDates={dates}
       onChange={handleSelect}/>
+
+              </div>
+              
               <div className='flex justify-between py-2'>
               <p className='text-xs'>Contact</p>
               <p className='text-xs'>+254 712 345 678</p>
@@ -412,6 +448,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
      
 
       </div>
+      <Footer/>
        
         </div>
   )

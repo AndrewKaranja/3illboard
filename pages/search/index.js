@@ -8,7 +8,7 @@ import Header from '../../components/Header'
 import InfoCard from '../../components/InfoCard';
 import Map from '../../components/Map';
 import {useCollection} from "react-firebase-hooks/firestore";
-import { collection, query, where,getDocs } from "firebase/firestore";
+import { collection, query, where,getDocs, limit , orderBy } from "firebase/firestore";
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 import imgall from '../../images/billboard_yellow2.png';
@@ -20,7 +20,7 @@ import imgmoving from '../../images/movingAd.png';
 import * as AiIcons from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
 
-function Search({listings,searchResults}) {
+function Search({listings}) {
   const router=useRouter();
   const {user}=useAuth();
 const {location,startDate,endDate}=router.query;
@@ -83,7 +83,7 @@ if(startDate && endDate){
         <main className="flex-col lg:flex">
           {showMap && <div className="  lg:right-0 h-[70vh] lg:h-full z-0 lg:fixed lg:top-0 w-full lg:w-[40vw] "><Map searchResults={listings}/></div> }
         
-        {isMobile && <div className=" bg-black w-full h-[10vh] text-center">
+        {isMobile && <div className=" bg-slate-900 w-full h-[10vh] text-center">
           <p className="font-extrabold rounded-t-xl bg-white text-3xl px-auto h-full">_</p>
         </div> }
         
@@ -120,7 +120,7 @@ if(startDate && endDate){
             
         </main>
         {isMobile && <button className='sticky bottom-6 mx-auto px-4 border-2 bg-black rounded-full border-[#FAB038] text-white hover:bg-orange-300 p-2'
-          onClick={()=>{setShowMap(!showMap)}}>{showMap ?'Show List':'Show Map'}</button>}
+          onClick={()=>{setShowMap(!showMap)}}>{showMap ?'Hide Map':'Show Map'}</button>}
         
        
        <div  className="sticky z-50">
@@ -140,7 +140,7 @@ export default Search;
 export async function getServerSideProps() {
   const listingsRef = collection(db, "listings");
   // remember to fix the listingQuery
-  const listingQuery=query(listingsRef,where('activated','==',false));
+  const listingQuery=query(listingsRef,where('activated','==',true), limit(15));
  
   const listingsRes=await getDocs(listingQuery) ;
 
@@ -151,12 +151,11 @@ export async function getServerSideProps() {
 
 
 
-  const searchResults=await fetch('https://links.papareact.com/isz').
-  then(res=>res.json());
+  // const searchResults=await fetch('https://links.papareact.com/isz').
+  // then(res=>res.json());
 
   return{
     props:{
-      searchResults,
       listings:JSON.stringify(listings),
     }
   }
