@@ -72,7 +72,7 @@ function Map({searchResults}) {
     style={{width: '100%', height: '100%'}}
     {...viewstate}
     onMove={(nextViewstate)=>setViewstate(nextViewstate)}
-    mapboxAccessToken={process.env.mapbox_key}
+    mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_key} 
     >
       {markers}
       
