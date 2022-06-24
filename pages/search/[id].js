@@ -149,7 +149,7 @@ getReservations();
   
     }
     if(id){
-      console.log("fetched")
+      // console.log("fetched")
       getListingDetail();
       //const image=listing.photosURLS[0]
       //setBannerImage(image);
@@ -255,7 +255,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 {/* {loading && <LoadingScreen/>} */}
       
     
-    <div className='flex lg:mt-10 lg:ml-8 lg:mr-8 mb-2   h-84  lg:rounded-xl bg-white select-none '>
+    <div className='flex lg:mt-10 lg:ml-8 lg:mr-8 lg:mb-2   h-84  lg:rounded-xl bg-white select-none '>
     
       <div className='flex flex-col lg:flex-row mx-auto lg:flex-[10]'>
             <div className='relative h-full w-32 flex-grow-[1]  '>
@@ -273,9 +273,9 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                     
                 </div>
                 
-                <p className='text-sm text-gray-500 font-semibold'>📍{listing?.details?.billboardDescription}</p>
+                <p className='text-sm text-gray-500 font-semibold'>📍{listing?.details?.locationDescription}</p>
                 
-                <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
+                {/* <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
                
                 <div className='flex flex-row m-2 items-center'>
                   <MdIcons.MdOutlinePeopleAlt />
@@ -286,7 +286,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                   <p className='px-1 '>10 requests</p>
                 </div>
 
-                </div>
+                </div> */}
             
             <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
               onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button>
@@ -315,7 +315,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
         </div>
 
         {/* main body */}
-        <div className='flex  mt-3  h-fit  lg:rounded-xl bg-white cursor-pointer select-none '>
+        <div className='flex  lg:mt-3  h-fit  lg:rounded-xl bg-white cursor-pointer select-none '>
     
     <div className='flex flex-col md:flex-row md:justify-between w-full '>
     <div className='h-full w-full  md:w-[50%] lg:w-[60%]  md:p-5 '>
