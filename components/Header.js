@@ -21,12 +21,14 @@ import { IconContext } from 'react-icons';
 import Transition from '../utils/Transition';
 import { useAuth } from '../context/AuthContext';
 import Avatar from 'react-avatar';
+import { useMediaQuery } from 'react-responsive';
 
 
 
 function Header({placeholder}) {
     const [sidebar, setSidebar] = useState(false);
     const showSidebar = () => setSidebar(!sidebar);
+    const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
     const [searchInput,setSearchInput]=useState("");
     const[startDate,setStartDate]=useState(new Date());
     const[endDate,setEndDate]=useState(new Date());
@@ -134,7 +136,7 @@ function Header({placeholder}) {
 
       </div>
       {/* middle-search */}
-      <div className='flex items-center md:border-2 rounded-full py-2 md:shadow-sm hover:border-2'>
+      <div className='flex items-center w-fit border-2 rounded-full py-2 md:shadow-sm hover:border-[#fab038]'>
           <input 
           value={searchInput}
           onChange={(e)=>setSearchInput(e.target.value)}
@@ -148,12 +150,13 @@ function Header({placeholder}) {
 
       {/* right */}
       <div className='flex items-center space-x-4 justify-end text-gray-500'>
-          <button className='hidden md:inline border-2 border-[#FAB038] rounded text-black hover:bg-orange-300 p-2'
-          onClick={checkLogin}>Add your ad space</button>
+      {!isMobile && <button className='hidden md:inline border-2 border-[#FAB038] rounded text-black hover:bg-orange-300 p-2'
+          onClick={checkLogin}>Add your ad space</button>}
+          
           
           <div className='flex items-center space-x-2 p-2'>
-              
-              <button
+
+          {!isMobile && <button
         ref={trigger}
         className="inline-flex justify-center items-center group"
         aria-haspopup="true"
@@ -169,7 +172,9 @@ function Header({placeholder}) {
             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
           </svg>
         </div>
-      </button>
+      </button>}
+              
+              
               <Transition
         className={user?'origin-top-right z-10 absolute top-full right-0 w-44 px-4 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1':'hidden'}
         show={dropdownOpen}
