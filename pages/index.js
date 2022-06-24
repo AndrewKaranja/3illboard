@@ -47,22 +47,22 @@ export default function Home() {
 
   <SmallCard 
   img={city}
-  ads="500"
+  ads="100+"
   location="Nairobi"
   />
    <SmallCard 
   img={oceancity}
-  ads="500"
+  ads="COMING SOON"
   location="Mombasa"
   />
    <SmallCard 
   img={town}
-  ads="500"
+  ads="COMING SOON"
   location="Kisumu"
   />
   <SmallCard 
   img={town}
-  ads="500"
+  ads="COMING SOON"
   location="Nakuru"
   />
  

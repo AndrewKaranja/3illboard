@@ -9,7 +9,7 @@ function SmallCard({img,location,ads}) {
       
       <div>
           <h2 className="font-semibold">{location}</h2>
-          <h3 className='text-gray-500'>{ads}+</h3>
+          <h3 className='text-gray-500'>{ads}</h3>
       </div>
   </div>;
 }
