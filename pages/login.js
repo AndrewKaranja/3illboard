@@ -24,15 +24,16 @@ function choosePath(hostAd){
 
   } 
 
+
 function Login({user}) {
   const firebaseConfig = {
-    apiKey:`${process.env.firebase_key}`,
+    apiKey:`${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`,
     authDomain: "illboard.firebaseapp.com",
     projectId: "illboard",
     storageBucket: "illboard.appspot.com",
-    messagingSenderId: `${process.env.firebase_messagerID}`,
-    appId: `${process.env.firebase_appID}`,
-    measurementId: `${process.env.firebase_measurementID}`
+    messagingSenderId: `${process.env.NEXT_PUBLIC_FIREBASE_messagerID}`,
+    appId: `${process.env.NEXT_PUBLIC_FIREBASE_appID}`,
+    measurementId: `${process.env.NEXT_PUBLIC_FIREBASE_measurementID}`
   };
   firebase.initializeApp(firebaseConfig);
   const router=useRouter();
