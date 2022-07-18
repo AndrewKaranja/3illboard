@@ -44,8 +44,10 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { db } from '../../firebase';
 import ListingModal from '../../components/ListingModal';
 import Footer from '../../components/Footer';
+import { useUserType } from '../../context/UserTypeContext';
 
 function ListingDetails({prevUrl}) {
+  const {userInfo}=useUserType();
   const {user}=useAuth();
   const{query:{id}}=useRouter();
   const router = useRouter();
@@ -58,7 +60,126 @@ function ListingDetails({prevUrl}) {
   const [showModal, setShowModal] = React.useState(false);
   const [opened, setOpened] = useState(false);
 
+
   const dates = [];
+  const createStreamChatDemo =async ()=>{
+    const promises=[];
+    const docRef = doc(db, "users", `${user.uid}`);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setStreamUserToken(docSnap.data().streamUserToken);
+        console.log("Document data:", docSnap.data());
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    const client = StreamChat.getInstance(`${process.env.NEXT_PUBLIC_STEAMCHAT_APIKEY}`);
+    const userToken =`${streamUserToken}`;
+    const connectedUser= await client.connectUser(
+      {
+        id: user?.uid,
+        name: user?.displayName,
+        image: user?.photoURL,
+      },
+      userToken,);
+      promises.push(connectedUser);
+        const channel = client.channel('messaging', {
+          members: [`${user?.uid}`, `${listing?.ownerid}`],
+          created_by_id: `${user?.uid}`,
+          membersEmails:[`${user?.email}`,`${listing?.owneremail}`],
+        });
+      const channelState=await channel.watch();
+      promises.push(channelState);
+        Promise.all(channelState).then(async ()=>{
+          const messageHeader = await channel.sendMessage({
+            text: `Hello , Enquiry about your Listing http://3illboard.com/account/listings/${listing?.listingID} 
+            availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")}.`,
+            attachments: [
+              {
+                type: 'image',
+                asset_url: `${listing?.photosURLS?.[0]}`,
+                thumb_url: `${listing?.photosURLS?.[0]}`,
+              }
+            ],
+          });
+          promises.push(messageHeader);
+          const message = await channel.sendMessage({
+            text: `${values.message}`,
+          });
+          promises.push(message);
+
+        })
+        .catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
+
+        Promise.all(promises)
+.then(()=>{ router.push(`/account/inbox`);})
+.catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
+        
+
+
+  }
+  const createStreamChat = async (values)=>{
+    
+    const promises=[];
+    const client = StreamChat.getInstance(`${process.env.NEXT_PUBLIC_STEAMCHAT_APIKEY}`);
+    const functions = getFunctions();
+    const getStreamToken= httpsCallable(functions, 'ext-auth-chat-getStreamUserToken');
+    getStreamToken()
+    .then(async (result) => {
+      const userToken =`${result.data}`;
+      console.log(userToken);
+      // setStreamUserToken(userToken);
+    const connectedUser= await client.connectUser(
+        {
+          id: user?.uid,
+          name: user?.displayName,
+          image: user?.photoURL,
+        },
+        userToken,);
+        promises.push(connectedUser);
+        const channel = client.channel('messaging', {
+          members: [`${user?.uid}`, `${listing?.ownerid}`],
+          created_by_id: `${user?.uid}`,
+          membersEmails:[`${user?.email}`,`${listing?.owneremail}`],
+        });
+        console.log(channel);
+
+        const channelState=await channel.watch();
+        promises.push(channelState);
+        
+          const messageHeader = await channel.sendMessage({
+            text: `Hello , Enquiry about your Listing http://3illboard.com/account/listings/${listing?.listingid} 
+            availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")}.`,
+            attachments: [
+              {
+                type: 'image',
+                asset_url: `${listing?.photosURLS?.[0]}`,
+                thumb_url: `${listing?.photosURLS?.[0]}`,
+              }
+            ],
+          });
+          promises.push(messageHeader);
+          const message = await channel.sendMessage({
+            text: `${values.message}`,
+          });
+          promises.push(message);
+
+        
+})
+.catch((error) => {
+// Getting the Error details.
+const code = error.code;
+const message = error.message;
+const details = error.details;
+alert(message);
+// ...
+});
+Promise.all(promises)
+.then(()=>{ router.push(`/account/inbox`);})
+.catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
+
+
+  }
 
 
     const getReservations=async ()=>{
@@ -102,7 +223,7 @@ getReservations();
 
   const validate=Yup.object({
     message:Yup.string()
-    .min(5,'Must be atleast 5 characters')
+    .min(2,'Must be atleast 2 characters')
     .max(50,'Must be 50 characters or less')
     .required('Message is required'),
   });
@@ -293,8 +414,11 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
                 </div> */}
             
-            <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
-              onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button>
+            {/* <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
+              onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button> */}
+
+<button onClick={handleEnquiryClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
+            >📫Enquire</button>
               
             
               </div>
@@ -421,10 +545,9 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
 
   
-          <button onClick={handleEnquireClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
-            >📫Enquire</button>
+        
             <button onClick={handleEnquiryClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
-            >📫Test</button>
+            >📫Enquire</button>
 
 <Dialog
         opened={opened}
@@ -466,64 +589,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                           }
                         })
             }
-            const promises=[];
-            const client = StreamChat.getInstance(`${process.env.NEXT_PUBLIC_STEAMCHAT_APIKEY}`);
-            const functions = getFunctions();
-            const getStreamToken= httpsCallable(functions, 'getStreamToken');
-            getStreamToken({ userID: user.uid })
-            .then(async (result) => {
-              const userToken =`${result.data}`;
-              // setStreamUserToken(userToken);
-            const connectedUser= await client.connectUser(
-                {
-                  id: user?.uid,
-                  name: user?.displayName,
-                  image: user?.photoURL,
-                },
-                userToken,);
-                promises.push(connectedUser);
-                const channel = client.channel('messaging', {
-                  members: [`${user?.uid}`, `${listing?.ownerid}`],
-                  created_by_id: `${user?.uid}`,
-                });
-
-                const channelState=await channel.watch();
-                promises.push(channelState);
-                // Promise.all(channelState).then(()=>{
-
-                // })
-                // .catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
-                const messageHeader = await channel.sendMessage({
-                  text: `Hello , Enquiry about your Listing http://3illboard.com/account/listings/${listing?.listingID} 
-                  availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")}.`,
-                  attachments: [
-                    {
-                      type: 'image',
-                      asset_url: `${listing?.photosURLS?.[0]}`,
-                      thumb_url: `${listing?.photosURLS?.[0]}`,
-                    }
-                  ],
-                });
-                promises.push(messageHeader);
-                const message = await channel.sendMessage({
-                  text: `${values.message}`,
-                });
-                promises.push(message);
-  })
-  .catch((error) => {
-    // Getting the Error details.
-    const code = error.code;
-    const message = error.message;
-    const details = error.details;
-    // ...
-  });
-  Promise.all(promises)
-      .then(()=>{ router.push(`/account/inbox`);})
-      .catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
-
-
-
-
+            await createStreamChat(values);
+            // await createStreamChatDemo();
                           }}
                           >
                             {formik=>(
@@ -555,7 +622,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
             </div>
             {/* Client transactions documents */}
-            <div className='mx-4'>
+            {/* <div className='mx-4'>
               <div className='flex flex-row items-center w-full justify-evenly '>
                 <FcIcons.FcDocument className='w-8 h-8 pr-1'/>
                 <p className='font-semibold text-sm justify-start'>More Details</p>
@@ -563,7 +630,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                 
               </div>
               <div className='border-b mx-4 m-2 border-orange-100'/>
-            </div>
+            </div> */}
               
           </div>
 
@@ -583,9 +650,13 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 export default ListingDetails;
 
 export async function getServerSideProps(context) {
+  let previousURl="";
+  if(context.req.headers.referer){
+    previousURl=context.req.headers.referer;
+  }
   return{
     props:{
-      prevUrl:JSON.stringify(context.req.headers.referer),
+      prevUrl:JSON.stringify(previousURl),
     }
   }
 }
