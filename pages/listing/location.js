@@ -47,7 +47,7 @@ const containerStyle = {
 function Location() {
   const router=useRouter();
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: `${process.env.GOOGLEMAPS_API_KEY}`,
+    googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLEMAPS_API_KEY}`,
     libraries
   });
 

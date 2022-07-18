@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getFunctions } from 'firebase/functions';
 import localforage from 'localforage'
 
 // importScripts('https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js');
@@ -27,12 +28,13 @@ const firebaseConfig = {
 
 // Initialize Firebase
 // Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-// const app = initializeApp(firebaseConfig);
+// const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app = initializeApp(firebaseConfig);
 //  const analytics = getAnalytics(app);
 export const db=getFirestore(app);
 export const auth=getAuth();
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 // export const messaging = getMessaging(app);
 
 

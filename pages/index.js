@@ -22,7 +22,15 @@ import { useUserType } from '../context/UserTypeContext';
 
 export default function Home() {
   const {userInfo}=useUserType();
-  console.log("userinfo"+userInfo?.usertype);
+  const [userType, setUserType] = useState("client");
+  useEffect(() => {
+    if(userInfo!=null){
+      setUserType(userInfo?.userType);
+    }
+    
+  }, [userInfo])
+  
+  console.log("userinfo"+userType);
 
   return (
     <div className="">
