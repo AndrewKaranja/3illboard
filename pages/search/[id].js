@@ -62,62 +62,7 @@ function ListingDetails({prevUrl}) {
 
 
   const dates = [];
-  const createStreamChatDemo =async ()=>{
-    const promises=[];
-    const docRef = doc(db, "users", `${user.uid}`);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setStreamUserToken(docSnap.data().streamUserToken);
-        console.log("Document data:", docSnap.data());
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    const client = StreamChat.getInstance(`${process.env.NEXT_PUBLIC_STEAMCHAT_APIKEY}`);
-    const userToken =`${streamUserToken}`;
-    const connectedUser= await client.connectUser(
-      {
-        id: user?.uid,
-        name: user?.displayName,
-        image: user?.photoURL,
-      },
-      userToken,);
-      promises.push(connectedUser);
-        const channel = client.channel('messaging', {
-          members: [`${user?.uid}`, `${listing?.ownerid}`],
-          created_by_id: `${user?.uid}`,
-          membersEmails:[`${user?.email}`,`${listing?.owneremail}`],
-        });
-      const channelState=await channel.watch();
-      promises.push(channelState);
-        Promise.all(channelState).then(async ()=>{
-          const messageHeader = await channel.sendMessage({
-            text: `Hello , Enquiry about your Listing http://3illboard.com/account/listings/${listing?.listingID} 
-            availability from ${format(startDate,"do 'of' MMMM yyyy")} to ${format(endDate,"do 'of' MMMM yyyy")}.`,
-            attachments: [
-              {
-                type: 'image',
-                asset_url: `${listing?.photosURLS?.[0]}`,
-                thumb_url: `${listing?.photosURLS?.[0]}`,
-              }
-            ],
-          });
-          promises.push(messageHeader);
-          const message = await channel.sendMessage({
-            text: `${values.message}`,
-          });
-          promises.push(message);
-
-        })
-        .catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
-
-        Promise.all(promises)
-.then(()=>{ router.push(`/account/inbox`);})
-.catch((err)=>{console.log(err);alert("Something went wrong while sending message.Please try again in 3 seconds")});
-        
-
-
-  }
+ 
   const createStreamChat = async (values)=>{
     
     const promises=[];
