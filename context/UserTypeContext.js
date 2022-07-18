@@ -20,8 +20,13 @@ export const UserTypeContextProvider=({children})=>{
           const docRef = doc(db, "users", `${user.uid}`);
           const docSnap = await getDoc(docRef);
           promises.push(docSnap);
-         
-          setUserInfo(docSnap?.data()); 
+          if (docSnap.exists()) {
+            setUserInfo(docSnap?.data());
+          } else {
+            
+            console.log("No such user");
+          }
+          
           Promise.all(promises)
           .then(()=>{setLoading(false);})
           .catch((err)=>console.log(err));
