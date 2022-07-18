@@ -369,19 +369,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               </div>
 
             {handleCanlendar(showCalendar)}
-            {/* {()=>{
-              if (showCalendar) {
-              return <div className={showCalendar?'visible':'invisible'}>
-              <DateRange
-                ranges={[selectionRange]}
-                minDate={new Date()}
-                rangeColors={["#FAB038"]}
-                
-                onChange={handleSelect}/>
-  
-              </div>
-              
-            }}} */}
+           
             </div>
         
        
@@ -498,14 +486,15 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
         opened={opened}
         withCloseButton
         onClose={() => setOpened(false)}
-        size="lg"
-        radius="md"
-        className='bg-gray-900'
+        
+        size={350}
+        radius="lg"
+        className='bg-gray-900 right-0'
       >
         <Text size="sm" className='mb-5 text-white' weight={500}>
           Request Period
         </Text>
-        <div className="mx-auto">
+        <div className="max-w-[full]">
               <DateRange
       ranges={[selectionRange]}
       minDate={new Date()}
