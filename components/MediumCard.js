@@ -1,12 +1,13 @@
 import Image from 'next/image'
+import Link from 'next/link'
 function MediumCard({img,title}) {
   return (
-    <div className='cursor-pointer p-16 select-none hover:scale-105 transform transition duration-300 ease-out'>
-        <div className='relative h-80 w-80'>
+    <Link href='/search' passHref><div className='cursor-pointer py-10 px-3 select-none hover:scale-105 transform transition duration-300 ease-out'>
+        <div className='relative h-72 w-72'>
             <Image src={img} layout="fill" alt='medium image' className='rounded-xl '/>
         </div>
-        <h3 className='text-2xl mt-3'>{title}</h3>  
-    </div>
+        <h3 className='block text-2xl mt-3 mx-auto text-center font-semibold'>{title}</h3>  
+    </div></Link>
         
   )
 }
