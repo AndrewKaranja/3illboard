@@ -54,9 +54,6 @@ function NewRequestsCard() {
   const requestRows = requests && requests?.map((request)=>(
       
     <tr key={request.id} >
-      <td>
-      <Image src={UserIcon}alt='user image' objectFit="contain" width={50} height={50} /></td>
-      
       <td>{request?.fname}</td>
       <td>{request.requestedPeriod ? request?.requestedPeriod: "Not set"}</td>
       <td><Badge onClick={()=>{handleRequestedListing(request?.listingid)}} color="green" variant="light">
@@ -77,7 +74,6 @@ function NewRequestsCard() {
         <Table highlightOnHover fontSize="xs" >
       <thead>
         <tr>
-          <th>Avatar</th>
           <th>Name</th>
           
           <th>Requested Period</th>
