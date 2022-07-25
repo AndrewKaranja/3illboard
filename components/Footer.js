@@ -1,4 +1,4 @@
-
+import Link from 'next/link'
 
 function Footer() {
   return (
@@ -33,8 +33,12 @@ function Footer() {
               , All right reserved
             </p>
             <div className="flex justify-center p-2">
+            <Link href='/help/privacy' passHref>
                 <p className="cursor-pointer hover:text-orange-400 hover:scale-105 transition transform duration-200 ease-out">Privacy .</p>
+                </Link>
+                <Link href='/help/terms' passHref>
                 <p className="cursor-pointer hover:text-orange-400 hover:scale-105 transition transform duration-200 ease-out"> Terms .</p>
+                </Link>
                 <p className="cursor-pointer hover:text-orange-400 hover:scale-105 transition transform duration-200 ease-out"> Sitemap</p>
                  
             </div>
