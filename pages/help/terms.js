@@ -30,6 +30,7 @@ If you are a Lister, you are responsible for understanding and complying with al
          </div> 
    </section>
    </main>
+   <Footer/>
       </div>
   )
 }
