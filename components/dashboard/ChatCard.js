@@ -2,9 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import moment from 'moment';
 import {useRouter} from "next/router";
-import billboard from '../../images/cat.png';
-import {useCollection} from "react-firebase-hooks/firestore";
-import { collection, query, where } from "firebase/firestore";
+
+
 import getRecipientEmail from '../../utils/getRecipientEmail';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';

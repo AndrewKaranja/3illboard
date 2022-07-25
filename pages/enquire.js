@@ -4,20 +4,19 @@ import { db } from '../firebase'
 import { withProtected } from '../hooks/route';
 import {useRouter} from "next/router";
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
-import { useCollectionOnce } from 'react-firebase-hooks/firestore';
+// import { useCollectionOnce } from 'react-firebase-hooks/firestore';
 import { LoadingOverlay, Affix,Notification } from '@mantine/core';
 import * as Yup from 'yup';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { useAuth } from '../context/AuthContext';
-import { writeBatch,collection, doc, getDoc,addDoc,getDocs,query, orderBy,where,setDoc,serverTimestamp  } from "firebase/firestore";
-import {addDays,format} from 'date-fns';
+// import { collection, doc, addDoc,query, where,setDoc,serverTimestamp  } from "firebase/firestore";
+
 
 function Enquire() {
     const {user}=useAuth();
     const router=useRouter();
     const userChatRef = collection(db, "chats");
-    const [ChatRefID, setChatRefID] = useState('')
     const {owneremail,listingID,ownerID,billboardTitle,requestedPeriod}=router.query;
     const chatsQuery = query(userChatRef,where('users','array-contains',user?.email));
     const [chatsSnapshot]=useCollectionOnce(chatsQuery);
@@ -105,7 +104,7 @@ function Enquire() {
                               phone:values.phone,
                            });
 
-                           console.log(values.fname);
+                           
                            const clientMessage=`Hello ${owneremail},${values.fname} 
                            is inquiring about your Listing http://3illboard.com/account/listings/${listingID} 
                            availability from ${requestedPeriod} . Additional message:${values.message}`;
@@ -139,7 +138,7 @@ function Enquire() {
                                 promises.push(messageDoc);
                                 const requestDoc=await addDoc(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingid:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
                                 promises.push(requestDoc);
-                                // batch.set(requestCollectionRef,{fname:values.fname,message:values.message,email:values.email,phone:values.phone,requestedPeriod:requestedPeriod,listingID:listingID,chatid:chatRef.id,listingTitle:billboardTitle,requestTime:serverTimestamp()})
+                               
                                 const userDoc=await setDoc(userDocRef,{lastSeen:serverTimestamp(),phone:values.phone}, { merge: true });
                                 promises.push(userDoc);
                                 
@@ -152,7 +151,7 @@ function Enquire() {
                             }
                             else{
                               const promises=[];
-                              // const batch = writeBatch(db);
+                             
                               const chatRef=chatsSnapshot?.docs.find((chat)=>chat.data().users.find(user=>user===owneremail));
                               
                               
@@ -292,18 +291,7 @@ function Enquire() {
                       </Formik>
 
 
-
-
-
-
-
-
-
-
-
                   <p className="my-2 text-slate-500 text-xs">
-
-                 
                   You agree to 3illboard Terms of Use and Privacy Policy. 
                   By choosing to contact an adlister, you also agree that 3illboard,
                    ad owners, and ad managers may call or text you about any inquiries

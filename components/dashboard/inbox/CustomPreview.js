@@ -1,6 +1,6 @@
 import { Avatar,ChannelPreviewUIComponentProps, useChatContext } from 'stream-chat-react';
 import { useAuth } from '../../../context/AuthContext';
-// import './CustomPreview.scss';
+
 
 export const CustomPreview = (ChannelPreviewUIComponentProps) => {
   const { channel, lastMessage, setActiveChannel, setIsCreating } = ChannelPreviewUIComponentProps;

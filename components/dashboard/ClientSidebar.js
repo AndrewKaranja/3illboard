@@ -23,7 +23,7 @@ function ClientSidebar({ sidebarOpen,
 
   useEffect(() => {
     const storedSidebarExpandedState = localStorage.getItem('sidebar-expanded');
-    console.log(storedSidebarExpandedState);
+   
     
     setstoredSidebarExpanded(storedSidebarExpandedState);
   

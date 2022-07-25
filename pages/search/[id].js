@@ -1,19 +1,18 @@
-import React, {  useRef,useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useRouter} from "next/router";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
-import * as MdIcons from 'react-icons/md';
-import * as FcIcons from 'react-icons/fc';
+
 import * as AiIcons from 'react-icons/ai';
-import { Dialog, Group, Button, TextInput, Text } from '@mantine/core';
+import { Dialog, Group, Text } from '@mantine/core';
 import { StreamChat } from 'stream-chat';
 
 import { DateRange } from 'react-date-range';
 
-import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
+import {ErrorMessage,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
-import PhoneInput from 'react-phone-input-2';
+
 import 'react-phone-input-2/lib/style.css';
 import {
   addDays,
@@ -47,13 +46,11 @@ import Footer from '../../components/Footer';
 import { useUserType } from '../../context/UserTypeContext';
 
 function ListingDetails({prevUrl}) {
-  const {userInfo}=useUserType();
+ 
   const {user}=useAuth();
   const{query:{id}}=useRouter();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [streamUserToken,setStreamUserToken] = useState(null);
-  const [response, setResponse] = useState("");
+ 
   const [done, setDone] = useState(undefined);
   const [showCalendar,setShowCalendar]=useState(false);
   const [listing,setListing]=useState("");
@@ -87,7 +84,7 @@ function ListingDetails({prevUrl}) {
           created_by_id: `${user?.uid}`,
           membersEmails:[`${user?.email}`,`${listing?.owneremail}`],
         });
-        console.log(channel);
+    
 
         const channelState=await channel.watch();
         promises.push(channelState);
@@ -174,12 +171,11 @@ getReservations();
   });
 
   const [MessageInfo, setMessageInfo] = useState([]);
-  const [chatRefId, setChatRefId] = useState(null);
+
  
 
   const[startDate,setStartDate]=useState(new Date());
-  // let minimumDays=Number(listing?.minimumListingPeriod);
-  // console.log(String(minimumDays));
+
   const[endDate,setEndDate]=useState(new Date());
 
   useEffect(()=>{
@@ -200,8 +196,7 @@ getReservations();
     async function getListingDetail(){
       const promises=[];
       const docRef = doc(db, "listings", `${id}`);
-      // const reservationsRef=collection(db,`listings/${id}/reservations`);
-      // const reservationsQuerySnapshot = await getDocs(reservationsRef);
+      
       const docSnap = await getDoc(docRef);
       promises.push(docSnap);
       setListing(docSnap.data()); 
@@ -230,39 +225,7 @@ const handleSelect=(ranges)=>{
     setEndDate(addDays(ranges.selection.startDate,Math.max(Number(listing?.price?.minimumBookingPeriod), 1) - 1))
 }
  
-const messageEnquiry=()=>{
-  const enquiry=`Hello ${listing?.owneremail},${MessageInfo?.fname} is inquiring about your Listing http://localhost:3000/account/listings/${listing?.listingid}.Additional message:
-  ${MessageInfo?.message}`
-  return enquiry;
-}
 
-const handleEnquireClick= async()=>{
-
- 
-  if(!user){
-    const prevPath=router.pathname;
-            router.push({
-                pathname:'/login',
-                query:{
-                  prevPath:`/search/${listing?.listingid}`
-                }
-              })
-  }else{
-    const requestedPeriod=`${format(startDate,"do 'of' MMMM yyyy")} - ${format(endDate,"do 'of' MMMM yyyy")}`
-    router.push({
-      pathname:'/enquire',
-      query:{
-        owneremail:listing?.owneremail,
-        listingID:listing?.listingid,
-        ownerID:listing?.ownerid,
-        billboardTitle:listing?.details?.billboardTitle,
-        requestedPeriod:requestedPeriod,
-      }
-    })
-
-  }
-
-}
 
 const handleEnquiryClick= async()=>{
 
@@ -302,7 +265,6 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 <div key={photosURL}>
   <SwiperSlide >   
           <Image src={photosURL} layout="fill" alt='ad image' objectFit="contain"  className='rounded-2xl w-full h-full'/>
-          {/* <img src={photosURL} alt="listing images" /> */}
       </SwiperSlide>
 </div>
 )
@@ -323,7 +285,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
  
       
 
-{/* {loading && <LoadingScreen/>} */}
+
       
     
     <div className='flex lg:mt-10 lg:ml-8 lg:mr-8 lg:mb-2   h-84  lg:rounded-xl bg-white select-none '>
@@ -331,9 +293,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
       <div className='flex flex-col lg:flex-row mx-auto lg:flex-[10]'>
             <div className='relative h-full w-32 flex-grow-[1]  '>
               <Image src={listing.length==0 ? preLoadGif : listing?.photosURLS?.[0]} layout="fill" alt='ad image' objectFit='cover' className='rounded-l-xl rounded-bl-xl'/>
-              {/* <Link passHref href="/account/listings">
-              <AiIcons.AiOutlineRollback className='h-full w-full'/>
-              </Link> */}
+             
               
             </div>
             <div className='flex flex-col flex-grow-[9] p-5 h-fit'>
@@ -346,21 +306,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
                 
                 <p className='text-sm text-gray-500 font-semibold'>📍{listing?.details?.locationDescription}</p>
                 
-                {/* <div className='flex flex-row m-2 items-center font-semibold text-gray-500'>
-               
-                <div className='flex flex-row m-2 items-center'>
-                  <MdIcons.MdOutlinePeopleAlt />
-                  <p className='px-1 '>6 clients</p>
-                </div>
-                <div className='flex flex-row m-2 items-center'>
-                  <MdIcons.MdOutlineReport />
-                  <p className='px-1 '>10 requests</p>
-                </div>
-
-                </div> */}
-            
-            {/* <button className=' border-2 border-orange-200 bg-[#FAB038]  text-white font-semibold hover:bg-orange-300 p-2 w-56 rounded-full'
-              onClick={()=>setShowCalendar(!showCalendar)}>{!showCalendar ? '📅 Show Ad Calendar' :'📅 Hide Ad Calendar'}</button> */}
+              
 
 <button onClick={handleEnquiryClick} className=' border-2 border-orange-200 bg-blue-500 w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl'
             >📫Enquire</button>
@@ -457,14 +403,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               </div>
 
               <div className='border-b pt-2 border-slate-200'/>
-              {/* <div className='flex justify-between py-2'>
-              <p className='text-xs'>Available</p>
-              <p className='text-xs'>{format(startDate,"do 'of' MMMM yyyy")}</p>
-              </div>
-              <div className='flex justify-between py-2'>
-              <p className='text-xs'>to</p>
-              <p className='text-xs'>{format(endDate,"do 'of' MMMM yyyy")}</p>
-              </div> */}
+           
               
               
               <div className='flex justify-between py-2'>
@@ -555,17 +494,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
       </Dialog>
 
             </div>
-            {/* Client transactions documents */}
-            {/* <div className='mx-4'>
-              <div className='flex flex-row items-center w-full justify-evenly '>
-                <FcIcons.FcDocument className='w-8 h-8 pr-1'/>
-                <p className='font-semibold text-sm justify-start'>More Details</p>
-                <RiIcons.RiDownload2Fill className='text-gray-400 content-end'/>
-                
-              </div>
-              <div className='border-b mx-4 m-2 border-orange-100'/>
-            </div> */}
-              
+      
           </div>
 
        

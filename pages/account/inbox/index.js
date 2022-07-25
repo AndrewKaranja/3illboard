@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../../../components/dashboard/Sidebar';
 import SidebarClient from '../../../components/dashboard/SidebarClient';
-import Header from '../../../components/dashboard/Header';
+
 import { useAuth } from '../../../context/AuthContext';
 import {useUserType} from '../../../context/UserTypeContext';
 import { withProtected } from '../../../hooks/route';
@@ -29,36 +29,7 @@ const Inbox = () => {
 
     const [chatClient, setChatClient] = useState(null);
 
-  // useEffect(() => {
-  //   const initChat = async () => {
-  //     // const docRef = doc(db, "users", `${user.uid}`);
-  //     // const docSnap = await getDoc(docRef);
-  //     // if (docSnap.exists()) {
-  //     //   console.log("Document data:", docSnap.data());
-  //     // } else {
-  //     //   // doc.data() will be undefined in this case
-  //     //   console.log("No such document!");
-  //     // }
-  //      const userToken = `${userInfo?.streamUserToken}`;
-  //   const client = StreamChat.getInstance(`${process.env.NEXT_PUBLIC_STEAMCHAT_APIKEY}`);
 
-  //   client.connectUser(
-  //     {
-  //       id:`${user.uid}`,
-  //       name:`${user?.displayName}` ,
-  //       image:`${user?.photoURL}` ,
-  //     },
-  //     userToken,
-  //   );
-
-
-  //   setChatClient(client);
-
-  //   }
-  
-  //   initChat();
-  // }, [user,userInfo])
-  
    
 
   useEffect(() => {

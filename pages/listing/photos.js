@@ -1,13 +1,13 @@
 import React, {useEffect, useState,createRef} from 'react';
 import Image from 'next/image';
-import Head from 'next/head';
+
 import { Dropzone, FileItem, FullScreenPreview } from "@dropzone-ui/react";
 import { useRouter } from 'next/router';
 
 import BackgroundImg from '../../images/streetlights.png';
 import {storage} from "../../firebase";
 import {ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { async } from '@firebase/util';
+
 import {v4} from 'uuid';
 import LoadingScreen from '../../components/LoadingScreen';
 import UploadedScreen from '../../components/UploadedScreen';
@@ -67,7 +67,7 @@ function Photos() {
         async ()=>{
          await getDownloadURL(uploadTask.snapshot.ref).then((urls)=>{
             setUrls((prevState)=>[...prevState,urls]);
-           // console.log('File available at', urls);
+           
           });
         }
         );
@@ -77,7 +77,7 @@ function Photos() {
       Promise.all(promises)
       .then(()=>{setTimeout(() => { setUploading(false);setDone(true); }, 1000);setTimeout(() => {router.push("/listing/price");}, 4000);   })
       .catch((err)=>console.log(err));
-      // console.log("urls",urls);
+      
       
 
      
@@ -86,7 +86,7 @@ function Photos() {
 
     //Update files state
     const updateFiles = (incommingFiles) => {
-      console.log("incomming files", incommingFiles);
+  
       setFiles(incommingFiles);
      // setImages(incommingFiles);
       
@@ -128,16 +128,14 @@ function Photos() {
   return (
     <div className='2xl:container h-screen m-auto'>
      
-      {/* <Head>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"></link>
-      </Head> */}
+    
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block  '>
         
         <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
         <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>Showcase your billboard</h1>
        
         
-        {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
+       
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full overflow-auto ml-auto lg:w-6/12'>

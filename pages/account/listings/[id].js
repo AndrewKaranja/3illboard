@@ -1,8 +1,7 @@
-import React, {  useRef,useEffect, useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import {useRouter} from "next/router";
 import { Timeline, Text,Modal, Button, Group,NativeSelect   } from '@mantine/core';
-import { HeartIcon} from '@heroicons/react/outline'
-import { StarIcon } from '@heroicons/react/solid';
+
 import * as BiIcons from 'react-icons/bi';
 import * as RiIcons from 'react-icons/ri';
 import * as MdIcons from 'react-icons/md';
@@ -31,40 +30,22 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import Image from 'next/image';
 import billboard from '../../../images/cat.png';
 import Link from 'next/link';
-import { async } from '@firebase/util';
+
 import { doc, getDoc,collection,getDocs } from "firebase/firestore";
 import { db } from '../../../firebase';
 import { useAuth } from '../../../context/AuthContext';
-import UploadedScreen from '../../../components/UploadedScreen';
+
 import LoadingScreen from '../../../components/LoadingScreen';
 import AddReservation from '../../../components/dashboard/AddReservation';
-import {
-  addDays,
-  addSeconds,
-  addHours
-} from 'date-fns';
 
 
-// export async function getServerSideProps({params}){
-//   console.log(params.listingid);
-//   const docRef = doc(db, "listings", `${params.id}`);
-//       const docSnap = await getDoc(docRef);
-     
 
-//   const response=JSON.stringify(docSnap.data());
-// return{
-//   props:{
-//     listing:response,
-//   },
-// }
-// }
+
 
 
 export default function ListingDetails() {
   const {user}=useAuth();
   const{query:{id}}=useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [response, setResponse] = useState("");
   const [listing,setListing]=useState("");
   const [done, setDone] = useState(undefined);
   const [showCalendar,setShowCalendar]=useState(false);
@@ -85,7 +66,7 @@ export default function ListingDetails() {
     key:'selection',
 }
 const reservedDates=[];
-console.log("Selection Range"+selectionRange);
+
 const handleSelect=(ranges)=>{
     setStartDate(ranges.selection.startDate)
     setEndDate(ranges.selection.endDate)
@@ -98,16 +79,10 @@ const handleReservations=()=>{
 
 const handleCanlendar=(isPressed)=>{
   if (isPressed) {
-    console.log(" reserved testing"+reservedDates);
+   
     return <div className='flex mt-3 lg:ml-12 lg:mr-12 lg:mb-12  h-[40rem]  rounded-xl bg-white cursor-pointer select-none '>
       <div className='w-full h-[36rem] m-3'>
-    {/* <DateRange
-    ranges={reservedDates}
-      
-      staticRanges={reservedDates}
-      rangeColors={["#FAB038","#f0f0f0"]}
-      
-     /> */}
+
      <FullCalendar
   plugins={[ dayGridPlugin ]}
   height="100%"
@@ -150,8 +125,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
        
         reservedDates.push(event);
         
-        console.log("eventstart"+event.start);
-        console.log("reservedDates"+reservedDates);
+      
       });
 
       // Another option for this
@@ -162,14 +136,14 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
           allDay:true,
           backgroundColor:doc.data().background,
     }))
-  console.log("somereserved start"+results.start);
+
     // setSomeReserved(results);
     setBookings(results);
 
 
       const docSnap = await getDoc(docRef);
       promises.push(docSnap);
-      console.log(docSnap)
+      
       setListing(docSnap.data()); 
       Promise.all(promises)
       .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
@@ -178,8 +152,8 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
     }
     if(id){
       getListingDetail(user);
-      //const image=listing.photosURLS[0]
-      //setBannerImage(image);
+     
+ 
     }
     
    
@@ -199,7 +173,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
               
               </Link>
       
-      {console.log("Hello",id)}
+     
      
      
       {!done ?(<LoadingScreen/>):(
@@ -246,19 +220,7 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
             </div>
             {/* {handleCanlendar(showCalendar)} */}
 
-            {/* {()=>{
-              if (showCalendar) {
-              return <div className={showCalendar?'visible':'invisible'}>
-              <DateRange
-                ranges={[selectionRange]}
-                minDate={new Date()}
-                rangeColors={["#FAB038"]}
-                
-                onChange={handleSelect}/>
-  
-              </div>
-              
-            }}} */}
+           
             </div>
         
        
@@ -361,14 +323,10 @@ const listingImage=listing?.photosURLS?.map((photosURL)=>
 
 <div>
 <h4 className='font-bold text-xl m-4'>Ad Space overview</h4>
-{/* <div className='flex  p-3'>
-<Image src={billboard} alt='ad image' width={100} height={100}  objectFit="fit" className='rounded-2xl m-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl m-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl mx-5'/>
-<Image src={billboard} alt='ad image' width={100} height={100} objectFit="cover" className='rounded-2xl mx-5'/>
 
 
-</div> */}
+
+
 <Swiper
         effect={"flip"}
         grabCursor={true}

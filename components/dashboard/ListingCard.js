@@ -36,10 +36,7 @@ export default function ListingCard({img,title,location,activated,interval,price
                 
                 <p className='text-sm text-gray-500'>{location}</p>
                 <div className='border-b w10 pt-1'/>
-                {/* <p className='pt-2 text-sm text-gray-500 flex-grow'>{otherServices?.map((service)=>
-          
-          <> {service} .</>
-        )}</p> */}
+               
     
                 <div className='flex justify-between items-end pt-2'>
                 <p className='flex items-center'>

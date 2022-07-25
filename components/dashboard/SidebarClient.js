@@ -2,26 +2,15 @@ import React, { useState, useEffect, useRef }  from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Logo from '../../images/Logo.png';
 import OfficialLogoWhite from '../../images/3illboardLogoWhite.svg';
 import OfficialLogoMiniWhite from '../../images/3illboardLogoMiniWhite.svg';
 import SidebarLinkGroup from './SidebarLinkGroup';
-import { useAuth } from '../../context/AuthContext';
-import { useUserType } from '../../context/UserTypeContext';
 
-function SidebarClient({ sidebarOpen,
-  setSidebarOpen
-}) {
+
+function SidebarClient({ sidebarOpen,setSidebarOpen}) {
  
-  const {user}=useAuth();
- const {userInfo}=useUserType();
- 
-  
   const router = useRouter();
-  // const location = useLocation();
-  // const { router.pathname } = location;
-  const { asPath } = useRouter();
-  //const { pathname } = "/";
+
 
  const trigger = useRef(null);
   const sidebar = useRef(null);
@@ -31,7 +20,6 @@ function SidebarClient({ sidebarOpen,
   useEffect(() => {
     // Perform localStorage action
     const storedSidebarExpandedState = localStorage.getItem('sidebar-expanded');
-    console.log(storedSidebarExpandedState);
     
     setstoredSidebarExpanded(storedSidebarExpandedState);
   
@@ -142,18 +130,6 @@ function SidebarClient({ sidebarOpen,
               </Link>
             </li>
     
-                {/* Messages */}
-                {/* <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('messages') && 'bg-slate-900'}`}>
-              <Link passHref href="/account/messages" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('messages') && 'hover:text-slate-200'}`}>
-                <div className="flex items-center hover:cursor-pointer">
-                  <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                    <path className={`fill-current text-slate-600 ${router.pathname.includes('messages') && 'text-indigo-500'}`} d="M14.5 7c4.695 0 8.5 3.184 8.5 7.111 0 1.597-.638 3.067-1.7 4.253V23l-4.108-2.148a10 10 0 01-2.692.37c-4.695 0-8.5-3.184-8.5-7.11C6 10.183 9.805 7 14.5 7z" />
-                    <path className={`fill-current text-slate-400 ${router.pathname.includes('messages') && 'text-[#fab038]'}`} d="M11 1C5.477 1 1 4.582 1 9c0 1.797.75 3.45 2 4.785V19l4.833-2.416C8.829 16.85 9.892 17 11 17c5.523 0 10-3.582 10-8s-4.477-8-10-8z" />
-                  </svg>
-                  <span className="text-sm text-white font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Messages</span>
-                </div>
-              </Link>
-            </li> */}
 
             {/* Inbox */}
             <li className={`px-3 py-2 rounded-sm mb-0.5 last:mb-0 ${router.pathname.includes('/inbox') && 'bg-slate-900'}`}>
@@ -184,18 +160,18 @@ function SidebarClient({ sidebarOpen,
             
     
             {/* Settings */}
-            <SidebarLinkGroup activecondition={router.pathname.includes('profile')}>
+            <SidebarLinkGroup activecondition={router.pathname.includes('settings')}>
               {(handleClick, open) => {
                 return (
                   <React.Fragment>
-                    <a href="#0" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('profile') && 'hover:text-slate-200'}`} onClick={(e) => { e.preventDefault(); sidebarExpanded ? handleClick() : setSidebarExpanded(true) }}>
+                    <a href="#0" className={`block text-slate-200 hover:text-white truncate transition duration-150 ${router.pathname.includes('settings') && 'hover:text-slate-200'}`} onClick={(e) => { e.preventDefault(); sidebarExpanded ? handleClick() : setSidebarExpanded(true) }}>
                       <div className="flex items-center justify-between hover:cursor-pointer">
                         <div className="flex items-center">
                           <svg className="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                            <path className={`fill-current text-slate-600 ${router.pathname.includes('profile') && 'text-orange-500'}`} d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z" />
-                            <path className={`fill-current text-slate-400 ${router.pathname.includes('profile') && 'text-orange-300'}`} d="M10.714 18.3c.4-.195.84-.298 1.286-.3a3 3 0 11-3 3c.002-.446.105-.885.3-1.286l-6.007-6.007 1.414-1.414 6.007 6.007z" />
-                            <path className={`fill-current text-slate-600 ${router.pathname.includes('profile') && 'text-orange-500'}`} d="M5.7 10.714c.195.4.298.84.3 1.286a3 3 0 11-3-3c.446.002.885.105 1.286.3l7.007-7.007 1.414 1.414L5.7 10.714z" />
-                            <path className={`fill-current text-slate-400 ${router.pathname.includes('profile') && 'text-orange-300'}`} d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z" />
+                            <path className={`fill-current text-slate-600 ${router.pathname.includes('settings') && 'text-orange-500'}`} d="M19.714 14.7l-7.007 7.007-1.414-1.414 7.007-7.007c-.195-.4-.298-.84-.3-1.286a3 3 0 113 3 2.969 2.969 0 01-1.286-.3z" />
+                            <path className={`fill-current text-slate-400 ${router.pathname.includes('settings') && 'text-orange-300'}`} d="M10.714 18.3c.4-.195.84-.298 1.286-.3a3 3 0 11-3 3c.002-.446.105-.885.3-1.286l-6.007-6.007 1.414-1.414 6.007 6.007z" />
+                            <path className={`fill-current text-slate-600 ${router.pathname.includes('settings') && 'text-orange-500'}`} d="M5.7 10.714c.195.4.298.84.3 1.286a3 3 0 11-3-3c.446.002.885.105 1.286.3l7.007-7.007 1.414 1.414L5.7 10.714z" />
+                            <path className={`fill-current text-slate-400 ${router.pathname.includes('settings') && 'text-orange-300'}`} d="M19.707 9.292a3.012 3.012 0 00-1.415 1.415L13.286 5.7c-.4.195-.84.298-1.286.3a3 3 0 113-3 2.969 2.969 0 01-.3 1.286l5.007 5.006z" />
                           </svg>
                           <span className="text-sm text-white font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Settings</span>
                         </div>
@@ -208,35 +184,31 @@ function SidebarClient({ sidebarOpen,
                       </div>
                     </a>
                     <div className="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                      <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
+                    <ul className={`pl-9 mt-1 ${!open && 'hidden'}`}>
                         <li className="mb-1 last:mb-0">
                           <Link passHref href="/account/settings/profile" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
                             <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Account</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Notifications</span>
+                          <Link passHref href="/account/settings/notifications" className="block text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">My Notifications</span>
+                          </Link>
+                        </li>
+                        
+                        <li className="mb-1 last:mb-0">
+                          <Link passHref href="/account/settings/pricing" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Plans</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Connected Apps</span>
+                          <Link passHref href="/account/settings/billing" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Billing and Invoices</span>
                           </Link>
                         </li>
                         <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Plans</span>
-                          </Link>
-                        </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Billing & Invoices</span>
-                          </Link>
-                        </li>
-                        <li className="mb-1 last:mb-0">
-                          <Link passHref href="/" className="block hover:cursor-pointer text-slate-400 hover:text-slate-200 transition duration-150 truncate">
-                            <span className="text-sm text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Give Feedback</span>
+                          <Link passHref href="/account/settings/feedback" className="block  text-slate-400 hover:text-slate-200 transition duration-150 truncate">
+                            <span className="text-sm hover:cursor-pointer text-white font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Give Feedback</span>
                           </Link>
                         </li>
                       </ul>

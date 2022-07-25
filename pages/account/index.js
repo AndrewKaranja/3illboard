@@ -4,12 +4,12 @@ import Sidebar from '../../components/dashboard/Sidebar';
 import SidebarClient from '../../components/dashboard/SidebarClient';
 import Header from '../../components/dashboard/Header';
 import WelcomeBanner from '../../components/dashboard/WelcomeBanner';
-import DashboardCard01 from '../../components/dashboard/CardCustomers';
+
 import DashboardCardBookings from '../../components/dashboard/BookingsCard';
 
 import DashboardCard02 from '../../components/dashboard/RecentCard';
 
-import { useAuth } from '../../context/AuthContext';
+
 import {useUserType} from '../../context/UserTypeContext';
 
 
@@ -23,7 +23,7 @@ import ListingsOverviewCard from '../../components/dashboard/ListingsOverviewCar
 import NewRequestsCard from '../../components/dashboard/NewRequestsCard';
 
 function Dashboard() {
-  const {user}=useAuth();
+ 
   const {userInfo}=useUserType();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [show,setShow]=useState(false);
@@ -35,23 +35,23 @@ function Dashboard() {
       if (token) {
         setMounted(true);
         // not working
-        console.log("token",token)
+       
       }
     };
     const result = setToken();
-    console.log("result", result);
+   
   }, []);
 
   const messaging = getMessaging();
-  console.log(show,notification);
+
   onMessage(messaging,(payload) => {
-    console.log('Message received. ', payload);
+    
     setShow(true);
   setNotification({
     title:payload.notification.title,
     body:payload.notification.body,
   });
-  console.log("Payload"+payload);
+ 
   });
 
   return (
@@ -85,16 +85,16 @@ function Dashboard() {
               <div className='col-span-full xl:col-span-6'>
               {userInfo?.usertype==="lister" && <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} />}
               
-              {/* {userInfo?.usertype==="lister" && <NewRequestsCard/> } */}
+             
               {userInfo?.usertype==="client" && <DashboardCardBookings/> }
-{/* {userInfo?.usertype==="lister" && <DashboardCard01 /> } */}
+
 
               </div>
 
               
             
               <div className='col-span-full xl:col-span-6'>
-              {/* <ListingsOverviewCard totalListings={userInfo?.totalListings} enquiries={userInfo?.totalRequests} bookings={userInfo?.totalAdsActive} /> */}
+             
               
               <DashboardCard02 />
               

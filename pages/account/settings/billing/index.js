@@ -85,22 +85,7 @@ function Billing() {
 </div>
 
 
-{/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 ">
-        <div className="p-3 my-2 bg-white rounded flex flex-col justify-between">
-        <svg className="shrink-0 h-8 w-8" viewBox="0 0 24 24">
-                    <path className="fill-current text-indigo-500" d="M0 20h24v2H0z" />
-                    <path className="fill-current text-[#fab038]" d="M4 18h2a1 1 0 001-1V8a1 1 0 00-1-1H4a1 1 0 00-1 1v9a1 1 0 001 1zM11 18h2a1 1 0 001-1V3a1 1 0 00-1-1h-2a1 1 0 00-1 1v14a1 1 0 001 1zM17 12v5a1 1 0 001 1h2a1 1 0 001-1v-5a1 1 0 00-1-1h-2a1 1 0 00-1 1z" />
-                  </svg>
-                  <div>
-                  <h4 className="text-xs font-semibold text-gray-500">Total amount Due</h4> 
-            <p className="text-xl font-bold text-gray-700">200</p>
 
-                  </div>
-            
-        </div>
-        Hello
-    
-    </div> */}
 
 
 

@@ -1,5 +1,5 @@
-import React,{useState,useEffect} from 'react';
-import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
+import React,{useState} from 'react';
+import {ErrorMessage,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -70,9 +70,8 @@ import 'react-phone-input-2/lib/style.css';
                               phone:values.phone,
                            });
                            
-                           //console.log(listingInfo);
+                          
                            setShowModal(false)
-                        //    router.push("/account/messages");
                            
                           }}
                           
@@ -185,24 +184,13 @@ import 'react-phone-input-2/lib/style.css';
 
 
 
-
-
-
-
-
-
-
-
                   <p className="my-4 text-slate-500 text-sm leading-relaxed">
-
-                 
                   You agree to 3illboard Terms of Use and Privacy Policy. 
                   By choosing to contact an adlister, you also agree that 3illboard,
                    ad owners, and ad managers may call or text you about any inquiries
                     you submit through our services, which may involve use of automated means
                      and prerecorded/artificial voices.  Message/data rates may apply.
                       </p>
-
 
                 </div>
                 

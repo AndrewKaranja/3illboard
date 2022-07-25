@@ -67,7 +67,7 @@ function BillingDetails() {
     
           const docSnap = await getDoc(docRef);
           promises.push(docSnap);
-          console.log(docSnap)
+         
           setListing(docSnap.data()); 
           Promise.all(promises)
           .then(()=>{setTimeout(() => { setDone(true);}, 2000);})
@@ -188,12 +188,7 @@ function BillingDetails() {
 
                 </div>
                 <div className="flex-grow-[2] ">
-                    {/* <h4 className='px-5 font-semibold text-xl text-slate-900'>Payment Method</h4>
-                    <Chips direction='column' radius='md' size='xl' className='m-5' color="yellow" multiple={false} value={value} onChange={setValue} >
-                        <Chip value="mpesa" ><Image height={35} width={40} src={imgmpesa}  alt='ad image' objectFit='cover' /></Chip>
-                        <Chip value="wire" ><Image height={35} width={40} src={imgwire}  alt='ad image' objectFit='cover' /></Chip>
-                        <Chip value="paypal" ><Image height={35} width={40} src={imgpaypal}  alt='ad image' objectFit='cover' /></Chip>
-                    </Chips> */}
+                   
 
                     <h4 className='px-5 font-semibold text-xl text-slate-900'>Details</h4>
                     <div className='p-5 h-fit text-black font-semibold bg-white rounded-xl m-5 cursor-pointer  select-none '>
@@ -217,8 +212,7 @@ function BillingDetails() {
                   <p className='text-[#FAB038] mb-3'>KES 5000</p>
               </div>
               <PaypalCheckoutButton product={product} listingID={id} />
-              {/* <button className=' border-2 border-orange-200 bg-[#FAB038] w-full  text-white font-semibold hover:bg-orange-300 p-2  rounded-xl '
-            >Continue to Pay</button> */}
+              
             
             
 

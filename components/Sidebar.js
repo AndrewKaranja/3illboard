@@ -1,7 +1,6 @@
 import React,{useState} from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
-import * as IoIcons from 'react-icons/io';
 import Link from 'next/link'
 import { SidebarData} from './Data/SidebarData';
 import {SidebarDataLoggedIn } from './Data/SidebarDataLoggedIn';

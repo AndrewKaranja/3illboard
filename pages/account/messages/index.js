@@ -13,12 +13,7 @@ import { collection, query, where,orderBy } from "firebase/firestore";
 
 
 
-import * as BiIcons from 'react-icons/bi';
-import * as RiIcons from 'react-icons/ri';
-import * as MdIcons from 'react-icons/md';
-import * as FcIcons from 'react-icons/fc';
 import ChatCard from '../../../components/dashboard/ChatCard';
-import ChatScreen from '../../../components/dashboard/ChatScreen';
 import SidebarClient from '../../../components/dashboard/SidebarClient';
 
 function Messages() {
@@ -29,7 +24,7 @@ function Messages() {
     const userChatRef = collection(db, "chats");
     const chatsQuery = query(userChatRef,where('users','array-contains',user.email));
     const [chatsSnapshot]=useCollection(chatsQuery);
-    console.log("usertype"+userInfo?.usertype)
+    
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const chatAlreadyExists=(recepientEmail)=>
@@ -60,14 +55,14 @@ function Messages() {
 
           <SearchIcon className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
-           {chatsSnapshot?.docs.map((chat)=>(
+           {/* {chatsSnapshot?.docs.map((chat)=>(
                <ChatCard key={chat.id} id={chat.id} 
                users={chat.data().users}
                lastMessage={chat.data().lastMessage} 
                lastSender={chat.data().lastSender} 
                lastMessageTime={chat.data().lastMessageTime?.toDate().getTime()}
                />
-           ))}
+           ))} */}
             {/* <ChatCard/> */}
               
 </div>

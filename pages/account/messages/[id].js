@@ -19,7 +19,7 @@ import ChatScreen from '../../../components/dashboard/ChatScreen';
 function Chat({chat,messages}) {
     const {user}=useAuth();
     const {userInfo}=useUserType();
-    console.log(userInfo);
+   
     const [sidebarOpen, setSidebarOpen] = useState(true);
     //get chats snapshots
     const userChatRef = collection(db, "chats");
@@ -50,19 +50,19 @@ function Chat({chat,messages}) {
 
           <SearchIcon className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
-           {chatsSnapshot?.docs.map((chat)=>(
+           {/* {chatsSnapshot?.docs.map((chat)=>(
                <ChatCard key={chat.id} id={chat.id} users={chat.data().users} 
                lastMessage={chat.data()?.lastMessage} 
                lastSender={chat.data()?.lastSender} 
                lastMessageTime={chat.data()?.lastMessageTime?.toDate().getTime()} />
-           ))}
+           ))} */}
             {/* <ChatCard/> */}
             
 </div>
 
 {/*chat screen*/}
           <div className='flex flex-col flex-grow-[9] w-full h-full'>
-            <ChatScreen messages={messages} chat={chat}/>
+            {/* <ChatScreen messages={messages} chat={chat}/> */}
           </div>
 
 
@@ -74,45 +74,45 @@ function Chat({chat,messages}) {
 }
 export default withProtected(Chat);
 
-export async function getServerSideProps(context){ 
-    console.log(context.query.id)
-    const collectionRef = collection(db,`chats/${context.query.id}/messages`);
-    const ref = doc(db,"chats",context.query.id);
+// export async function getServerSideProps(context){ 
+   
+//     const collectionRef = collection(db,`chats/${context.query.id}/messages`);
+//     const ref = doc(db,"chats",context.query.id);
  
-    //const ref=collection(db,`chats/${context.query.id}/messages`);
+//     //const ref=collection(db,`chats/${context.query.id}/messages`);
    
 
-    //prep the messages on the server
+//     //prep the messages on the server
 
-    const q=query(collectionRef,orderBy("timestamp","asc"))
+//     const q=query(collectionRef,orderBy("timestamp","asc"))
     
-    const messagesRes=await getDocs(q) ;
+//     const messagesRes=await getDocs(q) ;
 
-    const messages=messagesRes.docs?.map((doc)=>({
-        id:doc.id,
-        ...doc.data(),
-    })).map(messages=>({
-        ...messages,
-        timestamp:messages.timestamp.toDate().getTime()
-    }));
+//     const messages=messagesRes.docs?.map((doc)=>({
+//         id:doc.id,
+//         ...doc.data(),
+//     })).map(messages=>({
+//         ...messages,
+//         timestamp:messages.timestamp.toDate().getTime()
+//     }));
 
-    //prep the chats
-    //There is an error here to fix
-    const chatRes=await getDoc(ref);
-    const chat={
-        id:chatRes.id,
-        lastMessage:chatRes.data().lastMessage,
-        lastMessageTime:chatRes.data().lastMessageTime.toDate().getTime(),
-        lastSender:chatRes.data().lastSender,
-        users:chatRes.data().users,
-    }
+//     //prep the chats
+//     //There is an error here to fix
+//     const chatRes=await getDoc(ref);
+//     const chat={
+//         id:chatRes.id,
+//         lastMessage:chatRes.data().lastMessage,
+//         lastMessageTime:chatRes.data().lastMessageTime.toDate().getTime(),
+//         lastSender:chatRes.data().lastSender,
+//         users:chatRes.data().users,
+//     }
 
-    return{
-        props:{
-            messages:JSON.stringify(messages),
-            chat:chat,
-        }
-    }
+//     return{
+//         props:{
+//             messages:JSON.stringify(messages),
+//             chat:chat,
+//         }
+//     }
 
-}
+// }
 

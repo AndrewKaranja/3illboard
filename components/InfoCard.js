@@ -29,14 +29,13 @@ function InfoCard({img,id,location,title,description,star,price,total}) {
             
 
             <div className='flex justify-between items-end pt-5'>
-            <p className='flex items-center'>
+            <p className='flex items-center invisible'>
             <StarIcon className='h-5 text-[#FAB038]'/>
-            {/* {star} */}
             3.5
             </p>
             <div>
                 <p className='text-xs font-semibold pb-2'>KES{price.price}/{price.interval}</p>
-                {/* <p className='text-right font-extralight'>{total}</p> */}
+               
             </div>
         </div>
         </div>

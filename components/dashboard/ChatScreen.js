@@ -7,13 +7,10 @@ import {useRouter} from "next/router";
 import Avatar from 'react-avatar';
 import { PaperClipIcon,DotsVerticalIcon,EmojiHappyIcon } from '@heroicons/react/outline'
 import { useAuth } from '../../context/AuthContext';
-import {useCollection} from "react-firebase-hooks/firestore";
-import {  query, orderBy, doc, addDoc, collection,serverTimestamp,setDoc, Firestore, where } from "firebase/firestore";
-import { db } from '../../firebase';
 import Message from './Message';
-import * as IoIcons from 'react-icons/io';
+
 import TimeAgo from 'timeago-react'; 
-import { FirebaseError } from 'firebase/app';
+
 import getRecipientEmail from '../../utils/getRecipientEmail';
 import * as AiIcons from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';

@@ -21,8 +21,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 // import required modules
-import { EffectFade, Navigation, EffectFlip, Pagination } from "swiper";
-import { writeBatch,collection,addDoc,serverTimestamp,setDoc,doc, Firestore} from 'firebase/firestore';
+import { Navigation, EffectFlip, Pagination } from "swiper";
+import { writeBatch,serverTimestamp,doc} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
 
@@ -34,15 +34,13 @@ function Preview() {
   const [price, setPrice] = useState([]);
   const [location, setLocation] = useState([]);
   const [photosURLS, setPhotosURLS] = useState([]);
-  //const [photos, setPhotos] = useState([]);
+
   const [legalsURLS, setLegalsURLS] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [hash,setHash]=useState(null);
   const listingID=v4();
 
- // const usersCollectionRef=collection(db,"users");
-  //const listingsCollectionRef=collection(db,`users/${user.uid}/listings`);
-  //const listingsMainCollectionRef=collection(db,"listings");
+
  
 
   const addListing =async(user)=>{
@@ -61,13 +59,7 @@ function Preview() {
     const addListingBatch= await batch.commit();
     promises.push(addListingBatch);
    
-    
-    // const uploadUserListing=setDoc(listingUserDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,activated:false,rating:0.00,geohash:hash});
-    // promises.push(uploadUserListing);
-    // const uploadListing=setDoc(listingDocRef,{details,price,location,photosURLS,legalsURLS,listingType:details.listingType,paymentStatus:"pending",created:serverTimestamp(),listingid:listingID,ownerid:user.uid,owneremail:user.email,activated:false,rating:0.00,geohash:hash});
-    // promises.push(uploadListing);
-    // const setUserType=setDoc(userDocRef,{usertype:"lister",totalListings:increment}, { merge: true });
-    // promises.push(setUserType);
+
   
     Promise.all(promises)
   .then(()=>{localStorage.clear(); setTimeout(() => { router.push("/account");}, 1000);})
@@ -78,7 +70,7 @@ function Preview() {
   <>
     <SwiperSlide key={photosURL}>
             
-            {/* <Image src={photosURL} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl w-full h-full'/> */}
+
             <Image src={photosURL} layout="fill" alt='ad image' objectFit="contain"  className='rounded-2xl w-full h-full'/>
         </SwiperSlide>
   </>
@@ -125,16 +117,13 @@ function Preview() {
 
   return (
     <div className='2xl:container h-screen m-auto'>
-      {/* <Head>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"></link>
-      </Head> */}
+     
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block  '>
         
         <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
         <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>TaaDaaah!</h1>
        
-        
-        {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
+
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12 overflow-auto bg-slate-100'>
@@ -152,7 +141,7 @@ function Preview() {
 
             <div className='items-center sm:h-1/3 w-fit justify-self-center bg-white  border-[#FAB038]  p-6 border-2 rounded-lg cursor-pointer select-none hover:opacity-80 hover:shadow-lg  transition duration-100 ease-out '>
         <div className='relative  h-52 w-full  flex-shrink-0'>
-        {/* <Image src={CatImg} layout="fill" alt='ad image' objectFit='cover' className='rounded-2xl'/> */}
+
       
       <Swiper
         effect={"flip"}
@@ -179,7 +168,7 @@ function Preview() {
               <> {service} .</>
             )}</p>
             {details.otherServices?.map((service)=>{
-              //console.log(service);
+             
               <p className='text-black' key={service}>{service}</p>
             })}
 

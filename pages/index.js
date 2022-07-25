@@ -30,7 +30,7 @@ export default function Home() {
     
   }, [userInfo])
   
-  console.log("userinfo"+userType);
+
 
   return (
     <div className="">
@@ -116,22 +116,4 @@ title="Moving Ads"/>
 
 
 
-// export async function getStaticProps() {
-//   // To be edited to add 3illboard api
-//   const exploreData=await fetch('https://links.papareact.com/pyp').
-//   then(
-//     (res)=>res.json()
-//     );
 
-//     const cardsData=await fetch('https://links.papareact.com/zp1').
-//     then(
-//       (res)=>res.json()
-//       );
-    
-//     return{
-//       props:{
-//         exploreData,
-//         cardsData,
-//       }
-//     }
-// }

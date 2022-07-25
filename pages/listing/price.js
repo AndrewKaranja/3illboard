@@ -27,16 +27,14 @@ function Price() {
 
   return (
     <div className='2xl:container h-screen m-auto'>
-      {/* <Head>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"></link>
-      </Head> */}
+    
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block  '>
         
         <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
         <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>Time to set your price</h1>
        
         
-        {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
+       
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
@@ -56,7 +54,7 @@ function Price() {
                           validationSchema={validate}
                           onSubmit={values=>{
                             
-                                console.log(values)
+                             
                                 setlistingPrice({
                                   price:values.price,
                                   interval:values.interval,

@@ -7,7 +7,7 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import InfoCard from '../../components/InfoCard';
 import Map from '../../components/Map';
-import {useCollection} from "react-firebase-hooks/firestore";
+
 import { collection, query, where,getDocs, limit , orderBy } from "firebase/firestore";
 import { db } from '../../firebase';
 import { useAuth } from '../../context/AuthContext';
@@ -39,7 +39,7 @@ useEffect(() => {
 if(startDate && endDate){
   const formattedStartDate=format(new Date(startDate),"dd MMMM yy");
   const formattedEndDate=format(new Date(endDate),"dd MMMM yy");
-  const range=`${formattedStartDate} - ${formattedEndDate}`;
+  
  
   
 }
@@ -91,7 +91,7 @@ if(startDate && endDate){
                 <p className='text-xs mb-2'>200+ Ad spaces available {range} in { location ?`${location}`:"the area"}</p>
     
                 <div className='flex flex-col'>
-                  {console.log(listings)}
+                  
                   {JSON.parse(listings)?.map((listing)=>(
                     <InfoCard
                     key={listing.listingid}
@@ -151,8 +151,7 @@ export async function getServerSideProps() {
 
 
 
-  // const searchResults=await fetch('https://links.papareact.com/isz').
-  // then(res=>res.json());
+
 
   return{
     props:{

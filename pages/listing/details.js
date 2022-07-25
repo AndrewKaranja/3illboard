@@ -1,36 +1,24 @@
 import React,{useState,useEffect} from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
+
 import BackgroundImg from '../../images/streetlights.png';
-import ReactDOM from "react-dom";
+
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
-import PhoneInput from 'react-phone-input-2';
+
 import 'react-phone-input-2/lib/style.css'
 import {ErrorMessage,useField,Formik,Form,Field} from 'formik';
 import * as Yup from 'yup';
 
-function sanitizePhoneNo(phone){
-  if(phone==""){
-    return "";
-  }
-  if(phone.length < 11 && phone.startsWith("0")){
-    const p=phone.replace(/0/,"254");
-    return p;
-  }
-  if(phone.length == 13 && phone.startsWith("+")){
-    const p=phone.replace(/0/,"");
-    return p;
-  }
-}
+
 
 function Details() {
   const router=useRouter();
 const {listingType}=router.query;
-const [phoneNo, setphoneNo] = useState(null);
+
 const [tags, setTags] =useState(["design"]);
-const [uploading, setUploading] = useState(false);
+
 
 const [listingInfo, setlistingInfo] = useState([]);
 
@@ -40,9 +28,7 @@ useEffect(() => {
 
 
 
-    // const handleChange = (event) => {
-    //     setOwnershipType(event.target.value);
-    //   };
+
 
       
 
@@ -68,16 +54,13 @@ useEffect(() => {
 
   return (
     <div className='2xl:container h-screen m-auto'>
-      {/* <Head>
-      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"></link>
-      </Head> */}
+     
       <div className='fixed inset-0 w-7/12 invisible md:visible md:hidden lg:block  '>
         
         <Image src={BackgroundImg}  alt='traffic lights' objectFit='cover' layout="fill"/>
         <h1 className='absolute z-10 text-2xl justify-center top-[45%] left-[24%] text-white'>How does the ad look like?</h1>
        
-        
-        {/* <video className="w-full h-full object-cover" src="" autoPlay loop poster='../public'></video> */}
+ 
       </div>
       <div role="hidden" className='fixed inset-0 w-6/12 ml-auto bg-white bg-opacity-70 backdrop-blur-xl lg:block'></div>
         <div className='relative h-full ml-auto lg:w-6/12'>
@@ -112,7 +95,7 @@ useEffect(() => {
                               nightVisibility:values.nightVisibility
                            });
                            
-                           //console.log(listingInfo);
+                          
                            router.push("/listing/location");
                            
                           }}
@@ -197,14 +180,6 @@ useEffect(() => {
                 </div>
             </div>
             
-            {/* <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Contact phone No</div>
-                            <PhoneInput
-                            country={'ke'}
-                            regions={'africa'}
-                            className="ml-3"
-                            onBlur={formik.handleBlur}
-                            value={formik.values.contact}
-                            onChange={formik.handleChange}/> */}
                      
             
             <div className="font-bold text-gray-600 text-xs leading-8 uppercase h-6 mx-2 mt-3">Other Services Offered</div>
