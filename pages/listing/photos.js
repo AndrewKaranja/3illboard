@@ -159,7 +159,7 @@ function Photos() {
         value={files}
 	onClean
 	accept={"image/jpeg,.ts,.png"}
-	maxFileSize={5242880}
+	maxFileSize={2097152}
 	maxFiles={5}
 	label={"Drop images here or click to browse"}
 	minHeight={"200px"}
