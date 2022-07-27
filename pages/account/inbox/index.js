@@ -94,7 +94,7 @@ const Inbox = () => {
 <div >
 
 <Chat client={chatClient} theme='messaging light'>
-      <ChannelList Preview={CustomPreview} filters={filters} sort={sort} showChannelSearch />
+      <ChannelList Preview={CustomPreview} filters={filters} sort={sort} />
       <Channel>
         <Window>
           <ChannelHeader />
