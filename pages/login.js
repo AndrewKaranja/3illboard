@@ -90,7 +90,7 @@ signInSuccessUrl: prevPath,
               <a href="">
               <h3 className='text-3xl'>3illboard</h3>
               </a>
-              <p className='font-medium text-lg text-gray-600'>Welcome to 3illboard! Login first:</p>
+              <p className='font-medium text-lg text-gray-600'>Welcome to 3illboard! Login or signup here first:</p>
             </div>
 
             <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />
@@ -99,7 +99,7 @@ signInSuccessUrl: prevPath,
                 <div className="border-t pt-12">
                     <div className="space-y-2 text-center">
                         
-                        <span className="block text-sm tracking-wide text-gray-500">Enjoy free adspace advertising till September 22.</span>
+                        <span className="block text-sm tracking-wide text-gray-500">Enjoy free adspace advertising till October 22.</span>
                     </div>
                 </div>
 
