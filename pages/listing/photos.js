@@ -157,7 +157,7 @@ function Photos() {
             <Dropzone
         onChange={updateFiles}
         value={files}
-	onClean
+        onClean
 	accept={"image/jpeg,.ts,.png"}
 	maxFileSize={2097152}
 	maxFiles={5}
@@ -208,13 +208,6 @@ function Photos() {
                
             </div>
         </div>
-
-
-
-  
-   
-
-
           </div>
         </div>
       </div>

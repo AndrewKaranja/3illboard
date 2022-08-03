@@ -44,8 +44,6 @@ function Login({user}) {
   }
  
  
-  
- 
   // Configure FirebaseUI.
   const uiConfig = {
     // Popup signin flow rather than redirect flow.
