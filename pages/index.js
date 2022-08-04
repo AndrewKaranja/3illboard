@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image'
 import Banner from '../components/Banner'
@@ -19,6 +20,7 @@ import imgside from '../images/street-sideAd.png';
 import imgclock from '../images/clock.png';
 import imgmoving from '../images/movingAd.png';
 import { useUserType } from '../context/UserTypeContext';
+import { Affix, Button, Text, Transition } from '@mantine/core';
 
 export default function Home() {
   const {userInfo}=useUserType();
@@ -108,6 +110,15 @@ title="Moving Ads"/>
    title="The perfect ad campaign"
    description="Campaign curated by 3illboard"
    buttonText="Try out"/>
+
+
+<Affix position={{ bottom: 20, right: 20 }}>
+            <a href="https://photos.app.goo.gl/YiQq2xrx7oBvwwfG9" target="_blank" rel="noreferrer">
+            <Button color="yellow" variant="outline">
+              View Product demo
+            </Button>
+            </a>
+      </Affix>
 </main>
 <Footer/>
     </div>
