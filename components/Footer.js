@@ -3,19 +3,19 @@ import Link from 'next/link'
 function Footer() {
   return (
     <div >
-        <div className="grid grid-cols-1 md:grid-cols-2 space-y-10 px-32 py-14 bg-gray-100 text-gray-600">
+        <div className="grid grid-cols-1 md:grid-cols-2  px-32 py-14 bg-gray-100 text-gray-600">
         <div className="space-y-4 text-xs text-gray-800">
            <h5 className="font-bold">ABOUT</h5>
-           <p className="buttonFooter">How 3illboard works</p>
-           <p className="buttonFooter">Newsroom</p>
+           <a href="https://photos.app.goo.gl/YiQq2xrx7oBvwwfG9" target="_blank" rel="noreferrer"><p className="buttonFooter">How 3illboard works</p></a>
+           {/* <p className="buttonFooter">Newsroom</p>
            <p className="buttonFooter">Investors</p>
            <p className="buttonFooter">Partners</p>
-           <p className="buttonFooter">Careers</p>
+           <p className="buttonFooter">Careers</p> */}
         </div>
         <div className="space-y-4 text-xs text-gray-800">
         <h5 className="font-bold">Support</h5>
-           <p className="buttonFooter">Help Center</p>
-           <p className="buttonFooter">Safety Information</p>
+        <Link href='/account/settings/feedback' passHref><p className="buttonFooter">Help Center</p></Link>
+           {/* <p className="buttonFooter">Safety Information</p> */}
            
         </div>
         </div>
