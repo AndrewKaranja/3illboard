@@ -10,7 +10,7 @@ function Banner() {
     { bannerOpen && (
       <div className="fixed bottom-0 right-0 w-full md:bottom-8 md:right-12 md:w-auto z-60">
         <div className="bg-slate-800 text-slate-50 text-sm p-3 md:rounded shadow-lg flex justify-between">
-          <div className='flex'>👉 <Link passHref href="/account/messages" ><p className="hover:underline hover:cursor-pointer">Check new messages</p></Link></div>
+          <div className='flex'>👉 <Link passHref href="/account/inbox" ><p className="hover:underline hover:cursor-pointer">Check new messages</p></Link></div>
           <button className="text-slate-500 hover:text-slate-400 ml-5" onClick={() => setBannerOpen(false) }>
             <span className="sr-only">Close</span>
             <svg className="w-4 h-4 shrink-0 fill-current" viewBox="0 0 16 16">
