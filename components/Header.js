@@ -140,7 +140,7 @@ function Header({placeholder}) {
           onClick={()=>setSidebar(false)}
           className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 text-ellipsis' 
           type="text" 
-          placeholder={placeholder || 'Start your search'}/>
+          placeholder={placeholder || 'Search by Location'}/>
 
           <SearchIcon onClick={search} className='hidden md:inline-flex h-8 bg-orange-300 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
       </div>
