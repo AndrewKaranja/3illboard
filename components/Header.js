@@ -133,12 +133,12 @@ function Header({placeholder}) {
 
       </div>
       {/* middle-search */}
-      <div className='flex items-center w-fit border-2 rounded-full py-2 md:shadow-sm hover:border-[#fab038]'>
+      <div className='flex items-center w-fit border-2 border-gray-500 rounded-full py-2 md:shadow-sm hover:border-[#fab038]'>
           <input 
           value={searchInput}
           onChange={(e)=>setSearchInput(e.target.value)}
           onClick={()=>setSidebar(false)}
-          className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-700 placeholder-gray-400 text-ellipsis' 
+          className='flex-grow pl-5 bg-transparent outline-none text-sm text-gray-800 placeholder-gray-400 text-ellipsis' 
           type="text" 
           placeholder={placeholder || 'Search by Location'}/>
 
