@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import Traffic from '../images/traffic.png'
+import Traffic from '../images/traffic.png';
+import Link from 'next/link';
 
 function LargeCard({title,description,buttonText}) {
   return (
@@ -12,7 +13,7 @@ function LargeCard({title,description,buttonText}) {
             <h3 className='text-4xl mb-3 w-64 text-[#FAB038]'>{title}</h3>
             <p className='text-white'>{description}</p>
 
-            <button className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>{buttonText}</button>
+            <Link href='/search' passHref><button className='text-sm text-white bg-gray-900 px-4 py-2 rounded-lg mt-5 active:scale-90 transition duration-150'>{buttonText}</button></Link>
         </div>
     </section>
   )
