@@ -28,7 +28,7 @@ function Map({searchResults}) {
 
             <Image onClick={() => {
             setSelectedLocation(result);
-          }} src={imgbill} height={40} width={30} alt="" className='cursor-pointer hover:animate-none animate-bounce active:animate-none' />
+          }} src={imgbill} height={40} width={30} alt="" className='cursor-pointer animate-none hover:animate-bounce active:animate-bounce ' />
 
             
             
