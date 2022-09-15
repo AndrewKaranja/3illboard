@@ -97,7 +97,7 @@ signInSuccessUrl: prevPath,
                 <div className="border-t pt-12">
                     <div className="space-y-2 text-center">
                         
-                        <span className="block text-sm tracking-wide text-gray-500">Enjoy free adspace advertising till October 22.</span>
+                        <span className="block text-sm tracking-wide text-gray-500">Enjoy free adspace advertising till November 22.</span>
                     </div>
                 </div>
 
