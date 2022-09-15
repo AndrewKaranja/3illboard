@@ -88,7 +88,7 @@ if(startDate && endDate){
         </div> }
         
          <section className='pt-6 px-6 lg:w-[60vw] w-full '>
-                <p className='text-xs mb-2'>200+ Ad spaces available {range} in { location ?`${location}`:"the area"}</p>
+                <p className='text-xs mb-2'>5+ Ad spaces available {range} in { location ?`${location}`:"the area"}</p>
     
                 <div className='flex flex-col'>
                   
